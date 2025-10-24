@@ -1,0 +1,50 @@
+.navbar {
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+}
+
+.logo-icon {
+  margin-left: 4px;
+  color: #0066ff;
+  transform: rotate(180deg);
+}
+
+.login-button a {
+  background: none;
+  border: 1px solid #d1d3d7;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 700;
+  padding: 8px 16px;
+  transition: 0.2s;
+  text-decoration: none;
+}
+
+.login-button a:hover {
+  background-color: #d1d3d7;
+}
+
+.navbar-container {
+  direction: rtl;
+}

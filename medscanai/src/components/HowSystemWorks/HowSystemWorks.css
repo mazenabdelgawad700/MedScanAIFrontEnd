@@ -1,0 +1,98 @@
+.how-system {
+  width: 100%;
+  background-color: #f6f8fa;
+  /* subtle page background */
+  padding: 56px 20px 80px;
+  direction: rtl;
+}
+
+.how-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.how-title {
+  font-size: 28px;
+  color: #071428;
+  margin: 0 0 30px 0;
+  font-weight: 600;
+}
+
+.how-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.how-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 34px 28px;
+  box-shadow: 0 6px 18px rgba(6, 6, 26, 0.06);
+  position: relative;
+  min-height: 200px;
+  text-align: right;
+}
+
+.card-icon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-green {
+  background: #dbfce7;
+  color: #00a63e;
+}
+
+.icon-purple {
+  background: #F6EEFF;
+  color: #9810fa;
+}
+
+.icon-blue {
+  background: #EAF2FF;
+}
+
+.card-title {
+  margin: 0 50px;
+  font-size: 20px;
+  color: #071428;
+  font-weight: 600;
+}
+
+.card-desc {
+  margin: 15px;
+  color: #5b6b77;
+  line-height: 1.7;
+  font-size: 15px;
+  max-width: 520px;
+}
+
+@media (max-width:980px) {
+  .how-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width:620px) {
+  .how-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .how-inner {
+    padding: 0 12px;
+  }
+
+  .card-desc {
+    max-width: 100%;
+  }
+}
