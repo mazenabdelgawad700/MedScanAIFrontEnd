@@ -45,6 +45,22 @@
   background-color: #d1d3d7;
 }
 
+.login-button button {
+  background: none;
+  border: 1px solid #d1d3d7;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 700;
+  padding: 8px 16px;
+  transition: 0.2s;
+}
+
+.login-button button:hover {
+  background-color: #d1d3d7;
+}
+
 .navbar-container {
   direction: rtl;
 }

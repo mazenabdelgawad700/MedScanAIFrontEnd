@@ -11,7 +11,7 @@ const Hero = () => {
           مواعيد مع أطباء متخصصين كل ذلك في مكان واحد.
         </p>
         <div className="hero-cta">
-          <NavLink className="cta-button" to="/login">
+          <NavLink className="cta-button" to="/auth">
             ابدأ الآن
           </NavLink>
         </div>

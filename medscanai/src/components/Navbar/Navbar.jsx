@@ -1,13 +1,45 @@
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsLogged(Boolean(localStorage.getItem("token")));
+    check();
+    const onStorage = () => check();
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  const handleSignOut = () => {
+    try {
+      localStorage.removeItem("token");
+    } catch (err) {
+      void err;
+      console.warn(err);
+    }
+    setIsLogged(false);
+    navigate("/");
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="login-button">
-          <NavLink to="/login">تسجيل الدخول</NavLink>
-        </div>
+        {!isLogged ? (
+          <div className="login-button">
+            <NavLink to="/auth">تسجيل الدخول</NavLink>
+          </div>
+        ) : (
+          <div className="login-button">
+            <button onClick={handleSignOut} aria-label="تسجيل الخروج">
+              تسجيل الخروج
+            </button>
+          </div>
+        )}
+
         <div className="logo">
           <span className="logo-icon">
             <svg

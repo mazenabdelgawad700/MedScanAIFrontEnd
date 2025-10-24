@@ -10,7 +10,7 @@ const AreYouReady = () => {
         <p className="are-sub">
           انضم إلى آلاف المرضى الذين يستخدمون MedScanAI بالفعل
         </p>
-        <NavLink to="/signup" className="are-cta" aria-label="إنشاء حساب">
+        <NavLink to="/auth" className="are-cta" aria-label="إنشاء حساب">
           إنشاء حساب
         </NavLink>
       </div>
