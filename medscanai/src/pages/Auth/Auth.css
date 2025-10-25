@@ -113,6 +113,25 @@
   cursor: pointer;
 }
 
+.forgot-password-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #0b63ff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.text-button:hover {
+  color: #0842b8;
+}
+
 @media (max-width:520px) {
   .auth-card {
     padding: 16px;

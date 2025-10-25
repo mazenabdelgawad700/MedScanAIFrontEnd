@@ -196,6 +196,18 @@ const Auth = () => {
           <button className="submit-btn" type="submit" disabled={loading}>
             {loading ? "..." : mode === "login" ? "تسجيل الدخول" : "إنشاء حساب"}
           </button>
+
+          {mode === "login" && (
+            <div className="forgot-password-link">
+              <button
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+                className="text-button"
+              >
+                هل نسيت كلمة المرور؟
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>
