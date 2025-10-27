@@ -2,14 +2,60 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
+// small helper to decode jwt payload safely
+function decodeJwtPayload(token) {
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+    const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const pad = payload.length % 4;
+    const padded = pad ? payload + "=".repeat(4 - pad) : payload;
+    const json = atob(padded);
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [isLogged, setIsLogged] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const checkAuth = () => {
+    const token = localStorage.getItem("token");
+    setIsLogged(Boolean(token));
+    if (!token) {
+      setIsAdmin(false);
+      return;
+    }
+    const payload = decodeJwtPayload(token);
+    if (!payload) {
+      setIsAdmin(false);
+      return;
+    }
+    const role =
+      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+      payload.role;
+    const exp = payload.exp;
+    const now = Math.floor(Date.now() / 1000);
+    if (exp && exp < now) {
+      // expired
+      try {
+        localStorage.removeItem("token");
+      } catch (e) {
+        console.log(e);
+      }
+      setIsLogged(false);
+      setIsAdmin(false);
+      return;
+    }
+    setIsAdmin(role === "Admin");
+  };
 
   useEffect(() => {
-    const check = () => setIsLogged(Boolean(localStorage.getItem("token")));
-    check();
-    const onStorage = () => check();
+    checkAuth();
+    const onStorage = () => checkAuth();
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
   }, []);
@@ -22,24 +68,32 @@ const Navbar = () => {
       console.warn(err);
     }
     setIsLogged(false);
+    setIsAdmin(false);
     navigate("/");
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {!isLogged ? (
-          <div className="login-button">
+        {/* left area: auth controls + admin link (inline) */}
+        <div className="login-button">
+          {!isLogged ? (
             <NavLink to="/auth">تسجيل الدخول</NavLink>
-          </div>
-        ) : (
-          <div className="login-button">
+          ) : (
             <button onClick={handleSignOut} aria-label="تسجيل الخروج">
               تسجيل الخروج
             </button>
-          </div>
-        )}
+          )}
 
+          {isAdmin && (
+            // admin link placed next to login/logout with same styling
+            <NavLink to="/admin" className="admin-inline-link">
+              لوحة المشرف
+            </NavLink>
+          )}
+        </div>
+
+        {/* center logo */}
         <div className="logo">
           <span className="logo-icon">
             <svg
@@ -60,6 +114,13 @@ const Navbar = () => {
           </span>
           <span>MedScanAI</span>
         </div>
+
+        {/* admin link (right area) */}
+        {isAdmin && (
+          <div className="admin-link">
+            <NavLink to="/admin">Go to admin panel</NavLink>
+          </div>
+        )}
       </div>
     </nav>
   );

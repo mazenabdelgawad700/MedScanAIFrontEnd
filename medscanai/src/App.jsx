@@ -4,6 +4,9 @@ import Auth from "./pages/Auth/Auth";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import CreateAdmin from "./pages/Admin/CreateAdmin";
+import AdminPanel from "./pages/Admin/AdminPanel";
+import AddDoctor from "./pages/Admin/AddDoctor";
 
 function App() {
   return (
@@ -14,6 +17,9 @@ function App() {
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/admin/create-admin" element={<CreateAdmin />} />
+        <Route path="/admin/add-doctor" element={<AddDoctor />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </main>
   );

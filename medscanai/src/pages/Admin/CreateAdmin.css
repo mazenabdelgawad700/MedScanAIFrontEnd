@@ -1,0 +1,68 @@
+.create-admin-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: #f7fafc;
+  direction: rtl;
+}
+
+.create-admin-card {
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(8, 35, 63, 0.06);
+}
+
+.create-admin-card h1 {
+  margin: 0 0 8px 0;
+}
+
+.create-admin-card p {
+  color: #556;
+  margin-bottom: 16px;
+}
+
+.create-admin-form label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.create-admin-form .label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.create-admin-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ee;
+}
+
+.create-admin-form .message {
+  margin: 12px 0;
+  padding: 10px;
+  background: #fff3cd;
+  border-radius: 6px;
+  color: #856404;
+}
+
+.create-admin-form button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0b63ff;
+  color: white;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.create-admin-form button:disabled {
+  background: #9bb7ff;
+  cursor: not-allowed;
+}

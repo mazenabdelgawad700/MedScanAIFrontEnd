@@ -64,3 +64,39 @@
 .navbar-container {
   direction: rtl;
 }
+
+.admin-link a {
+  background: none;
+  border: 1px solid #d1d3d7;
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: #000;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.admin-link a:hover {
+  background: #d1d3d7;
+}
+
+.login-button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.login-button .admin-inline-link {
+  background: none;
+  border: 1px solid #d1d3d7;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 700;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.login-button .admin-inline-link:hover {
+  background-color: #d1d3d7;
+}
