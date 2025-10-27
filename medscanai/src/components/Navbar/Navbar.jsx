@@ -86,7 +86,6 @@ const Navbar = () => {
           )}
 
           {isAdmin && (
-            // admin link placed next to login/logout with same styling
             <NavLink to="/admin" className="admin-inline-link">
               لوحة المشرف
             </NavLink>
@@ -114,13 +113,6 @@ const Navbar = () => {
           </span>
           <span>MedScanAI</span>
         </div>
-
-        {/* admin link (right area) */}
-        {isAdmin && (
-          <div className="admin-link">
-            <NavLink to="/admin">Go to admin panel</NavLink>
-          </div>
-        )}
       </div>
     </nav>
   );
