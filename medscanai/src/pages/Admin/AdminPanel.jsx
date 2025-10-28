@@ -40,6 +40,40 @@ const AdminPanel = () => {
     if (role !== "Admin") return navigate("/");
   }, [navigate]);
 
+  // fetch doctors counts
+  const [doctorsCount, setDoctorsCount] = React.useState("—");
+  const [activeDoctorsCount, setActiveDoctorsCount] = React.useState("—");
+
+  const fetchCounts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const [allRes, activeRes] = await Promise.all([
+        fetch("https://localhost:7196/api/doctor/GetCount", { headers }),
+        fetch("https://localhost:7196/api/doctor/GetActiveCount", { headers }),
+      ]);
+
+      if (allRes.ok) {
+        const a = await allRes.json();
+        setDoctorsCount(a?.data ?? a?.data ?? "—");
+      }
+      if (activeRes.ok) {
+        const b = await activeRes.json();
+        setActiveDoctorsCount(b?.data ?? b?.data ?? "—");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchCounts();
+    const onCounts = () => fetchCounts();
+    window.addEventListener("countsUpdated", onCounts);
+    return () => window.removeEventListener("countsUpdated", onCounts);
+  }, []);
+
   return (
     <div className="admin-panel-page">
       <div className="admin-panel-card">
@@ -59,11 +93,14 @@ const AdminPanel = () => {
             </div>
           </div>
 
-          <div className="stat-card">
+          <div
+            className="stat-card clickable"
+            onClick={() => navigate("/admin/doctors")}
+          >
             <div className="icon">👩‍⚕️</div>
             <div className="stat-body">
               <div className="stat-title">الأطباء المسجلون</div>
-              <div className="stat-value">—</div>
+              <div className="stat-value">{doctorsCount}</div>
             </div>
           </div>
 
@@ -75,11 +112,14 @@ const AdminPanel = () => {
             </div>
           </div>
 
-          <div className="stat-card">
+          <div
+            className="stat-card clickable"
+            onClick={() => navigate("/admin/doctors?active=1")}
+          >
             <div className="icon">👥</div>
             <div className="stat-body">
-              <div className="stat-title">إجمالي الأطباء</div>
-              <div className="stat-value">—</div>
+              <div className="stat-title">الأطباء النشطون</div>
+              <div className="stat-value">{activeDoctorsCount}</div>
             </div>
           </div>
         </section>

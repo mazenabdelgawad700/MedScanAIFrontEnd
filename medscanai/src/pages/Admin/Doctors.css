@@ -1,0 +1,99 @@
+.doctors-page {
+  min-height: 100vh;
+  padding: 32px;
+  direction: rtl;
+  background: #f8f9fd;
+  display: flex;
+  justify-content: center;
+}
+
+.doctors-card {
+  width: 100%;
+  max-width: 980px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 16px rgba(8, 35, 63, 0.06);
+}
+
+.doctors-card h1 {
+  margin: 0 0 12px 0;
+}
+
+.doctors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doctor-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #eef2f7;
+}
+
+.doctor-main {
+  text-align: right;
+}
+
+.doctor-name {
+  font-weight: 700;
+}
+
+.doctor-email {
+  color: #718096;
+  font-size: 14px;
+}
+
+.doctor-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.doctor-phone {
+  color: #4a5568;
+}
+
+.doctor-actions button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-danger {
+  background: #e53e3e;
+  color: white
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white
+}
+
+.loading,
+.error,
+.empty {
+  padding: 12px;
+  color: #4a5568
+}
+
+@media (max-width: 720px) {
+  .doctor-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px
+  }
+
+  .doctor-right {
+    width: 100%;
+    justify-content: space-between
+  }
+}

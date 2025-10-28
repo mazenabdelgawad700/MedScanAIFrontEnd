@@ -7,6 +7,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import CreateAdmin from "./pages/Admin/CreateAdmin";
 import AdminPanel from "./pages/Admin/AdminPanel";
 import AddDoctor from "./pages/Admin/AddDoctor";
+import Doctors from "./pages/Admin/Doctors";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/admin/create-admin" element={<CreateAdmin />} />
         <Route path="/admin/add-doctor" element={<AddDoctor />} />
+        <Route path="/admin/doctors" element={<Doctors />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </main>

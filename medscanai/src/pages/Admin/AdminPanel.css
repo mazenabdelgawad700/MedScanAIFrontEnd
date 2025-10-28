@@ -66,6 +66,10 @@
   border: 1px solid #edf2f7;
 }
 
+.stat-card.clickable {
+  cursor: pointer;
+}
+
 .stat-card .icon {
   font-size: 24px;
 }
