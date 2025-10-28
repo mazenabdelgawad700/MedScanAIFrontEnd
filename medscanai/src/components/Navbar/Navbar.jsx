@@ -22,16 +22,20 @@ const Navbar = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const [isPatient, setIsPatient] = useState(false);
+
   const checkAuth = () => {
     const token = localStorage.getItem("token");
     setIsLogged(Boolean(token));
     if (!token) {
       setIsAdmin(false);
+      setIsPatient(false);
       return;
     }
     const payload = decodeJwtPayload(token);
     if (!payload) {
       setIsAdmin(false);
+      setIsPatient(false);
       return;
     }
     const role =
@@ -48,9 +52,11 @@ const Navbar = () => {
       }
       setIsLogged(false);
       setIsAdmin(false);
+      setIsPatient(false);
       return;
     }
     setIsAdmin(role === "Admin");
+    setIsPatient(role === "Patient");
   };
 
   useEffect(() => {
@@ -88,6 +94,11 @@ const Navbar = () => {
           {isAdmin && (
             <NavLink to="/admin" className="admin-inline-link">
               لوحة المشرف
+            </NavLink>
+          )}
+          {isPatient && (
+            <NavLink to="/patient/dashboard" className="admin-inline-link">
+              لوحة التحكم
             </NavLink>
           )}
         </div>

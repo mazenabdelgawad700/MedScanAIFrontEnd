@@ -1,0 +1,103 @@
+.medical-profile {
+  direction: rtl;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.back-link {
+  color: #666;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  color: #333;
+}
+
+.section-title {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.subtitle {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  font-weight: normal;
+}
+
+.personal-info {
+  margin-bottom: 32px;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.info-label {
+  min-width: 180px;
+  color: #666;
+}
+
+.info-value {
+  color: #333;
+}
+
+.medical-section {
+  margin-top: 32px;
+}
+
+.medical-section h3 {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  font-weight: normal;
+}
+
+.medical-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.medical-tag {
+  background: #f8f0f0;
+  color: #ff6b6b;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.medical-tag.allergy {
+  background: #fff0f0;
+  color: #ff6b6b;
+}
+
+.medical-tag.medication {
+  background: #f0f8ff;
+  color: #4a90e2;
+}
