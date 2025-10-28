@@ -1,0 +1,53 @@
+.pd-page {
+  direction: rtl;
+  padding: 28px 40px
+}
+
+.pd-hero h1 {
+  font-size: 28px;
+  margin: 6px 0
+}
+
+.pd-sub {
+  color: #6b7a99
+}
+
+.pd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 22px
+}
+
+.pd-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, .04);
+  cursor: pointer;
+  border: 1px solid #f0f3f7;
+  transition: transform .08s, box-shadow .12s
+}
+
+.pd-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .06)
+}
+
+.pd-card-title {
+  font-weight: 700;
+  color: #0f1724
+}
+
+.pd-card-sub {
+  color: #6b7a99;
+  margin-top: 6px
+}
+
+.pd-card-icon {
+  font-size: 28px;
+  color: #2563eb
+}

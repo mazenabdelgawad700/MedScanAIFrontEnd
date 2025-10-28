@@ -55,8 +55,34 @@ const Auth = () => {
         if (data && data.succeeded && data.data) {
           // store token
           localStorage.setItem("token", data.data);
-          // optionally navigate to home or dashboard
-          navigate("/");
+          // decode role from token and redirect appropriately
+          try {
+            const token = data.data;
+            const parts = token.split(".");
+            if (parts.length >= 2) {
+              const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+              const pad = payload.length % 4;
+              const padded = pad ? payload + "=".repeat(4 - pad) : payload;
+              const json = atob(padded);
+              const claims = JSON.parse(json);
+              const role =
+                claims[
+                  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                ] || claims.role;
+              if (role === "Patient") {
+                navigate("/patient/complete-profile");
+              } else if (role === "Admin") {
+                navigate("/admin");
+              } else {
+                navigate("/");
+              }
+            } else {
+              navigate("/");
+            }
+          } catch (err) {
+            console.error(err);
+            navigate("/");
+          }
         }
       } else {
         // register patient (include gender, phone number, date of birth)

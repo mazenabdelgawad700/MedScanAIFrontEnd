@@ -1,0 +1,219 @@
+/* CompleteProfile.css */
+.complete-profile-bg {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #e9f0ff 0%, #f5f8ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: rtl;
+}
+
+.complete-profile-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+  padding: 32px 32px 24px 32px;
+  max-width: 520px;
+  width: 100%;
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.profile-logo {
+  margin-bottom: 8px;
+}
+
+.profile-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #222b45;
+}
+
+.profile-subtitle {
+  color: #6b7a99;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.profile-section-title {
+  font-weight: 700;
+  color: #222b45;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.profile-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-label {
+  font-weight: 500;
+  color: #222b45;
+  margin-bottom: 2px;
+}
+
+.profile-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.profile-add-btn {
+  background: #0a0a23;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 1;
+  margin-top: 8px;
+  align-self: flex-start;
+  transition: background 0.2s;
+}
+
+.profile-add-btn:active {
+  background: #222b45;
+}
+
+.profile-remove-btn-red {
+  background: #fff;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 0;
+  margin-left: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.profile-remove-btn-red:hover {
+  background: #d32f2f;
+  color: #fff;
+}
+
+.profile-input {
+  flex: 1;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  background: #f5f8ff;
+  color: #222b45;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.profile-input:focus {
+  border: 1.5px solid #3b82f6;
+}
+
+.profile-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.profile-checkbox-label {
+  font-size: 0.98rem;
+  color: #222b45;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Info box replacing the checkbox row */
+.profile-info-box {
+  width: 100%;
+  background: #eef6ff;
+  border: 1px solid #cfe6ff;
+  color: #0b3e82;
+  padding: 12px 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-info-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #0f2b4a;
+  flex: 1;
+}
+
+.profile-info-icon {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #3b82f6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+  font-weight: 700;
+  background: #fff;
+}
+
+.profile-error {
+  color: #d32f2f;
+  background: #fff0f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.profile-success {
+  color: #388e3c;
+  background: #e8f5e9;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.profile-submit-btn {
+  width: 100%;
+  background: #0a0a23;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.profile-submit-btn:disabled {
+  background: #6b7a99;
+  cursor: not-allowed;
+}
