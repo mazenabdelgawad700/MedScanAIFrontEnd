@@ -24,6 +24,16 @@ const SPECIALIZATIONS = [
   { id: 3, name: "أمراض الصدر" },
 ];
 
+const DAYS = [
+  { key: "sunday", label: "الأحد" },
+  { key: "monday", label: "الاثنين" },
+  { key: "tuesday", label: "الثلاثاء" },
+  { key: "wednesday", label: "الأربعاء" },
+  { key: "thursday", label: "الخميس" },
+  { key: "friday", label: "الجمعة" },
+  { key: "saturday", label: "السبت" },
+];
+
 const AddDoctor = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -34,6 +44,8 @@ const AddDoctor = () => {
     yearsOfExperience: 0,
     specializationID: SPECIALIZATIONS[0].id,
   });
+  // schedule: { day: { start: "", end: "" } }
+  const [schedule, setSchedule] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -65,6 +77,28 @@ const AddDoctor = () => {
     }));
   };
 
+  const handleScheduleDayChange = (dayKey, checked) => {
+    setSchedule((prev) => {
+      const newSchedule = { ...prev };
+      if (checked) {
+        newSchedule[dayKey] = { start: "", end: "" };
+      } else {
+        delete newSchedule[dayKey];
+      }
+      return newSchedule;
+    });
+  };
+
+  const handleScheduleTimeChange = (dayKey, field, value) => {
+    setSchedule((prev) => ({
+      ...prev,
+      [dayKey]: {
+        ...prev[dayKey],
+        [field]: value,
+      },
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
@@ -74,6 +108,35 @@ const AddDoctor = () => {
       setMessage("يرجى ملء الحقول المطلوبة.");
       return;
     }
+
+    // schedule validation: at least one day
+    if (Object.keys(schedule).length === 0) {
+      setMessage("يرجى تحديد جدول الطبيب (يوم واحد على الأقل)");
+      return;
+    }
+    // check all selected days have start and end
+    for (const day of Object.keys(schedule)) {
+      if (!schedule[day].start || !schedule[day].end) {
+        setMessage("يرجى تحديد وقت البداية والنهاية لكل يوم متاح");
+        return;
+      }
+    }
+
+    // Prepare workDays, startTime, endTime
+    const workDays = Object.keys(schedule);
+    // Find earliest start and latest end
+    let startTime = null;
+    let endTime = null;
+    workDays.forEach((day) => {
+      const s = schedule[day].start;
+      const e = schedule[day].end;
+      if (!startTime || s < startTime) startTime = s;
+      if (!endTime || e > endTime) endTime = e;
+    });
+    // Ensure .NET TimeSpan format (HH:mm:ss)
+    const toTimeSpan = (t) => (t && t.length === 5 ? t + ":00" : t);
+    const startTimeSpan = toTimeSpan(startTime);
+    const endTimeSpan = toTimeSpan(endTime);
 
     setLoading(true);
     try {
@@ -92,7 +155,10 @@ const AddDoctor = () => {
           email: form.email,
           phoneNumber: form.phoneNumber,
           yearsOfExperience: form.yearsOfExperience,
-          specializationID: Number(form.specializationID),
+          specializationId: Number(form.specializationID),
+          workDays,
+          startTime: startTimeSpan,
+          endTime: endTimeSpan,
         }),
       });
 
@@ -107,6 +173,7 @@ const AddDoctor = () => {
           yearsOfExperience: 0,
           specializationID: SPECIALIZATIONS[0].id,
         });
+        setSchedule({});
       } else {
         setMessage(data?.message || "حدث خطأ أثناء إضافة الطبيب.");
       }
@@ -194,6 +261,60 @@ const AddDoctor = () => {
               required
             />
           </label>
+
+          {/* Doctor Schedule Section */}
+          <div className="schedule-section">
+            <div className="label" style={{ marginBottom: 8 }}>
+              جدول الطبيب (الأيام المتاحة وأوقات العمل)
+            </div>
+            <div className="days-row">
+              {DAYS.map((d) => (
+                <label key={d.key} style={{ marginLeft: 12 }}>
+                  <input
+                    type="checkbox"
+                    checked={!!schedule[d.key]}
+                    onChange={(e) =>
+                      handleScheduleDayChange(d.key, e.target.checked)
+                    }
+                  />
+                  {d.label}
+                </label>
+              ))}
+            </div>
+            {/* For each selected day, show time pickers */}
+            {Object.keys(schedule).length > 0 && (
+              <div className="schedule-times">
+                {Object.keys(schedule).map((dayKey) => (
+                  <div key={dayKey} className="schedule-time-row">
+                    <span style={{ minWidth: 70, display: "inline-block" }}>
+                      {DAYS.find((d) => d.key === dayKey)?.label}:
+                    </span>
+                    <input
+                      type="time"
+                      value={schedule[dayKey].start}
+                      onChange={(e) =>
+                        handleScheduleTimeChange(
+                          dayKey,
+                          "start",
+                          e.target.value
+                        )
+                      }
+                      style={{ margin: "0 8px" }}
+                    />
+                    <span>إلى</span>
+                    <input
+                      type="time"
+                      value={schedule[dayKey].end}
+                      onChange={(e) =>
+                        handleScheduleTimeChange(dayKey, "end", e.target.value)
+                      }
+                      style={{ margin: "0 8px" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           {message && <div className="message">{message}</div>}
 
