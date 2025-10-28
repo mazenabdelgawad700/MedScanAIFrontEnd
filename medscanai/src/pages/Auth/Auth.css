@@ -55,17 +55,18 @@
 }
 
 .tab {
-  background: #f3f4f6;
+  background: #ececf0;
   border: none;
   padding: 10px 22px;
   border-radius: 22px;
   cursor: pointer;
   font-weight: 600;
+  color: black;
 }
 
 .tab.active {
-  background: #fff;
-  box-shadow: 0 6px 12px rgba(6, 6, 26, 0.06) inset;
+  background: #a0a0a0;
+  color: white;
 }
 
 .auth-form {
