@@ -1,0 +1,120 @@
+/* RTL Arabic form styling */
+.appointment-container {
+  direction: rtl;
+  max-width: 600px;
+  margin: 40px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-family: "Cairo", sans-serif;
+  color: #333;
+}
+
+.go-to-dashboard {
+  text-decoration: none;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.appointment-title {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #007bff;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.loading,
+.error-text {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.error-text {
+  color: red;
+}
+
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+select,
+textarea,
+input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+select:focus,
+textarea:focus,
+input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+textarea {
+  resize: none;
+}
+
+.submit-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #0056b3;
+}
+
+.submit-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.submit-message {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 8px 0;
+}
+
+.submit-message.success {
+  color: #28a745;
+}
+
+.submit-message.error {
+  color: #dc3545;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .appointment-container {
+    padding: 20px;
+  }
+
+  .appointment-title {
+    font-size: 1.5rem;
+  }
+}
