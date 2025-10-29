@@ -199,16 +199,18 @@
   text-align: center;
 }
 
+.buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
 .profile-submit-btn {
-  width: 100%;
   background: #0a0a23;
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 12px 0;
   font-size: 1.1rem;
   font-weight: 700;
-  margin-top: 8px;
   cursor: pointer;
   transition: background 0.2s;
 }

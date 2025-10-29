@@ -287,13 +287,23 @@ const CompleteProfile = () => {
           {success && (
             <div className="profile-success">تم حفظ البيانات بنجاح!</div>
           )}
-          <button
-            type="submit"
-            className="profile-submit-btn"
-            disabled={submitting}
-          >
-            {submitting ? "جارٍ الحفظ..." : "إكمال الملف الشخصي"}
-          </button>
+          <div className="buttons">
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={() => navigate("/patient/dashboard")}
+            >
+              لدي ملف تعريفي بالفعل
+            </button>
+
+            <button
+              type="submit"
+              className="profile-submit-btn"
+              disabled={submitting}
+            >
+              {submitting ? "جارٍ الحفظ..." : "إكمال الملف الشخصي"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

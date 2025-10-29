@@ -13,6 +13,7 @@ const BookAppointment = () => {
   const [reason, setReason] = useState("");
   const [submitMsg, setSubmitMsg] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [isThereDoctors, setIsThereDoctors] = useState(false);
 
   // Get token and patientId from localStorage/token
   const token = localStorage.getItem("token");
@@ -44,6 +45,8 @@ const BookAppointment = () => {
         const result = await res.json();
         if (result.succeeded && Array.isArray(result.data)) {
           setDoctors(result.data);
+          if (result.data.length > 0) setIsThereDoctors(true);
+          else setIsThereDoctors(false);
         } else {
           throw new Error(result.message || "استجابة غير متوقعة من الخادم");
         }
@@ -115,77 +118,91 @@ const BookAppointment = () => {
         العودة الي لوحة التحكم
       </Link>
 
-      {loading ? (
-        <p className="loading">جاري تحميل الأطباء...</p>
-      ) : error ? (
-        <p className="error-text">{error}</p>
-      ) : (
-        <form onSubmit={handleSubmit} className="appointment-form">
-          <div className="form-group">
-            <label>اختر الطبيب:</label>
-            <select
-              value={selectedDoctor}
-              onChange={(e) => {
-                setSelectedDoctor(e.target.value);
-                setSelectedTime("");
-              }}
-              required
-            >
-              <option value="">-- اختر الطبيب --</option>
-              {doctors.map((doc) => (
-                <option key={doc.id} value={doc.id}>
-                  {doc.fullName} ({doc.specialization})
-                </option>
-              ))}
-            </select>
-          </div>
+      {!isThereDoctors && (
+        <p className="text-red">
+          لا يوجد أطباء متاحين الآن، حاول مرة أخرى لاحقًا  
+        </p>
+      )}
 
-          {selectedDoctor && (
-            <div className="form-group">
-              <label>اختر الوقت المتاح:</label>
-              <select
-                value={selectedTime}
-                onChange={(e) => setSelectedTime(e.target.value)}
-                required
+      {isThereDoctors && (
+        <>
+          {loading ? (
+            <p className="loading">جاري تحميل الأطباء...</p>
+          ) : error ? (
+            <p className="error-text">{error}</p>
+          ) : (
+            <form onSubmit={handleSubmit} className="appointment-form">
+              <div className="form-group">
+                <label>اختر الطبيب:</label>
+                <select
+                  value={selectedDoctor}
+                  onChange={(e) => {
+                    setSelectedDoctor(e.target.value);
+                    setSelectedTime("");
+                  }}
+                  required
+                >
+                  <option value="">-- اختر الطبيب --</option>
+                  {doctors.map((doc) => (
+                    <option key={doc.id} value={doc.id}>
+                      {doc.fullName} ({doc.specialization})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedDoctor && (
+                <div className="form-group">
+                  <label>اختر الوقت المتاح:</label>
+                  <select
+                    value={selectedTime}
+                    onChange={(e) => setSelectedTime(e.target.value)}
+                    required
+                  >
+                    <option value="">-- اختر الوقت --</option>
+                    {(
+                      doctors.find((d) => d.id === selectedDoctor)
+                        ?.availableStartTimes || []
+                    ).map((t, idx) => (
+                      <option key={idx} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="form-group">
+                <label>سبب الحجز:</label>
+                <textarea
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  rows={3}
+                  required
+                  placeholder="اكتب سبب الحجز..."
+                />
+              </div>
+
+              {submitMsg && (
+                <div
+                  className={`submit-message ${
+                    submitMsg.includes("نجاح") ? "success" : "error"
+                  }`}
+                >
+                  {submitMsg}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="submit-btn"
               >
-                <option value="">-- اختر الوقت --</option>
-                {(
-                  doctors.find((d) => d.id === selectedDoctor)
-                    ?.availableStartTimes || []
-                ).map((t, idx) => (
-                  <option key={idx} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {submitting ? "جاري الحجز..." : "حجز الموعد"}
+              </button>
+            </form>
           )}
-
-          <div className="form-group">
-            <label>سبب الحجز:</label>
-            <textarea
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              rows={3}
-              required
-              placeholder="اكتب سبب الحجز..."
-            />
-          </div>
-
-          {submitMsg && (
-            <div
-              className={`submit-message ${
-                submitMsg.includes("نجاح") ? "success" : "error"
-              }`}
-            >
-              {submitMsg}
-            </div>
-          )}
-
-          <button type="submit" disabled={submitting} className="submit-btn">
-            {submitting ? "جاري الحجز..." : "حجز الموعد"}
-          </button>
-        </form>
+        </>
       )}
     </div>
   );
