@@ -130,6 +130,7 @@
   min-width: 80px;
   color: #4a5568;
   font-weight: 600;
+  direction: ltr;
 }
 
 .appointment-info {

@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./AdminPanel.css";
 
-// reuse jwt decode as in other admin pages
 function decodeJwtPayload(token) {
   try {
     const parts = token.split(".");
@@ -20,6 +19,7 @@ function decodeJwtPayload(token) {
 const AdminPanel = () => {
   const navigate = useNavigate();
 
+  // ✅ Auth check
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return navigate("/auth");
@@ -40,9 +40,9 @@ const AdminPanel = () => {
     if (role !== "Admin") return navigate("/");
   }, [navigate]);
 
-  // fetch doctors counts
-  const [doctorsCount, setDoctorsCount] = React.useState("—");
-  const [activeDoctorsCount, setActiveDoctorsCount] = React.useState("—");
+  // ✅ Doctor counts
+  const [doctorsCount, setDoctorsCount] = useState("—");
+  const [activeDoctorsCount, setActiveDoctorsCount] = useState("—");
 
   const fetchCounts = async () => {
     try {
@@ -56,22 +56,59 @@ const AdminPanel = () => {
 
       if (allRes.ok) {
         const a = await allRes.json();
-        setDoctorsCount(a?.data ?? a?.data ?? "—");
+        setDoctorsCount(a?.data ?? "—");
       }
       if (activeRes.ok) {
         const b = await activeRes.json();
-        setActiveDoctorsCount(b?.data ?? b?.data ?? "—");
+        setActiveDoctorsCount(b?.data ?? "—");
       }
     } catch (err) {
       console.warn(err);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchCounts();
     const onCounts = () => fetchCounts();
     window.addEventListener("countsUpdated", onCounts);
     return () => window.removeEventListener("countsUpdated", onCounts);
+  }, []);
+
+  // ✅ Today's Appointments
+  const [todayAppointments, setTodayAppointments] = useState([]);
+  const [appointmentsLoading, setAppointmentsLoading] = useState(true);
+
+  const fetchTodayAppointments = async () => {
+    try {
+      setAppointmentsLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        "https://localhost:7196/api/appointment/GetForToday",
+        {
+          headers: {
+            Accept: "*/*",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!res.ok) throw new Error("فشل في تحميل مواعيد اليوم");
+      const result = await res.json();
+
+      if (result.succeeded && Array.isArray(result.data)) {
+        setTodayAppointments(result.data);
+      } else {
+        setTodayAppointments([]);
+      }
+    } catch (err) {
+      console.error(err);
+      setTodayAppointments([]);
+    } finally {
+      setAppointmentsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodayAppointments();
   }, []);
 
   return (
@@ -108,7 +145,7 @@ const AdminPanel = () => {
             <div className="icon">🗓️</div>
             <div className="stat-body">
               <div className="stat-title">مواعيد اليوم</div>
-              <div className="stat-value">—</div>
+              <div className="stat-value">{todayAppointments.length}</div>
             </div>
           </div>
 
@@ -124,34 +161,34 @@ const AdminPanel = () => {
           </div>
         </section>
 
+        {/* ✅ Today Appointments Section */}
         <section className="appointments-section">
           <h2>مواعيد اليوم</h2>
-          <p className="appointments-date">المواعيد المحددة لـ 2025/10/27</p>
+          <p className="appointments-date">
+            المواعيد المحددة لـ{" "}
+            {new Date().getDate() +
+              "/" +
+              (new Date().getMonth() + 1) +
+              "/" +
+              new Date().getFullYear()}
+          </p>
 
           <div className="appointments-list">
-            <div className="appointment-item">
-              <div className="appointment-time">09:00 ص</div>
-              <div className="appointment-info">
-                <div className="patient-name">محمد أحمد</div>
-                <div className="doctor-name">مع د. سارة أحمد</div>
-              </div>
-            </div>
-
-            <div className="appointment-item">
-              <div className="appointment-time">10:00 ص</div>
-              <div className="appointment-info">
-                <div className="patient-name">فاطمة علي</div>
-                <div className="doctor-name">مع د. سارة أحمد</div>
-              </div>
-            </div>
-
-            <div className="appointment-item">
-              <div className="appointment-time">11:00 ص</div>
-              <div className="appointment-info">
-                <div className="patient-name">أحمد خالد</div>
-                <div className="doctor-name">مع د. محمد علي</div>
-              </div>
-            </div>
+            {appointmentsLoading ? (
+              <div className="loading-text">جاري تحميل المواعيد...</div>
+            ) : todayAppointments.length === 0 ? (
+              <div className="empty-text">لا توجد مواعيد اليوم.</div>
+            ) : (
+              todayAppointments.map((appt, idx) => (
+                <div key={idx} className="appointment-item">
+                  <div className="appointment-time">{appt.time}</div>
+                  <div className="appointment-info">
+                    <div className="patient-name">{appt.patientName}</div>
+                    <div className="doctor-name">مع {appt.doctorName}</div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </section>
 
