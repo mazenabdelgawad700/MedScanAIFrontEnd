@@ -14,6 +14,7 @@ import MedicalProfile from "./pages/Patient/MedicalProfile";
 import Appointments from "./pages/Patient/Appointments";
 import BookAppointment from "./pages/Patient/BookAppointment";
 import AIAssistant from "./pages/Patient/AIAssistant";
+import BookAppointmentAdmin from "./pages/Admin/BookAppointmentAdmin";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/admin/add-doctor" element={<AddDoctor />} />
         <Route path="/admin/doctors" element={<Doctors />} />
         <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin/book-appointment" element={<BookAppointmentAdmin />} />
         <Route path="/patient/complete-profile" element={<CompleteProfile />} />
         <Route path="/patient/dashboard" element={<PatientDashboard />} />
         <Route path="/patient/medical-profile" element={<MedicalProfile />} />

@@ -218,6 +218,19 @@ const AdminPanel = () => {
               </NavLink>
             </div>
           </div>
+
+          <div className="action-card admin">
+            <div className="action-head">
+              <div className="action-icon">👤</div>
+            </div>
+            <div className="action-body">
+              <h3>حدد موعدًا</h3>
+              <p>حجز موعد للمريض</p>
+              <NavLink className="action-link" to="/admin/book-appointment">
+                الانتقال
+              </NavLink>
+            </div>
+          </div>
         </section>
       </div>
     </div>

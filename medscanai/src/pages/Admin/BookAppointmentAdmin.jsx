@@ -1,32 +1,23 @@
 import { useEffect, useState } from "react";
-import "./BookAppointment.css";
+import "../Patient/BookAppointment.css";
 import { Link } from "react-router-dom";
 
 const API_BASE = "https://localhost:7196/api/appointment";
 
-const BookAppointment = () => {
+const BookAppointmentAdmin = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [reason, setReason] = useState("");
+  const [patientName, setPatientName] = useState(""); // ✅ new field
   const [submitMsg, setSubmitMsg] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [isThereDoctors, setIsThereDoctors] = useState(false);
 
-  // Get token and patientId from localStorage/token
+  // ✅ use admin token directly (no patientId)
   const token = localStorage.getItem("token");
-  const getUserIdFromToken = (token) => {
-    try {
-      const base64Payload = token.split(".")[1];
-      const payload = JSON.parse(atob(base64Payload));
-      return payload.UserId;
-    } catch {
-      return null;
-    }
-  };
-  const patientId = getUserIdFromToken(token);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -45,8 +36,7 @@ const BookAppointment = () => {
         const result = await res.json();
         if (result.succeeded && Array.isArray(result.data)) {
           setDoctors(result.data);
-          if (result.data.length > 0) setIsThereDoctors(true);
-          else setIsThereDoctors(false);
+          setIsThereDoctors(result.data.length > 0);
         } else {
           throw new Error(result.message || "استجابة غير متوقعة من الخادم");
         }
@@ -57,24 +47,30 @@ const BookAppointment = () => {
         setLoading(false);
       }
     };
+
     if (token) fetchDoctors();
   }, [token]);
 
+  // ✅ updated submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitMsg(null);
-    if (!selectedDoctor || !selectedTime || !reason) {
-      setSubmitMsg("يرجى اختيار طبيب ووقت وكتابة سبب الحجز.");
+
+    if (!patientName.trim() || !selectedDoctor || !selectedTime || !reason) {
+      setSubmitMsg("يرجى إدخال اسم المريض واختيار الطبيب والوقت وكتابة السبب.");
       return;
     }
+
     setSubmitting(true);
     try {
       const today = new Date();
       const [time, period] = selectedTime.split(" ");
       let [hours, minutes] = time.split(":").map(Number);
+
       if (period === "PM" && hours < 12) hours += 12;
       if (period === "AM" && hours === 12) hours = 0;
 
+      // ✅ Create a Date object in local time (Egypt time)
       const appointmentDate = new Date(
         today.getFullYear(),
         today.getMonth(),
@@ -83,9 +79,19 @@ const BookAppointment = () => {
         minutes
       );
 
+      // ✅ Format without converting to UTC (keep it local)
       const formattedDate = appointmentDate
         .toLocaleString("sv-SE", { hour12: false }) // ISO-like but local
-        .replace(" ", "T");
+        .replace(" ", "T"); // e.g. "2025-10-30T15:55:00"
+
+      // ✅ Updated payload
+      const payload = {
+        patientName,
+        doctorId: selectedDoctor,
+        date: formattedDate, // <--- send this one
+        reason,
+        status: "Pending",
+      };
 
       const res = await fetch(`${API_BASE}/MakeAppointment`, {
         method: "POST",
@@ -94,36 +100,35 @@ const BookAppointment = () => {
           "Content-Type": "application/json",
           Authorization: `bearer ${token}`,
         },
-        body: JSON.stringify({
-          patientId,
-          doctorId: selectedDoctor,
-          date: formattedDate,
-          reason,
-          status: "Pending",
-        }),
+        body: JSON.stringify(payload),
       });
+
       if (!res.ok) throw new Error("فشل الحجز");
+
       setSubmitMsg("تم حجز الموعد بنجاح ✅");
       setSelectedDoctor("");
       setSelectedTime("");
       setReason("");
-    } catch {
+      setPatientName("");
+    } catch (err) {
+      console.error(err);
       setSubmitMsg("حدث خطأ أثناء الحجز. حاول مرة أخرى.");
     } finally {
       setSubmitting(false);
     }
+
   };
 
   return (
     <div className="appointment-container">
-      <h2 className="appointment-title">📅 حجز موعد</h2>
+      <h2 className="appointment-title">📅 حجز موعد جديد (للمشرف)</h2>
 
-      <Link to="/patient/dashboard" className="go-to-dashboard">
-        العودة الي لوحة التحكم
+      <Link to="/admin" className="go-to-dashboard">
+        ← العودة إلى لوحة التحكم
       </Link>
 
       {!isThereDoctors && (
-        <p className="text-danger">
+        <p className="text-red">
           لا يوجد أطباء متاحين الآن، حاول مرة أخرى لاحقًا
         </p>
       )}
@@ -136,6 +141,17 @@ const BookAppointment = () => {
             <p className="error-text">{error}</p>
           ) : (
             <form onSubmit={handleSubmit} className="appointment-form">
+              <div className="form-group">
+                <label>اسم المريض:</label>
+                <input
+                  type="text"
+                  value={patientName}
+                  onChange={(e) => setPatientName(e.target.value)}
+                  placeholder="اكتب اسم المريض..."
+                  required
+                />
+              </div>
+
               <div className="form-group">
                 <label>اختر الطبيب:</label>
                 <select
@@ -212,4 +228,4 @@ const BookAppointment = () => {
   );
 };
 
-export default BookAppointment;
+export default BookAppointmentAdmin;
