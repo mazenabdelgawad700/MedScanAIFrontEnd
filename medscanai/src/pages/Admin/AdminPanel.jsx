@@ -111,6 +111,52 @@ const AdminPanel = () => {
     fetchTodayAppointments();
   }, []);
 
+
+  const [confirmingId, setConfirmingId] = useState(null);
+  const [confirmedIds, setConfirmedIds] = useState([]);
+
+
+  const handleConfirmAppointment = async (appointmentId) => {
+    if (!appointmentId) return;
+
+    setConfirmingId(appointmentId);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setConfirmingId(null);
+        return navigate("/auth");
+      }
+
+      const res = await fetch(
+        "https://localhost:7196/api/appointment/Confirm",
+        {
+          method: "POST",
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ appointmentId }),
+        }
+      );
+
+      const result = await res.json();
+
+      if (res.ok && result.succeeded) {
+        // ✅ Mark as confirmed in local state
+        setConfirmedIds((prev) => [...prev, appointmentId]);
+      } else {
+        console.error("فشل في تأكيد الموعد:", result.message);
+      }
+    } catch (err) {
+      console.error("Error confirming appointment:", err);
+    } finally {
+      setConfirmingId(null);
+    }
+  };
+
+
   return (
     <div className="admin-panel-page">
       <div className="admin-panel-card">
@@ -186,6 +232,20 @@ const AdminPanel = () => {
                     <div className="patient-name">{appt.patientName}</div>
                     <div className="doctor-name">مع {appt.doctorName}</div>
                   </div>
+                  {confirmedIds.includes(appt.id) ? (
+                    <div className="confirmed-msg">تم التأكيد ✅</div>
+                  ) : appt.status === "Pending" ? (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleConfirmAppointment(appt.id)}
+                      disabled={confirmingId === appt.id}
+                      style={{ width: "fit-content" }}
+                    >
+                      {confirmingId === appt.id ? "جاري التأكيد..." : "تأكيد"}
+                    </button>
+                  ) : (
+                    <div className="confirmed-msg">تم التأكيد ✅</div>
+                  )}
                 </div>
               ))
             )}

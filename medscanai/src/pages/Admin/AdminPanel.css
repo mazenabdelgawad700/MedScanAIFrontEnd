@@ -218,3 +218,12 @@
     padding: 16px;
   }
 }
+
+.confirmed-msg {
+  color: #0f766e;
+  font-weight: 600;
+  background: #ecfdf5;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+}
