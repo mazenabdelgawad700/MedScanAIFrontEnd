@@ -168,14 +168,6 @@ const AdminPanel = () => {
         </header>
 
         <section className="stats-grid">
-          <div className="stat-card">
-            <div className="icon">📅</div>
-            <div className="stat-body">
-              <div className="stat-title">إجمالي المواعيد</div>
-              <div className="stat-value">—</div>
-            </div>
-          </div>
-
           <div
             className="stat-card clickable"
             onClick={() => navigate("/admin/doctors")}

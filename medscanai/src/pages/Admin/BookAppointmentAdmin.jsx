@@ -116,7 +116,6 @@ const BookAppointmentAdmin = () => {
     } finally {
       setSubmitting(false);
     }
-
   };
 
   return (
@@ -127,11 +126,7 @@ const BookAppointmentAdmin = () => {
         ← العودة إلى لوحة التحكم
       </Link>
 
-      {!isThereDoctors && (
-        <p className="text-red">
-          لا يوجد أطباء متاحين الآن، حاول مرة أخرى لاحقًا
-        </p>
-      )}
+      {!isThereDoctors && <p className="text-red">لا يوجد أطباء متاحين الآن</p>}
 
       {isThereDoctors && (
         <>
