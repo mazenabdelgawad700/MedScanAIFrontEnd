@@ -21,30 +21,36 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
   const [isPatient, setIsPatient] = useState(false);
+  const [isDoctor, setIsDoctor] = useState(false);
 
   const checkAuth = () => {
     const token = localStorage.getItem("token");
     setIsLogged(Boolean(token));
+
     if (!token) {
       setIsAdmin(false);
       setIsPatient(false);
+      setIsDoctor(false);
       return;
     }
+
     const payload = decodeJwtPayload(token);
     if (!payload) {
       setIsAdmin(false);
       setIsPatient(false);
+      setIsDoctor(false);
       return;
     }
+
     const role =
       payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
       payload.role;
     const exp = payload.exp;
     const now = Math.floor(Date.now() / 1000);
+
     if (exp && exp < now) {
-      // expired
+      // token expired
       try {
         localStorage.removeItem("token");
       } catch (e) {
@@ -53,10 +59,13 @@ const Navbar = () => {
       setIsLogged(false);
       setIsAdmin(false);
       setIsPatient(false);
+      setIsDoctor(false);
       return;
     }
+
     setIsAdmin(role === "Admin");
     setIsPatient(role === "Patient");
+    setIsDoctor(role === "Doctor");
   };
 
   useEffect(() => {
@@ -70,18 +79,19 @@ const Navbar = () => {
     try {
       localStorage.removeItem("token");
     } catch (err) {
-      void err;
       console.warn(err);
     }
     setIsLogged(false);
     setIsAdmin(false);
+    setIsPatient(false);
+    setIsDoctor(false);
     navigate("/");
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* left area: auth controls + admin link (inline) */}
+        {/* left area: auth controls + role-based links */}
         <div className="login-button">
           {!isLogged ? (
             <NavLink to="/auth">تسجيل الدخول</NavLink>
@@ -96,8 +106,15 @@ const Navbar = () => {
               لوحة المشرف
             </NavLink>
           )}
+
           {isPatient && (
             <NavLink to="/patient/dashboard" className="admin-inline-link">
+              لوحة التحكم
+            </NavLink>
+          )}
+
+          {isDoctor && (
+            <NavLink to="/doctor/dashboard" className="admin-inline-link">
               لوحة التحكم
             </NavLink>
           )}
@@ -113,13 +130,13 @@ const Navbar = () => {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="lucide lucide-activity h-8 w-8 text-blue-600"
               aria-hidden="true"
             >
-              <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path>
+              <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
             </svg>
           </span>
           <span>MedScanAI</span>
