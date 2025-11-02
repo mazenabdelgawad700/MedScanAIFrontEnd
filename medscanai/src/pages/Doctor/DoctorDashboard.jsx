@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./DoctorDashboard.css";
 
-// safe JWT decode (returns payload or null)
 function decodeJwtPayload(token) {
   try {
     const parts = token.split(".");
@@ -23,8 +22,11 @@ export default function DoctorDashboard() {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState(null); // for modal
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionMsg, setActionMsg] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,7 +40,6 @@ export default function DoctorDashboard() {
       payload.role;
     if (role !== "Doctor") return navigate("/");
 
-    // try different claim names for user id
     const doctorId =
       payload[
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
@@ -49,7 +50,6 @@ export default function DoctorDashboard() {
     if (!doctorId) return navigate("/auth");
 
     fetchDoctorData(doctorId, token);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const fetchDoctorData = async (doctorId, token) => {
@@ -66,14 +66,11 @@ export default function DoctorDashboard() {
         }
       );
 
-      if (!res.ok) {
-        throw new Error("فشل في جلب بيانات الطبيب");
-      }
+      if (!res.ok) throw new Error("فشل في جلب بيانات الطبيب");
 
       const result = await res.json();
-      if (!result.succeeded) {
+      if (!result.succeeded)
         throw new Error(result.message || "استجابة غير متوقعة");
-      }
 
       setDoctor(result.data);
     } catch (err) {
@@ -88,16 +85,72 @@ export default function DoctorDashboard() {
   const openPatientModal = (patient) => {
     setSelectedPatient(patient);
     setModalOpen(true);
+    setActionMsg("");
   };
 
   const closeModal = () => {
     setModalOpen(false);
     setSelectedPatient(null);
+    setActionMsg("");
   };
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
     navigate("/auth");
+  };
+
+  // ✅ Mark appointment as complete
+  const handleCompleteAppointment = async () => {
+    if (!selectedPatient?.appointmentId) {
+      setActionMsg("رقم الموعد غير معروف.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/auth");
+
+    setActionLoading(true);
+    setActionMsg("");
+
+    try {
+      const res = await fetch(
+        "https://localhost:7196/api/appointment/Complete",
+        {
+          method: "PUT",
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            appointmentId: selectedPatient.appointmentId,
+          }),
+        }
+      );
+
+      const result = await res.json();
+
+      if (!res.ok || !result.succeeded) {
+        throw new Error(result.message || "فشل تحديث الموعد");
+      }
+
+      setActionMsg("✅ تم إنهاء الموعد بنجاح");
+      // refresh doctor data
+      const payload = decodeJwtPayload(token);
+      const doctorId =
+        payload[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ] ||
+        payload.UserId ||
+        payload.sub;
+
+      fetchDoctorData(doctorId, token);
+    } catch (err) {
+      console.error(err);
+      setActionMsg("❌ حدث خطأ أثناء إنهاء الموعد");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   if (loading) {
@@ -126,7 +179,6 @@ export default function DoctorDashboard() {
               </button>
             </div>
           </div>
-
           <div className="center-msg error">{error}</div>
         </div>
       </div>
@@ -169,7 +221,6 @@ export default function DoctorDashboard() {
             <h2>مواعيد اليوم</h2>
             <div className="appointments-meta">
               <div className="date-pill">
-                {/* formatted date like 29/10/2025 */}
                 {new Date().getDate()}/{new Date().getMonth() + 1}/
                 {new Date().getFullYear()}
               </div>
@@ -183,9 +234,7 @@ export default function DoctorDashboard() {
 
             {doctor.patients &&
               doctor.patients.map((p, idx) => {
-                // Some responses might use appointmentDate, some appointmentDate/time names —
-                const time =
-                  p.appointmentDate || p.time || p.AppointmentDate || "";
+                const time = p.appointmentDate || p.time || "";
                 const patientName =
                   p.patientName || p.patientName === ""
                     ? p.patientName
@@ -196,7 +245,6 @@ export default function DoctorDashboard() {
                       <button
                         className="details-btn"
                         onClick={() => openPatientModal(p)}
-                        aria-label="عرض التفاصيل"
                       >
                         عرض التفاصيل
                       </button>
@@ -204,28 +252,9 @@ export default function DoctorDashboard() {
 
                     <div className="appointment-body">
                       <div className="patient-line">
-                        <div className="patient-name">
-                          {patientName}
-                        </div>
-                        <div className="badges">
-                          {/* sample badges depending on flags */}
-                          {p.hasAiReport && (
-                            <span className="badge ai">AI تقرير</span>
-                          )}
-                          {p.hasMedicationWarning && (
-                            <span className="badge warn">تحذير دوائي</span>
-                          )}
-                        </div>
+                        <div className="patient-name">{patientName}</div>
                       </div>
-
                       <div className="reason-line">{p.reason || "—"}</div>
-
-                      <div className="meta-line">
-                        <div className="blood-type">
-                          {p.bloodType ? `فصيلة الدم: ${p.bloodType}` : ""}
-                        </div>
-                        <div className="status">{p.status ? p.status : ""}</div>
-                      </div>
                     </div>
 
                     <div className="appointment-time">{time}</div>
@@ -236,7 +265,7 @@ export default function DoctorDashboard() {
         </section>
       </div>
 
-      {/* Patient Modal */}
+      {/* ✅ Patient Modal with Complete button */}
       {modalOpen && selectedPatient && (
         <div className="modal-backdrop" onClick={closeModal}>
           <div
@@ -247,11 +276,7 @@ export default function DoctorDashboard() {
           >
             <div className="modal-header">
               <h3>تفاصيل المريض</h3>
-              <button
-                className="modal-close"
-                onClick={closeModal}
-                aria-label="إغلاق"
-              >
+              <button className="modal-close" onClick={closeModal}>
                 ✕
               </button>
             </div>
@@ -263,11 +288,7 @@ export default function DoctorDashboard() {
               </div>
               <div className="modal-row">
                 <strong>الوقت:</strong>
-                <span>
-                  {selectedPatient.appointmentDate ||
-                    selectedPatient.time ||
-                    "—"}
-                </span>
+                <span>{selectedPatient.appointmentDate || "—"}</span>
               </div>
               <div className="modal-row">
                 <strong>السبب:</strong>
@@ -277,8 +298,7 @@ export default function DoctorDashboard() {
               <div className="modal-row">
                 <strong>الأمراض المزمنة:</strong>
                 <div className="list-inline">
-                  {selectedPatient.chronicDiseases &&
-                  selectedPatient.chronicDiseases.length > 0
+                  {selectedPatient.chronicDiseases?.length
                     ? selectedPatient.chronicDiseases.join("، ")
                     : "لا توجد"}
                 </div>
@@ -287,8 +307,7 @@ export default function DoctorDashboard() {
               <div className="modal-row">
                 <strong>الحساسية:</strong>
                 <div className="list-inline">
-                  {selectedPatient.allergies &&
-                  selectedPatient.allergies.length > 0
+                  {selectedPatient.allergies?.length
                     ? selectedPatient.allergies.join("، ")
                     : "لا توجد"}
                 </div>
@@ -297,16 +316,34 @@ export default function DoctorDashboard() {
               <div className="modal-row">
                 <strong>الأدوية الحالية:</strong>
                 <div className="list-inline">
-                  {selectedPatient.currentMedicine &&
-                  selectedPatient.currentMedicine.length > 0
+                  {selectedPatient.currentMedicine?.length
                     ? selectedPatient.currentMedicine.join("، ")
                     : "لا توجد"}
                 </div>
               </div>
+
+              {actionMsg && (
+                <div
+                  style={{
+                    marginTop: "10px",
+                    color: actionMsg.includes("✅") ? "green" : "red",
+                    fontWeight: "500",
+                  }}
+                >
+                  {actionMsg}
+                </div>
+              )}
             </div>
 
             <div className="modal-footer">
-              <button className="btn-primary" onClick={closeModal}>
+              <button
+                className="btn-primary"
+                onClick={handleCompleteAppointment}
+                disabled={actionLoading}
+              >
+                {actionLoading ? "جارٍ الإنهاء..." : "إنهاء الموعد"}
+              </button>
+              <button className="btn-ghost" onClick={closeModal}>
                 إغلاق
               </button>
             </div>
