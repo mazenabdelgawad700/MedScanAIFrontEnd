@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PatientDashboard.css";
 
@@ -14,6 +14,36 @@ const Card = ({ title, subtitle, icon, onClick }) => (
 
 const PatientDashboard = () => {
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const userId = payload.UserId;
+
+        const response = await fetch(
+          "https://localhost:7196/api/patient/GetProfile",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ PatientId: userId }),
+          }
+        );
+
+        const data = await response.json();
+        if (data.succeeded) setProfile(data.data);
+      } catch (error) {
+        console.error("Failed to load profile", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <div className="pd-page">
@@ -48,6 +78,34 @@ const PatientDashboard = () => {
           onClick={() => navigate("/patient/ai")}
         />
       </div>
+
+      {profile && (
+        <div className="pd-profile-summary">
+          <div className="pd-profile-box">
+            <h2 className="pd-section-title">ملخص ملفك الطبي</h2>
+            <p>
+              <strong>الاسم:</strong> {profile.fullName}
+            </p>
+            <p>
+              <strong>البريد الإلكتروني:</strong> {profile.email}
+            </p>
+            <p>
+              <strong>رقم الهاتف:</strong> {profile.phoneNumber}
+            </p>
+            <p>
+              <strong>الأمراض المزمنة:</strong>{" "}
+              {profile.chronicDiseases.join(", ")}
+            </p>
+            <p>
+              <strong>الحساسية:</strong> {profile.allergies.join(", ")}
+            </p>
+            <p>
+              <strong>الأدوية الحالية:</strong>{" "}
+              {profile.currentMedication.join(", ")}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

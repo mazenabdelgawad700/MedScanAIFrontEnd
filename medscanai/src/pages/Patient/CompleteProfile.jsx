@@ -115,13 +115,24 @@ const CompleteProfile = () => {
     <div className="complete-profile-bg">
       <div className="complete-profile-card">
         <div className="profile-header">
-          <img
-            src="/assets/logo.svg"
-            alt="logo"
-            className="profile-logo"
-            style={{ width: 48, height: 48 }}
-          />
-          <h2>أكمل ملفك الطبي</h2>
+          <div className="logo-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-activity h-8 w-8 text-blue-600"
+              aria-hidden="true"
+            >
+              <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+            </svg>
+          </div>
+          <h2 style={{marginTop: "10px"}}>أكمل ملفك الطبي</h2>
           <div className="profile-subtitle">
             دعنا نقوم بإعداد معلوماتك الطبية
           </div>
