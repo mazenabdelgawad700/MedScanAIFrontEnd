@@ -267,56 +267,56 @@ export default function DoctorDashboard() {
 
       {/* ✅ Patient Modal with Complete button */}
       {modalOpen && selectedPatient && (
-        <div className="modal-backdrop" onClick={closeModal}>
+        <div className="doc-modal-backdrop" onClick={closeModal}>
           <div
-            className="modal"
+            className="doc-modal"
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-header">
+            <div className="doc-modal-header">
               <h3>تفاصيل المريض</h3>
-              <button className="modal-close" onClick={closeModal}>
+              <button className="doc-modal-close" onClick={closeModal}>
                 ✕
               </button>
             </div>
 
-            <div className="modal-body">
-              <div className="modal-row">
+            <div className="doc-modal-body">
+              <div className="doc-modal-row">
                 <strong>الاسم:</strong>
                 <span>{selectedPatient.patientName || "غير محدد"}</span>
               </div>
-              <div className="modal-row">
+              <div className="doc-modal-row">
                 <strong>الوقت:</strong>
                 <span>{selectedPatient.appointmentDate || "—"}</span>
               </div>
-              <div className="modal-row">
+              <div className="doc-modal-row">
                 <strong>السبب:</strong>
                 <span>{selectedPatient.reason || "—"}</span>
               </div>
 
-              <div className="modal-row">
+              <div className="doc-modal-row">
                 <strong>الأمراض المزمنة:</strong>
                 <div className="list-inline">
-                  {selectedPatient.chronicDiseases?.length
+                  {Array.isArray(selectedPatient.chronicDiseases) && selectedPatient.chronicDiseases.length
                     ? selectedPatient.chronicDiseases.join("، ")
                     : "لا توجد"}
                 </div>
               </div>
 
-              <div className="modal-row">
+              <div className="doc-modal-row">
                 <strong>الحساسية:</strong>
                 <div className="list-inline">
-                  {selectedPatient.allergies?.length
+                  {Array.isArray(selectedPatient.allergies) && selectedPatient.allergies.length
                     ? selectedPatient.allergies.join("، ")
                     : "لا توجد"}
                 </div>
               </div>
 
-              <div className="modal-row">
+              <div className="doc-modal-row">
                 <strong>الأدوية الحالية:</strong>
                 <div className="list-inline">
-                  {selectedPatient.currentMedicine?.length
+                  {Array.isArray(selectedPatient.currentMedicine) && selectedPatient.currentMedicine.length
                     ? selectedPatient.currentMedicine.join("، ")
                     : "لا توجد"}
                 </div>
@@ -335,7 +335,7 @@ export default function DoctorDashboard() {
               )}
             </div>
 
-            <div className="modal-footer">
+            <div className="doc-modal-footer">
               <button
                 className="btn-primary"
                 onClick={handleCompleteAppointment}

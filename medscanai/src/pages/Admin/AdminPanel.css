@@ -24,27 +24,24 @@
   color: #0b63ff;
   font-weight: 700;
   text-decoration: none;
-}
-
-.admin-actions a:hover {
-  text-decoration: underline;
+  color: #1a202c;
 }
 
 .admin-panel-header {
-  margin-bottom: 32px;
-}
-
-.admin-panel-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 32px;
-  font-weight: 700;
-  color: #1a202c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .admin-panel-header .sub {
   margin: 0;
   color: #677489;
   font-size: 16px;
+}
+
+.logout-btn {
+  width: fit-content;
+  border-radius: 15px;
 }
 
 .stats-grid {

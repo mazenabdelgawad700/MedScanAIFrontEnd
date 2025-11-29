@@ -157,6 +157,16 @@ const AdminPanel = () => {
   };
 
 
+  const handleSignOut = () => {
+    try {
+      localStorage.removeItem("token");
+    } catch (err) {
+      console.warn(err);
+    }
+    navigate("/auth");
+  };
+
+
   return (
     <div className="admin-panel-page">
       <div className="admin-panel-card">
@@ -165,6 +175,9 @@ const AdminPanel = () => {
             <h1>لوحة تحكم المدير</h1>
             <p className="sub">نظرة عامة على النظام والإجراءات السريعة</p>
           </div>
+          <button onClick={handleSignOut} className="logout-btn btn-danger">
+            تسجيل الخروج
+          </button>
         </header>
 
         <section className="stats-grid">

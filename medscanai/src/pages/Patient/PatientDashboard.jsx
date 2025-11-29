@@ -66,12 +66,12 @@ const PatientDashboard = () => {
       </div>
 
       <div className="pd-grid">
-        <Card
+        {/* <Card
           title="الملف الطبي"
           subtitle="اعرض وحدث معلوماتك الطبية"
           icon={<span className="pd-ico">👤</span>}
           onClick={() => navigate("/patient/medical-profile")}
-        />
+        /> */}
         <Card
           title="مواعيدي"
           subtitle="اعرض مواعيدك القادمة والسابقة"

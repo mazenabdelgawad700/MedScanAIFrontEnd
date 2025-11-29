@@ -73,8 +73,8 @@ const Auth = () => {
                 navigate("/patient/complete-profile");
               } else if (role === "Admin") {
                 navigate("/admin");
-              } else {
-                navigate("/");
+              } else if(role === "Doctor"){
+                navigate("/doctor/dashboard");
               }
             } else {
               navigate("/");
