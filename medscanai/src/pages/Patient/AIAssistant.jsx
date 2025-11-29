@@ -1,12 +1,8 @@
 import React from "react";
+import AssistantLayout from "../../components/AIAssistant/AssistantLayout";
 
 const AIAssistant = () => {
-  return (
-    <div style={{ direction: "rtl", padding: 24 }}>
-      <h2>المساعد الصحي الذكي</h2>
-      <p>واجهة المساعد الذكي — سيتم تنفيذها لاحقاً.</p>
-    </div>
-  );
+  return <AssistantLayout />;
 };
 
 export default AIAssistant;

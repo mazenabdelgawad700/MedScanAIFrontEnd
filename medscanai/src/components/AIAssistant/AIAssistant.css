@@ -1,0 +1,739 @@
+/* AIAssistant.css */
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --accent-color: #c7d2fe;
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.ai-assistant-container {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Navigation Sidebar/Pills */
+.nav-custom .nav-link {
+  color: #555;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.nav-custom .nav-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(5px);
+}
+
+.nav-custom .nav-link.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+  transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes pulse-soft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+.pulse-animation {
+  animation: pulse-soft 2s infinite;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* AIAssistant.css */
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --accent-color: #c7d2fe;
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.ai-assistant-container {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Navigation Sidebar/Pills */
+.nav-custom .nav-link {
+  color: #555;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.nav-custom .nav-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(5px);
+}
+
+.nav-custom .nav-link.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+  transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes pulse-soft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+.pulse-animation {
+  animation: pulse-soft 2s infinite;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Result Card */
+.result-card-header {
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  animation: pulse-soft 2s infinite;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* AIAssistant.css */
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --accent-color: #c7d2fe;
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.ai-assistant-container {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Navigation Sidebar/Pills */
+.nav-custom .nav-link {
+  color: #555;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.nav-custom .nav-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(5px);
+}
+
+.nav-custom .nav-link.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+  transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes pulse-soft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+.pulse-animation {
+  animation: pulse-soft 2s infinite;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Result Card */
+.result-card-header {
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  animation: pulse-soft 2s infinite;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* AIAssistant.css */
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --accent-color: #c7d2fe;
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.ai-assistant-container {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Navigation Sidebar/Pills */
+.nav-custom .nav-link {
+  color: #555;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.nav-custom .nav-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(5px);
+}
+
+.nav-custom .nav-link.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+  transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes pulse-soft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+.pulse-animation {
+  animation: pulse-soft 2s infinite;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Result Card */
+.result-card-header {
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-radius: 20px 20px 0 0;
+  padding: 15px 20px;
+}
+
+/* Hub View */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hub-card {
+  background: white;
+  border-radius: 24px;
+  transition: all 0.3s ease;
+  min-height: 320px;
+}
+
+.hub-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Brain Tumor - Blue border */
+.hub-card-bordered-blue {
+  border: 3px solid #2563eb;
+}
+
+.hub-card-bordered-blue:hover {
+  border-color: #1d4ed8;
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
+}
+
+/* Health Chatbot - Green border */
+.hub-card-bordered-green {
+  border: 3px solid #10b981;
+}
+
+.hub-card-bordered-green:hover {
+  border-color: #059669;
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+}
+
+/* X-Ray and Dermatology - Subtle gray border */
+.hub-card-bordered-subtle {
+  border: 2px solid #e5e7eb;
+}
+
+.hub-card-bordered-subtle:hover {
+  border-color: #d1d5db;
+}
+
+/* Hub View */
+.icon-wrapper {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

@@ -45,11 +45,24 @@ const PatientDashboard = () => {
     fetchProfile();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/auth");
+  };
+
   return (
     <div className="pd-page">
       <div className="pd-hero">
-        <h1>مرحبًا بعودتك</h1>
-        <p className="pd-sub">كيف يمكننا مساعدتك اليوم؟</p>
+        <div className="pd-hero-content">
+          <div>
+            <h1>مرحبًا بعودتك</h1>
+            <p className="pd-sub">كيف يمكننا مساعدتك اليوم؟</p>
+          </div>
+          <button className="pd-logout-btn" onClick={handleLogout}>
+            <i className="bi bi-box-arrow-right"></i>
+            تسجيل الخروج
+          </button>
+        </div>
       </div>
 
       <div className="pd-grid">
@@ -81,28 +94,94 @@ const PatientDashboard = () => {
 
       {profile && (
         <div className="pd-profile-summary">
-          <div className="pd-profile-box">
-            <h2 className="pd-section-title">ملخص ملفك الطبي</h2>
-            <p>
-              <strong>الاسم:</strong> {profile.fullName}
-            </p>
-            <p>
-              <strong>البريد الإلكتروني:</strong> {profile.email}
-            </p>
-            <p>
-              <strong>رقم الهاتف:</strong> {profile.phoneNumber}
-            </p>
-            <p>
-              <strong>الأمراض المزمنة:</strong>{" "}
-              {profile.chronicDiseases.join(", ")}
-            </p>
-            <p>
-              <strong>الحساسية:</strong> {profile.allergies.join(", ")}
-            </p>
-            <p>
-              <strong>الأدوية الحالية:</strong>{" "}
-              {profile.currentMedication.join(", ")}
-            </p>
+          <h2 className="pd-section-title">ملخص ملفك الطبي</h2>
+          
+          <div className="pd-profile-grid">
+            {/* Personal Info Card */}
+            <div className="pd-info-card">
+              <div className="pd-info-header">
+                <i className="bi bi-person-circle pd-info-icon"></i>
+                <h3>المعلومات الشخصية</h3>
+              </div>
+              <div className="pd-info-content">
+                <div className="pd-info-item">
+                  <i className="bi bi-person-fill"></i>
+                  <div>
+                    <span className="pd-info-label">الاسم</span>
+                    <span className="pd-info-value">{profile.fullName}</span>
+                  </div>
+                </div>
+                <div className="pd-info-item">
+                  <i className="bi bi-envelope-fill"></i>
+                  <div>
+                    <span className="pd-info-label">البريد الإلكتروني</span>
+                    <span className="pd-info-value">{profile.email}</span>
+                  </div>
+                </div>
+                <div className="pd-info-item">
+                  <i className="bi bi-telephone-fill"></i>
+                  <div>
+                    <span className="pd-info-label">رقم الهاتف</span>
+                    <span className="pd-info-value">{profile.phoneNumber}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Medical Info Card */}
+            <div className="pd-info-card">
+              <div className="pd-info-header">
+                <i className="bi bi-heart-pulse pd-info-icon"></i>
+                <h3>المعلومات الطبية</h3>
+              </div>
+              <div className="pd-info-content">
+                <div className="pd-info-item">
+                  <i className="bi bi-clipboard2-pulse"></i>
+                  <div>
+                    <span className="pd-info-label">الأمراض المزمنة</span>
+                    <div className="pd-tags">
+                      {profile.chronicDiseases && profile.chronicDiseases.length > 0 ? (
+                        profile.chronicDiseases.map((disease, idx) => (
+                          <span key={idx} className="pd-tag pd-tag-danger">{disease}</span>
+                        ))
+                      ) : (
+                        <span className="pd-info-value text-muted">لا يوجد</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="pd-info-item">
+                  <i className="bi bi-exclamation-triangle"></i>
+                  <div>
+                    <span className="pd-info-label">الحساسية</span>
+                    <div className="pd-tags">
+                      {profile.allergies && profile.allergies.length > 0 ? (
+                        profile.allergies.map((allergy, idx) => (
+                          <span key={idx} className="pd-tag pd-tag-warning">{allergy}</span>
+                        ))
+                      ) : (
+                        <span className="pd-info-value text-muted">لا يوجد</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="pd-info-item">
+                  <i className="bi bi-capsule"></i>
+                  <div>
+                    <span className="pd-info-label">الأدوية الحالية</span>
+                    <div className="pd-tags">
+                      {profile.currentMedication && profile.currentMedication.length > 0 ? (
+                        profile.currentMedication.map((med, idx) => (
+                          <span key={idx} className="pd-tag pd-tag-info">{med}</span>
+                        ))
+                      ) : (
+                        <span className="pd-info-value text-muted">لا يوجد</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
