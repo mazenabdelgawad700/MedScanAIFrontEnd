@@ -37,7 +37,7 @@ const ChatView = () => {
   };
 
   return (
-    <div className="d-flex flex-column h-100" style={{ minHeight: '600px' }} dir="rtl">
+    <div className="d-flex flex-column h-100" style={{ minHeight: '600px', maxHeight: '600px' }} dir="rtl">
       <div className="border-bottom pb-3 mb-3">
         <div className="d-flex align-items-center">
           <div className="bg-primary bg-opacity-10 p-3 rounded-circle text-primary ms-3">
