@@ -38,6 +38,7 @@ const AssistantLayout = () => {
             description="Dermatological analysis for skin conditions and allergic reactions."
             icon="bi-person-bounding-box"
             color="warning"
+            apiEndpoint="http://localhost:8000/predict"
           />
         );
       case 'chat':

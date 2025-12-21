@@ -1,36 +1,75 @@
 import React, { useState } from 'react';
 import ResultCard from './ResultCard';
 
-const ModelView = ({ title, description, icon, color = 'primary' }) => {
+const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setSelectedImage(URL.createObjectURL(file));
+      setSelectedFile(file);
       setResult(null);
+      setError(null);
     }
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!selectedImage) return;
 
     setIsAnalyzing(true);
+    setError(null);
     
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setResult({
-        Diagnose: "بناءً على تحليل الصورة المقدمة، هناك مؤشرات تشير إلى شذوذ محتمل يتوافق مع الأنماط المبكرة. ومع ذلك، يتطلب التشخيص النهائي الارتباط السريري.",
-        NextSteps: JSON.stringify([
-          "استشر أخصائيًا للحصول على مراجعة تفصيلية",
-          "حدد موعدًا لفحص متابعة بالرنين المغناطيسي/الأشعة المقطعية إذا أوصى الطبيب",
-          "راقب أي أعراض مصاحبة"
-        ]),
-        somethingIdonotremeber: "fsdfsdfsdf"
-      });
-    }, 2000);
+    // If API endpoint is provided, use it
+    if (apiEndpoint && selectedFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const response = await fetch(apiEndpoint, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Map API response to our internal format
+        setResult({
+          diagnosis: data.class_label_ar || data.class_label_en,
+          diagnosisEn: data.class_label_en,
+          confidence: data.confidence_level,
+          advice: data.generated_advice,
+          // Keep raw data just in case
+          raw: data
+        });
+      } catch (err) {
+        console.error("Analysis failed:", err);
+        setError("حدث خطأ أثناء تحليل الصورة. يرجى المحاولة مرة أخرى.");
+      } finally {
+        setIsAnalyzing(false);
+      }
+    } else {
+      // Fallback to mock data if no endpoint provided
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        setResult({
+          diagnosis: "بناءً على تحليل الصورة المقدمة، هناك مؤشرات تشير إلى شذوذ محتمل يتوافق مع الأنماط المبكرة. ومع ذلك، يتطلب التشخيص النهائي الارتباط السريري.",
+          nextSteps: JSON.stringify([
+            "استشر أخصائيًا للحصول على مراجعة تفصيلية",
+            "حدد موعدًا لفحص متابعة بالرنين المغناطيسي/الأشعة المقطعية إذا أوصى الطبيب",
+            "راقب أي أعراض مصاحبة"
+          ])
+        });
+      }, 2000);
+    }
   };
 
   return (
@@ -92,13 +131,22 @@ const ModelView = ({ title, description, icon, color = 'primary' }) => {
                 {isAnalyzing ? 'جاري تحليل الصورة...' : 'بدء التحليل'}
               </button>
             </div>
+            {error && (
+              <div className="alert alert-danger mt-3 fade-in-up" role="alert">
+                <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                {error}
+              </div>
+            )}
           </div>
 
           {result && (
             <div className="fade-in-up mt-4">
               <ResultCard 
-                diagnosis={result.Diagnose} 
-                nextSteps={result.NextSteps} 
+                diagnosis={result.diagnosis || result.Diagnose} 
+                diagnosisEn={result.diagnosisEn}
+                nextSteps={result.nextSteps || result.NextSteps}
+                advice={result.advice}
+                confidence={result.confidence}
                 color={color}
               />
             </div>
