@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ResultCard from './ResultCard';
 
-const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint }) => {
+const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, titleCard }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -148,6 +148,7 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint })
                 advice={result.advice}
                 confidence={result.confidence}
                 color={color}
+                title = {titleCard} 
               />
             </div>
           )}

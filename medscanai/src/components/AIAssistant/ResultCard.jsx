@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ResultCard = ({ diagnosis, diagnosisEn, nextSteps, advice, confidence, color = 'primary' }) => {
+const ResultCard = ({ diagnosis, diagnosisEn, nextSteps, advice, confidence, title, color = 'primary' }) => {
   let steps = [];
   try {
     steps = typeof nextSteps === 'string' ? JSON.parse(nextSteps) : nextSteps;
@@ -28,11 +28,11 @@ const ResultCard = ({ diagnosis, diagnosisEn, nextSteps, advice, confidence, col
             <div className="bg-white bg-opacity-25 p-2 rounded-circle ms-3">
               <i className="bi bi-clipboard2-pulse fs-4 text-white"></i>
             </div>
-            <h5 className="mb-0 fw-bold text-white">تقرير التحليل</h5>
+            <h5 className="mb-0 fw-bold text-white">{title}</h5>
           </div>
           {confidence && (
             <span className="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold dir-ltr">
-              {confidence}
+              نسبة الثقة  {confidence}
             </span>
           )}
         </div>

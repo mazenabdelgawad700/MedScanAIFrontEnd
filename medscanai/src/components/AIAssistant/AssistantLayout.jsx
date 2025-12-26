@@ -20,6 +20,7 @@ const AssistantLayout = () => {
             description="Advanced AI analysis for MRI scans to detect potential anomalies."
             icon="bi-activity"
             color="primary"
+            titleCard = "تقرير تحليل ورم الدماغ"
           />
         );
       case 'xray':
@@ -29,6 +30,7 @@ const AssistantLayout = () => {
             description="Rapid screening of X-ray images for bone fractures and lung conditions."
             icon="bi-lungs"
             color="info"
+            titleCard = "تقرير الاشعة المقطعية"
           />
         );
       case 'skin':
@@ -39,6 +41,7 @@ const AssistantLayout = () => {
             icon="bi-person-bounding-box"
             color="warning"
             apiEndpoint="http://localhost:8000/predict"
+            titleCard = "نتيجة تحليل الصورة"
           />
         );
       case 'chat':
