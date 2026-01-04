@@ -21,6 +21,7 @@ const AssistantLayout = () => {
             icon="bi-activity"
             color="primary"
             titleCard = "تقرير تحليل ورم الدماغ"
+            apiEndpoint="http://localhost:8001/predict"
           />
         );
       case 'xray':

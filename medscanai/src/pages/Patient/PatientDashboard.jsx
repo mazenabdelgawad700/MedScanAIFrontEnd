@@ -55,7 +55,7 @@ const PatientDashboard = () => {
       <div className="pd-hero">
         <div className="pd-hero-content">
           <div>
-            <h1>مرحبًا بعودتك</h1>
+            <h1>مرحبًا بعودتك {profile?.fullName}</h1>
             <p className="pd-sub">كيف يمكننا مساعدتك اليوم؟</p>
           </div>
           <button className="pd-logout-btn" onClick={handleLogout}>
@@ -97,11 +97,18 @@ const PatientDashboard = () => {
           <h2 className="pd-section-title">ملخص ملفك الطبي</h2>
           
           <div className="pd-profile-grid">
-            {/* Personal Info Card */}
-            <div className="pd-info-card">
+            {/* Personal Info Card - Clickable */}
+            <div 
+              className="pd-info-card pd-info-card-clickable"
+              onClick={() => navigate("/patient/update-profile")}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && navigate("/patient/update-profile")}
+            >
               <div className="pd-info-header">
                 <i className="bi bi-person-circle pd-info-icon"></i>
                 <h3>المعلومات الشخصية</h3>
+                <i className="bi bi-pencil-square pd-edit-icon"></i>
               </div>
               <div className="pd-info-content">
                 <div className="pd-info-item">
@@ -125,6 +132,10 @@ const PatientDashboard = () => {
                     <span className="pd-info-value">{profile.phoneNumber}</span>
                   </div>
                 </div>
+              </div>
+              <div className="pd-edit-hint">
+                <i className="bi bi-pencil"></i>
+                اضغط للتعديل
               </div>
             </div>
 

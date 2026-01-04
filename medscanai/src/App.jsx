@@ -14,6 +14,7 @@ import MedicalProfile from "./pages/Patient/MedicalProfile";
 import Appointments from "./pages/Patient/Appointments";
 import BookAppointment from "./pages/Patient/BookAppointment";
 import AIAssistant from "./pages/Patient/AIAssistant";
+import UpdateProfile from "./pages/Patient/UpdateProfile";
 import BookAppointmentAdmin from "./pages/Admin/BookAppointmentAdmin";
 import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/patient/appointments" element={<Appointments />} />
         <Route path="/patient/book" element={<BookAppointment />} />
         <Route path="/patient/ai" element={<AIAssistant />} />
+        <Route path="/patient/update-profile" element={<UpdateProfile />} />
         <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
       </Routes>
     </main>
