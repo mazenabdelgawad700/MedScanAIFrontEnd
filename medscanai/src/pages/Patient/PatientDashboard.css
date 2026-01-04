@@ -124,8 +124,9 @@
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(15, 23, 42, .06);
   border: 1px solid #f0f3f7;
-  overflow: hidden;
+  overflow: visible;
   transition: transform .2s, box-shadow .2s;
+  position: relative;
 }
 
 .pd-info-card:hover {
@@ -157,6 +158,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: visible;
+  position: relative;
 }
 
 .pd-info-item {
@@ -329,4 +332,341 @@
 
 .pd-logout-btn i {
   font-size: 18px;
+}
+
+/* Interactive Medical Tags */
+.pd-tag-interactive {
+  /* position: relative; */
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.pd-tag-interactive:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tag Popup */
+.pd-tag-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 50%;
+  transform: translateX(50%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  display: flex;
+  gap: 6px;
+  z-index: 9999;
+  animation: popupFadeIn 0.15s ease-out;
+}
+
+.pd-tag-popup::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 50%;
+  transform: translateX(50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-left: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(50%) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(50%) translateY(0);
+  }
+}
+
+.pd-tag-popup-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.pd-tag-popup-btn i {
+  font-size: 14px;
+}
+
+.pd-tag-popup-edit {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
+}
+
+.pd-tag-popup-edit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1px);
+}
+
+.pd-tag-popup-delete {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #fff;
+}
+
+.pd-tag-popup-delete:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-1px);
+}
+
+.pd-tag-popup-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Tag Editing Mode */
+.pd-tag-editing {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  min-width: 140px;
+}
+
+.pd-tag-input {
+  flex: 1;
+  min-width: 80px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.9);
+  color: inherit;
+  outline: none;
+}
+
+.pd-tag-input:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.pd-tag-edit-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.pd-tag-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+.pd-tag-btn i {
+  font-size: 14px;
+}
+
+.pd-tag-btn-save {
+  background: #16a34a;
+  color: #fff;
+}
+
+.pd-tag-btn-save:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.pd-tag-btn-cancel {
+  background: #6b7280;
+  color: #fff;
+}
+
+.pd-tag-btn-cancel:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.pd-tag-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Tag Spinner */
+.pd-tag-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: tagSpin 0.6s linear infinite;
+}
+
+@keyframes tagSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure proper z-index stacking */
+/* .pd-tags {
+  position: relative;
+  z-index: 10;
+} */
+
+.pd-info-item {
+  overflow: visible;
+}
+
+/* Active tag state */
+.pd-tag-active {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Delete Confirmation Modal */
+.pd-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.pd-modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.3);
+  animation: modalSlideIn 0.25s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.pd-modal-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.pd-modal-icon i {
+  font-size: 32px;
+  color: #d97706;
+}
+
+.pd-modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px;
+}
+
+.pd-modal-message {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0 0 28px;
+  line-height: 1.6;
+}
+
+.pd-modal-message strong {
+  color: #dc2626;
+}
+
+.pd-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pd-modal-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  border: none;
+  min-width: 120px;
+}
+
+.pd-modal-btn i {
+  font-size: 16px;
+}
+
+.pd-modal-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+}
+
+.pd-modal-btn-cancel:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.pd-modal-btn-delete {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+}
+
+.pd-modal-btn-delete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.pd-modal-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

@@ -12,42 +12,393 @@ const Card = ({ title, subtitle, icon, onClick }) => (
   </div>
 );
 
+// Interactive Medical Tag Component
+const MedicalTag = ({ item, type, tagClass, onUpdate, onDelete }) => {
+  const [showPopup, setShowPopup] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(item?.name || "");
+  const [isLoading, setIsLoading] = useState(false);
+  const tagRef = React.useRef(null);
+
+  // Close popup when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (tagRef.current && !tagRef.current.contains(event.target)) {
+        setShowPopup(false);
+      }
+    };
+
+    if (showPopup) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showPopup]);
+
+  const handleTagClick = (e) => {
+    e.stopPropagation();
+    if (!isEditing && !showDeleteConfirm) {
+      setShowPopup(!showPopup);
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!editValue.trim()) return;
+    setIsLoading(true);
+    await onUpdate(item, editValue);
+    setIsLoading(false);
+    setIsEditing(false);
+    setShowPopup(false);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setIsLoading(true);
+    await onDelete(item);
+    setIsLoading(false);
+    setShowDeleteConfirm(false);
+    setShowPopup(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleUpdate();
+    } else if (e.key === "Escape") {
+      setIsEditing(false);
+      setEditValue(item?.name || "");
+    }
+  };
+
+  if (isEditing) {
+    return (
+      <div className={`pd-tag ${tagClass} pd-tag-editing`} ref={tagRef}>
+        <input
+          type="text"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          autoFocus
+          className="pd-tag-input"
+          disabled={isLoading}
+        />
+        <div className="pd-tag-edit-actions">
+          <button
+            className="pd-tag-btn pd-tag-btn-save"
+            onClick={handleUpdate}
+            disabled={isLoading}
+          >
+            {isLoading ? <span className="pd-tag-spinner"></span> : <i className="bi bi-check"></i>}
+          </button>
+          <button
+            className="pd-tag-btn pd-tag-btn-cancel"
+            onClick={() => {
+              setIsEditing(false);
+              setEditValue(item?.name || "");
+            }}
+            disabled={isLoading}
+          >
+            <i className="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div
+        ref={tagRef}
+        className={`pd-tag ${tagClass} pd-tag-interactive ${showPopup ? 'pd-tag-active' : ''}`}
+        onClick={handleTagClick}
+      >
+        {item?.name}
+        {showPopup && (
+          <div className="pd-tag-popup" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="pd-tag-popup-btn pd-tag-popup-edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+                setShowPopup(false);
+              }}
+              disabled={isLoading}
+            >
+              <i className="bi bi-pencil"></i>
+              تعديل
+            </button>
+            <button
+              className="pd-tag-popup-btn pd-tag-popup-delete"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDeleteConfirm(true);
+                setShowPopup(false);
+              }}
+              disabled={isLoading}
+            >
+              <i className="bi bi-trash"></i>
+              حذف
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="pd-modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+          <div className="pd-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="pd-modal-icon">
+              <i className="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <h3 className="pd-modal-title">تأكيد الحذف</h3>
+            <p className="pd-modal-message">
+              هل أنت متأكد من حذف <strong>"{item?.name}"</strong>؟
+            </p>
+            <div className="pd-modal-actions">
+              <button
+                className="pd-modal-btn pd-modal-btn-cancel"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isLoading}
+              >
+                إلغاء
+              </button>
+              <button
+                className="pd-modal-btn pd-modal-btn-delete"
+                onClick={handleDeleteConfirm}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <span className="pd-tag-spinner"></span>
+                    جاري الحذف...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-trash"></i>
+                    نعم، احذف
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 const PatientDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
 
+  const getToken = () => localStorage.getItem("token");
+
+  const getUserId = () => {
+    const token = getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.UserId;
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const token = getToken();
+      const userId = getUserId();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/GetProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ PatientId: userId }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.succeeded) setProfile(data.data);
+    } catch (error) {
+      console.error("Failed to load profile", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        const userId = payload.UserId;
-
-        const response = await fetch(
-          "https://localhost:7196/api/patient/GetProfile",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ PatientId: userId }),
-          }
-        );
-
-        const data = await response.json();
-        if (data.succeeded) setProfile(data.data);
-      } catch (error) {
-        console.error("Failed to load profile", error);
-      }
-    };
-
     fetchProfile();
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/auth");
+  };
+
+  // Update handlers
+  const handleUpdateChronicDisease = async (disease, newName) => {
+    try {
+      const token = getToken();
+      const userId = getUserId();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/UpdateChronicDisease",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            chronicDisease: {
+              patientId: userId,
+              id: disease.id,
+              name: newName,
+            },
+          }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchProfile();
+      }
+    } catch (error) {
+      console.error("Failed to update chronic disease", error);
+    }
+  };
+
+  const handleUpdateAllergy = async (allergy, newName) => {
+    try {
+      const token = getToken();
+      const userId = getUserId();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/UpdateAllergy",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            allergy: {
+              patientId: userId,
+              id: allergy.id,
+              name: newName,
+            },
+          }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchProfile();
+      }
+    } catch (error) {
+      console.error("Failed to update allergy", error);
+    }
+  };
+
+  const handleUpdateMedication = async (medication, newName) => {
+    try {
+      const token = getToken();
+      const userId = getUserId();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/UpdateCurrentMedication",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            currentMedication: {
+              patientId: userId,
+              id: medication.id,
+              name: newName,
+            },
+          }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchProfile();
+      }
+    } catch (error) {
+      console.error("Failed to update medication", error);
+    }
+  };
+
+  // Delete handlers
+  const handleDeleteChronicDisease = async (disease) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/DeleteChronicDisease",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: disease.id }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchProfile();
+      }
+    } catch (error) {
+      console.error("Failed to delete chronic disease", error);
+    }
+  };
+
+  const handleDeleteAllergy = async (allergy) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/DeleteAllergy",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: allergy.id }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchProfile();
+      }
+    } catch (error) {
+      console.error("Failed to delete allergy", error);
+    }
+  };
+
+  const handleDeleteMedication = async (medication) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(
+        "https://localhost:7196/api/patient/DeleteCurrentMedication",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: medication.id }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchProfile();
+      }
+    } catch (error) {
+      console.error("Failed to delete medication", error);
+    }
   };
 
   return (
@@ -66,12 +417,6 @@ const PatientDashboard = () => {
       </div>
 
       <div className="pd-grid">
-        {/* <Card
-          title="الملف الطبي"
-          subtitle="اعرض وحدث معلوماتك الطبية"
-          icon={<span className="pd-ico">👤</span>}
-          onClick={() => navigate("/patient/medical-profile")}
-        /> */}
         <Card
           title="مواعيدي"
           subtitle="اعرض مواعيدك القادمة والسابقة"
@@ -152,8 +497,15 @@ const PatientDashboard = () => {
                     <span className="pd-info-label">الأمراض المزمنة</span>
                     <div className="pd-tags">
                       {profile.chronicDiseases && profile.chronicDiseases.length > 0 ? (
-                        profile.chronicDiseases.map((disease, idx) => (
-                          <span key={idx} className="pd-tag pd-tag-danger">{disease}</span>
+                        profile.chronicDiseases.map((disease) => (
+                          <MedicalTag
+                            key={disease?.id}
+                            item={disease}
+                            type="chronicDisease"
+                            tagClass="pd-tag-danger"
+                            onUpdate={handleUpdateChronicDisease}
+                            onDelete={handleDeleteChronicDisease}
+                          />
                         ))
                       ) : (
                         <span className="pd-info-value text-muted">لا يوجد</span>
@@ -167,8 +519,15 @@ const PatientDashboard = () => {
                     <span className="pd-info-label">الحساسية</span>
                     <div className="pd-tags">
                       {profile.allergies && profile.allergies.length > 0 ? (
-                        profile.allergies.map((allergy, idx) => (
-                          <span key={idx} className="pd-tag pd-tag-warning">{allergy}</span>
+                        profile.allergies.map((allergy) => (
+                          <MedicalTag
+                            key={allergy?.id}
+                            item={allergy}
+                            type="allergy"
+                            tagClass="pd-tag-warning"
+                            onUpdate={handleUpdateAllergy}
+                            onDelete={handleDeleteAllergy}
+                          />
                         ))
                       ) : (
                         <span className="pd-info-value text-muted">لا يوجد</span>
@@ -182,8 +541,15 @@ const PatientDashboard = () => {
                     <span className="pd-info-label">الأدوية الحالية</span>
                     <div className="pd-tags">
                       {profile.currentMedication && profile.currentMedication.length > 0 ? (
-                        profile.currentMedication.map((med, idx) => (
-                          <span key={idx} className="pd-tag pd-tag-info">{med}</span>
+                        profile.currentMedication.map((med) => (
+                          <MedicalTag
+                            key={med?.id}
+                            item={med}
+                            type="medication"
+                            tagClass="pd-tag-info"
+                            onUpdate={handleUpdateMedication}
+                            onDelete={handleDeleteMedication}
+                          />
                         ))
                       ) : (
                         <span className="pd-info-value text-muted">لا يوجد</span>
@@ -201,3 +567,4 @@ const PatientDashboard = () => {
 };
 
 export default PatientDashboard;
+
