@@ -250,7 +250,6 @@
 .pd-info-card-clickable:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
-  border-color: #2563eb;
 }
 
 .pd-info-card-clickable:focus {
@@ -336,15 +335,53 @@
 
 /* Interactive Medical Tags */
 .pd-tag-interactive {
-  /* position: relative; */
   cursor: pointer;
   transition: all 0.2s;
-  z-index: 1;
 }
 
 .pd-tag-interactive:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tag Tooltip */
+.pd-tag-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.pd-tag-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1e293b;
+}
+
+.pd-tag-interactive:hover .pd-tag-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.pd-tag-active .pd-tag-tooltip {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* Tag Popup */
@@ -560,6 +597,209 @@
   to {
     opacity: 1;
   }
+}
+
+.pd-modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.3);
+  animation: modalSlideIn 0.25s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.pd-modal-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.pd-modal-icon i {
+  font-size: 32px;
+  color: #d97706;
+}
+
+.pd-modal-icon-add {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.pd-modal-icon-add i {
+  color: #2563eb;
+}
+
+.pd-modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px;
+}
+
+.pd-modal-input-group {
+  margin: 20px 0 28px;
+}
+
+.pd-modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+  text-align: right;
+}
+
+.pd-modal-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.pd-modal-message {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0 0 28px;
+  line-height: 1.6;
+}
+
+.pd-modal-message strong {
+  color: #dc2626;
+}
+
+.pd-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pd-modal-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  border: none;
+  min-width: 120px;
+}
+
+.pd-modal-btn i {
+  font-size: 16px;
+}
+
+.pd-modal-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+}
+
+.pd-modal-btn-cancel:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.pd-modal-btn-delete {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+}
+
+.pd-modal-btn-delete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.pd-modal-btn-confirm {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+.pd-modal-btn-confirm:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.pd-modal-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Add Tag Button */
+.pd-tag-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px dashed;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 4px;
+}
+
+.pd-tag-add i {
+  font-size: 16px;
+}
+
+.pd-tag-add:hover {
+  transform: scale(1.1);
+  border-style: solid;
+}
+
+.pd-tag-add-danger {
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.pd-tag-add-danger:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+}
+
+.pd-tag-add-warning {
+  border-color: #fde68a;
+  color: #d97706;
+}
+
+.pd-tag-add-warning:hover {
+  background: #fef3c7;
+  border-color: #d97706;
+}
+
+.pd-tag-add-info {
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.pd-tag-add-info:hover {
+  background: #dbeafe;
+  border-color: #2563eb;
 }
 
 .pd-modal {

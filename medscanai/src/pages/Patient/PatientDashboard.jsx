@@ -17,6 +17,7 @@ const MedicalTag = ({ item, type, tagClass, onUpdate, onDelete }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   const [editValue, setEditValue] = useState(item?.name || "");
   const [isLoading, setIsLoading] = useState(false);
   const tagRef = React.useRef(null);
@@ -114,6 +115,7 @@ const MedicalTag = ({ item, type, tagClass, onUpdate, onDelete }) => {
         onClick={handleTagClick}
       >
         {item?.name}
+        <span className="pd-tag-tooltip">اضغط للتعديل أو الحذف</span>
         {showPopup && (
           <div className="pd-tag-popup" onClick={(e) => e.stopPropagation()}>
             <button
@@ -191,6 +193,10 @@ const MedicalTag = ({ item, type, tagClass, onUpdate, onDelete }) => {
 const PatientDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addType, setAddType] = useState(null); // 'chronicDisease', 'allergy', 'medication'
+  const [newItemName, setNewItemName] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
   const getToken = () => localStorage.getItem("token");
 
@@ -241,7 +247,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/UpdateChronicDisease",
+        "https://localhost:7196/api/chronicdisease/UpdateChronicDisease",
         {
           method: "PUT",
           headers: {
@@ -272,7 +278,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/UpdateAllergy",
+        "https://localhost:7196/api/allergy/UpdateAllergy",
         {
           method: "PUT",
           headers: {
@@ -303,7 +309,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/UpdateCurrentMedication",
+        "https://localhost:7196/api/currentmedication/UpdateCurrentMedication",
         {
           method: "PUT",
           headers: {
@@ -334,7 +340,7 @@ const PatientDashboard = () => {
       const token = getToken();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/DeleteChronicDisease",
+        "https://localhost:7196/api/chronicdisease/DeleteChronicDisease",
         {
           method: "DELETE",
           headers: {
@@ -358,7 +364,7 @@ const PatientDashboard = () => {
       const token = getToken();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/DeleteAllergy",
+        "https://localhost:7196/api/allergy/DeleteAllergy",
         {
           method: "DELETE",
           headers: {
@@ -382,7 +388,7 @@ const PatientDashboard = () => {
       const token = getToken();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/DeleteCurrentMedication",
+        "https://localhost:7196/api/currentmedication/DeleteCurrentMedication",
         {
           method: "DELETE",
           headers: {
@@ -398,6 +404,78 @@ const PatientDashboard = () => {
       }
     } catch (error) {
       console.error("Failed to delete medication", error);
+    }
+  };
+
+  // Helper to open add modal with correct type
+  const openAddModal = (type) => {
+    setAddType(type);
+    setNewItemName("");
+    setShowAddModal(true);
+  };
+
+  // Get label for add modal based on type
+  const getAddTypeLabel = () => {
+    switch (addType) {
+      case 'chronicDisease':
+        return 'مرض مزمن';
+      case 'allergy':
+        return 'حساسية';
+      case 'medication':
+        return 'دواء';
+      default:
+        return '';
+    }
+  };
+
+  // Handle add item submission
+  const handleAddItem = async () => {
+    if (!newItemName.trim()) return;
+    
+    setIsAdding(true);
+    try {
+      const token = getToken();
+      const userId = getUserId();
+      
+      let url = '';
+      let bodyKey = '';
+      
+      switch (addType) {
+        case 'chronicDisease':
+          url = 'https://localhost:7196/api/chronicdisease/AddChronicDisease';
+          break;
+        case 'allergy':
+          url = 'https://localhost:7196/api/allergy/AddAllergy';
+          break;
+        case 'medication':
+          url = 'https://localhost:7196/api/currentmedication/AddCurrentMedication';
+          break;
+        default:
+          return;
+      }
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          patientId: userId,
+          name: newItemName.trim(),
+        }),
+      });
+
+      if (response.ok) {
+        await fetchProfile();
+        setShowAddModal(false);
+        setNewItemName("");
+        setAddType(null);
+      }
+    } catch (error) {
+      console.error("Failed to add item", error);
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -430,7 +508,7 @@ const PatientDashboard = () => {
           onClick={() => navigate("/patient/book")}
         />
         <Card
-          title="المساعد الصحي الذكي"
+          title="دليلك الصحي الذكي"
           subtitle="تحدث عن أعراضك واحصل على توصيات"
           icon={<span className="pd-ico">💬</span>}
           onClick={() => navigate("/patient/ai")}
@@ -507,9 +585,14 @@ const PatientDashboard = () => {
                             onDelete={handleDeleteChronicDisease}
                           />
                         ))
-                      ) : (
-                        <span className="pd-info-value text-muted">لا يوجد</span>
-                      )}
+                      ) : null}
+                      <button
+                        className="pd-tag-add pd-tag-add-danger"
+                        onClick={() => openAddModal('chronicDisease')}
+                        title="إضافة مرض مزمن"
+                      >
+                        <i className="bi bi-plus-lg"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -529,9 +612,14 @@ const PatientDashboard = () => {
                             onDelete={handleDeleteAllergy}
                           />
                         ))
-                      ) : (
-                        <span className="pd-info-value text-muted">لا يوجد</span>
-                      )}
+                      ) : null}
+                      <button
+                        className="pd-tag-add pd-tag-add-warning"
+                        onClick={() => openAddModal('allergy')}
+                        title="إضافة حساسية"
+                      >
+                        <i className="bi bi-plus-lg"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -551,13 +639,66 @@ const PatientDashboard = () => {
                             onDelete={handleDeleteMedication}
                           />
                         ))
-                      ) : (
-                        <span className="pd-info-value text-muted">لا يوجد</span>
-                      )}
+                      ) : null}
+                      <button
+                        className="pd-tag-add pd-tag-add-info"
+                        onClick={() => openAddModal('medication')}
+                        title="إضافة دواء"
+                      >
+                        <i className="bi bi-plus-lg"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Add Item Modal */}
+      {showAddModal && (
+        <div className="pd-modal-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="pd-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="pd-modal-icon pd-modal-icon-add">
+              <i className="bi bi-plus-lg"></i>
+            </div>
+            <h3 className="pd-modal-title">إضافة {getAddTypeLabel()}</h3>
+            <div className="pd-modal-input-group">
+              <input
+                type="text"
+                className="pd-modal-input"
+                placeholder={`أدخل اسم ال${getAddTypeLabel()}`}
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+                autoFocus
+                onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
+              />
+            </div>
+            <div className="pd-modal-actions">
+              <button
+                className="pd-modal-btn pd-modal-btn-cancel"
+                onClick={() => setShowAddModal(false)}
+                disabled={isAdding}
+              >
+                إلغاء
+              </button>
+              <button
+                className="pd-modal-btn pd-modal-btn-confirm"
+                onClick={handleAddItem}
+                disabled={isAdding || !newItemName.trim()}
+              >
+                {isAdding ? (
+                  <>
+                    <span className="pd-tag-spinner"></span>
+                    جاري الإضافة...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-check-lg"></i>
+                    إضافة
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

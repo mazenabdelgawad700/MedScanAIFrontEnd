@@ -70,7 +70,7 @@ const Auth = () => {
                   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
                 ] || claims.role;
               if (role === "Patient") {
-                navigate("/patient/complete-profile");
+                navigate("/patient/dashboard");
               } else if (role === "Admin") {
                 navigate("/admin");
               } else if(role === "Doctor"){
