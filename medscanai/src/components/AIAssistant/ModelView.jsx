@@ -78,8 +78,8 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
         <div className={`d-inline-flex align-items-center justify-content-center p-3 rounded-circle bg-${color} bg-opacity-10 text-${color} mb-3`}>
           <i className={`bi ${icon} display-6`}></i>
         </div>
-        <h2 className="fw-bold text-dark">{title}</h2>
-        <p className="text-muted lead fs-6">{description}</p>
+        <h2 className="fw-bold text-white">{title}</h2>
+        <p className="text-white lead fs-6">{description}</p>
       </div>
 
       <div className="row justify-content-center flex-grow-1">
@@ -113,7 +113,7 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
                       )}
                     </div>
                   ) : (
-                    <div className="text-muted py-4">
+                    <div className="text-white py-4">
                       <i className={`bi bi-cloud-arrow-up display-4 text-${color} mb-3 d-block`}></i>
                       <h5 className="fw-semibold">اسحب الصورة هنا أو انقر للتصفح</h5>
                       <p className="small mb-0">يدعم JPG، PNG، DICOM</p>

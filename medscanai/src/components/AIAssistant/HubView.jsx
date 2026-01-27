@@ -35,11 +35,11 @@ const HubView = ({ onSelectTool }) => {
   return (
     <div className="container-xl py-4" dir="rtl">
       <div className="mb-5">
-        <h2 className="fw-bold text-dark mb-2">مركز نماذج الذكاء الاصطناعي</h2>
-        <p className="text-muted lead">اختر أداة ذكاء اصطناعي لبدء التحليل</p>
+        <h2 className="fw-bold mb-2">مركز نماذج الذكاء الاصطناعي</h2>
+        <p className="text-white lead">اختر أداة ذكاء اصطناعي لبدء التحليل</p>
       </div>
       
-      <div className="bg-white p-5 rounded-5 shadow-sm">
+      <div className="p-5 rounded-5 shadow-sm">
         <div className="hub-grid">
           {tools.map((tool) => {
             // Determine border class based on tool
@@ -59,7 +59,7 @@ const HubView = ({ onSelectTool }) => {
                 </div>
                 
                 <h5 className="fw-bold mb-3">{tool.title}</h5>
-                <p className="text-muted small mb-4 px-2" style={{ minHeight: '48px' }}>{tool.description}</p>
+                <p className="small mb-4 px-2" style={{ minHeight: '48px' }}>{tool.description}</p>
                 
                 <div className="mt-auto d-flex justify-content-center">
                   <button 

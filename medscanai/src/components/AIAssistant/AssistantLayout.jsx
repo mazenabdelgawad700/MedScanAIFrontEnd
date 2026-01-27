@@ -59,9 +59,10 @@ const AssistantLayout = () => {
         <div className="mb-4" dir="rtl">
           <button 
             className="btn btn-outline-primary shadow-sm rounded-pill px-4 fw-bold"
+            style={{color: "#fff"}}
             onClick={() => navigate('/patient/dashboard')}
           >
-            <i className="bi bi-house-door me-2"></i>
+            <i className="bi bi-house-door ms-2"></i>
             العودة إلى لوحة التحكم
           </button>
         </div>
@@ -70,7 +71,7 @@ const AssistantLayout = () => {
         {currentView !== 'hub' && (
           <div className="mb-4" dir="rtl">
             <button 
-              className="btn btn-light shadow-sm rounded-pill px-4 fw-bold text-primary"
+              className="btn btn-light shadow-sm rounded-pill px-4 fw-bold text-white"
               onClick={() => setCurrentView('hub')}
             >
               <i className="bi bi-arrow-right me-2"></i>

@@ -165,11 +165,6 @@
   border-color: rgba(102, 126, 234, 0.3);
 }
 
-.pd-card-title {
-  font-weight: 700;
-  color: #0f1724
-}
-
 .pd-card-sub {
   color: #6b7a99;
   margin-top: 6px
@@ -1093,9 +1088,12 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -1119,6 +1117,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
