@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { API_BASE } from "../../../utils/Constants.ts";
 import "./ResetPassword.css";
-
-const API_BASE = "https://localhost:7196/api/authentication";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -45,7 +44,7 @@ const ResetPassword = () => {
     setMessage(null);
 
     try {
-      const response = await fetch(`${API_BASE}/ResetPassword`, {
+      const response = await fetch(`${API_BASE}/authentication/ResetPassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { API_BASE } from "../../../utils/Constants.ts"
 import "./AdminPanel.css";
 
 function decodeJwtPayload(token) {
@@ -50,8 +51,8 @@ const AdminPanel = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const [allRes, activeRes] = await Promise.all([
-        fetch("https://localhost:7196/api/doctor/GetCount", { headers }),
-        fetch("https://localhost:7196/api/doctor/GetActiveCount", { headers }),
+        fetch(`${API_BASE}/doctor/GetCount`, { headers }),
+        fetch(`${API_BASE}/doctor/GetActiveCount`, { headers }),
       ]);
 
       if (allRes.ok) {
@@ -83,7 +84,7 @@ const AdminPanel = () => {
       setAppointmentsLoading(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://localhost:7196/api/appointment/GetForToday",
+        `${API_BASE}/appointment/GetForToday`,
         {
           headers: {
             Accept: "*/*",
@@ -129,7 +130,7 @@ const AdminPanel = () => {
       }
 
       const res = await fetch(
-        "https://localhost:7196/api/appointment/Confirm",
+        `${API_BASE}/appointment/Confirm`,
         {
           method: "POST",
           headers: {

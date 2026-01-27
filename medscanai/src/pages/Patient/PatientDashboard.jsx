@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PatientDashboard.css";
+import { API_BASE } from "../../../utils/Constants.ts";
 
 const Card = ({ title, subtitle, icon, onClick }) => (
   <div className="pd-card" onClick={onClick} role="button" tabIndex={0}>
@@ -213,7 +214,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/GetProfile",
+        `${API_BASE}/patient/GetProfile`,
         {
           method: "POST",
           headers: {
@@ -247,7 +248,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/chronicdisease/UpdateChronicDisease",
+        `${API_BASE}/chronicdisease/UpdateChronicDisease`,
         {
           method: "PUT",
           headers: {
@@ -278,7 +279,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/allergy/UpdateAllergy",
+        `${API_BASE}/allergy/UpdateAllergy`,
         {
           method: "PUT",
           headers: {
@@ -309,7 +310,7 @@ const PatientDashboard = () => {
       const userId = getUserId();
 
       const response = await fetch(
-        "https://localhost:7196/api/currentmedication/UpdateCurrentMedication",
+        `${API_BASE}/currentmedication/UpdateCurrentMedication`,
         {
           method: "PUT",
           headers: {
@@ -340,7 +341,7 @@ const PatientDashboard = () => {
       const token = getToken();
 
       const response = await fetch(
-        "https://localhost:7196/api/chronicdisease/DeleteChronicDisease",
+        `${API_BASE}/chronicdisease/DeleteChronicDisease`,
         {
           method: "DELETE",
           headers: {
@@ -364,7 +365,7 @@ const PatientDashboard = () => {
       const token = getToken();
 
       const response = await fetch(
-        "https://localhost:7196/api/allergy/DeleteAllergy",
+        `${API_BASE}/allergy/DeleteAllergy`,
         {
           method: "DELETE",
           headers: {
@@ -388,7 +389,7 @@ const PatientDashboard = () => {
       const token = getToken();
 
       const response = await fetch(
-        "https://localhost:7196/api/currentmedication/DeleteCurrentMedication",
+        `${API_BASE}/currentmedication/DeleteCurrentMedication`,
         {
           method: "DELETE",
           headers: {
@@ -442,13 +443,13 @@ const PatientDashboard = () => {
       
       switch (addType) {
         case 'chronicDisease':
-          url = 'https://localhost:7196/api/chronicdisease/AddChronicDisease';
+          url = `${API_BASE}/chronicdisease/AddChronicDisease`;
           break;
         case 'allergy':
-          url = 'https://localhost:7196/api/allergy/AddAllergy';
+          url = `${API_BASE}/allergy/AddAllergy`;
           break;
         case 'medication':
-          url = 'https://localhost:7196/api/currentmedication/AddCurrentMedication';
+          url = `${API_BASE}/currentmedication/AddCurrentMedication`;
           break;
         default:
           return;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {API_BASE} from "../../../utils/Constants.ts"
 import "./DoctorDashboard.css";
 
 function decodeJwtPayload(token) {
@@ -57,7 +58,7 @@ export default function DoctorDashboard() {
     setError("");
     try {
       const res = await fetch(
-        `https://localhost:7196/api/doctor/GetInfoAndAppointments?DoctorId=${doctorId}`,
+        `${API_BASE}/doctor/GetInfoAndAppointments?DoctorId=${doctorId}`,
         {
           headers: {
             Accept: "*/*",
@@ -114,7 +115,7 @@ export default function DoctorDashboard() {
 
     try {
       const res = await fetch(
-        "https://localhost:7196/api/appointment/Complete",
+        `${API_BASE}/appointment/Complete`,
         {
           method: "PUT",
           headers: {

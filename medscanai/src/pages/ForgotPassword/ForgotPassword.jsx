@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ForgotPassword.css";
-
-const API_BASE = "https://localhost:7196/api/authentication";
+import { API_BASE } from "../../../utils/Constants.ts";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +23,7 @@ const ForgotPassword = () => {
     setMessage(null);
 
     try {
-      const response = await fetch(`${API_BASE}/ResetPasswordEmail`, {
+      const response = await fetch(`${API_BASE}/authentication/ResetPasswordEmail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

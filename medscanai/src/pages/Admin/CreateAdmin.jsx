@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
+import { API_BASE } from "../../../utils/Constants.ts";
 import "./CreateAdmin.css";
-
-const API_BASE = "https://localhost:7196/api/authentication";
 
 // Helper to safely decode JWT payload (base64url)
 function decodeJwtPayload(token) {
@@ -92,7 +91,7 @@ const CreateAdmin = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/RegisterAdmin`, {
+      const res = await fetch(`${API_BASE}/authentication/RegisterAdmin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

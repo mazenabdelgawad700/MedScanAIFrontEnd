@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Doctors.css";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
-
-const API_BASE = "https://localhost:7196/api/doctor";
+import { API_BASE } from "../../../utils/Constants.ts";
 
 function decodeJwtPayload(token) {
   try {
@@ -55,7 +54,7 @@ const Doctors = () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
-      const url = activeFilter ? `${API_BASE}/GetActive` : `${API_BASE}/GetAll`;
+      const url = activeFilter ? `${API_BASE}/doctor/GetActive` : `${API_BASE}/doctor/GetAll`;
       const res = await fetch(url, { headers });
       const data = await res.json();
       if (data && data.succeeded) {
@@ -97,8 +96,8 @@ const Doctors = () => {
       // backend expects doctor id in the request body (JSON).
       // POST to the endpoint without a query string and include the id in the body.
       const endpoint = selectedDoctor.isActive
-        ? `${API_BASE}/DeleteDoctor`
-        : `${API_BASE}/RestoreDoctor`;
+        ? `${API_BASE}/doctor/DeleteDoctor`
+        : `${API_BASE}/doctor/RestoreDoctor`;
 
       // include both forms to be tolerant to server naming (camelCase / PascalCase)
       const payload = {

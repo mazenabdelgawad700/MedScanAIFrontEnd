@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CompleteProfile.css";
+import {API_BASE} from "../../../utils/Constants.ts"
 
 // Helper to decode JWT and extract role
 function decodeJwtPayload(token) {
@@ -87,7 +88,7 @@ const CompleteProfile = () => {
       if (cm.length > 0) body.currentMedication = cm;
       if (al.length > 0) body.allergies = al;
       const res = await fetch(
-        "https://localhost:7196/api/patient/CreateProfile",
+        `${API_BASE}/patient/CreateProfile`,
         {
           method: "POST",
           headers: {

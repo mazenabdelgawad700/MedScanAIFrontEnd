@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
+import {API_BASE} from "../../../utils/Constants.ts"
 
-const API_BASE = "https://localhost:7196/api/authentication";
 
 const Auth = () => {
   const [mode, setMode] = useState("login"); // 'login' or 'register'
@@ -45,7 +45,7 @@ const Auth = () => {
 
     try {
       if (mode === "login") {
-        const res = await fetch(`${API_BASE}/Login`, {
+        const res = await fetch(`${API_BASE}/authentication/Login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: form.email, password: form.password }),
@@ -94,7 +94,7 @@ const Auth = () => {
           phoneNumber: form.phone,
           dateOfBirth: form.dob,
         };
-        const res = await fetch(`${API_BASE}/RegisterPatient`, {
+        const res = await fetch(`${API_BASE}/authentication/RegisterPatient`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
-import "./MedicalProfile.css";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {API_BASE} from "../../../utils/Constants.ts"
+import "./MedicalProfile.css";
+
+
 
 const MedicalProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -36,7 +39,7 @@ const MedicalProfile = () => {
         }
 
         const response = await fetch(
-          "https://localhost:7196/api/patient/GetProfile",
+          `${API_BASE}/patient/GetProfile`,
           {
             method: "POST",
             headers: {

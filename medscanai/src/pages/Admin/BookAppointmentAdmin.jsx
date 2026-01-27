@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import "../Patient/BookAppointment.css";
 import { Link } from "react-router-dom";
-
-const API_BASE = "https://localhost:7196/api/appointment";
+import { API_BASE } from "../../../utils/Constants.ts";
 
 const BookAppointmentAdmin = () => {
   const [doctors, setDoctors] = useState([]);
@@ -24,7 +23,7 @@ const BookAppointmentAdmin = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/GetDoctors`, {
+        const res = await fetch(`${API_BASE}/appointment/GetDoctors`, {
           method: "GET",
           headers: {
             Accept: "*/*",
@@ -93,7 +92,7 @@ const BookAppointmentAdmin = () => {
         status: "Pending",
       };
 
-      const res = await fetch(`${API_BASE}/MakeAppointment`, {
+      const res = await fetch(`${API_BASE}/appointment/MakeAppointment`, {
         method: "POST",
         headers: {
           Accept: "*/*",

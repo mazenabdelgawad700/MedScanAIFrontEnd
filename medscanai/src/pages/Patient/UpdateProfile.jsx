@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {API_BASE} from "../../../utils/Constants.ts"
 import "./UpdateProfile.css";
 
 const UpdateProfile = () => {
@@ -30,7 +31,7 @@ const UpdateProfile = () => {
         const userId = payload.UserId;
 
         const response = await fetch(
-          "https://localhost:7196/api/patient/GetProfile",
+          `${API_BASE}/patient/GetProfile`,
           {
             method: "POST",
             headers: {
@@ -91,7 +92,7 @@ const UpdateProfile = () => {
       }
 
       const response = await fetch(
-        "https://localhost:7196/api/patient/UpdateProfile",
+        `${API_BASE}/patient/UpdateProfile`,
         {
           method: "PUT",
           headers: {

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { API_BASE } from "../../../utils/Constants.ts";
 import "./ConfirmEmail.css";
-
-const API_BASE = "https://localhost:7196/api/authentication";
 
 const ConfirmEmail = () => {
   const [searchParams] = useSearchParams();
@@ -29,7 +28,7 @@ const ConfirmEmail = () => {
 
       try {
         const response = await fetch(
-          `${API_BASE}/ConfirmEmail?UserId=${encodeURIComponent(
+          `${API_BASE}/authentication/ConfirmEmail?UserId=${encodeURIComponent(
             userId
           )}&Token=${encodeURIComponent(token)}`,
           {

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../../utils/Constants.ts"
 import "./AddDoctor.css";
-
-const API_BASE = "https://localhost:7196/api/authentication";
 
 function decodeJwtPayload(token) {
   try {
@@ -25,13 +24,13 @@ const SPECIALIZATIONS = [
 ];
 
 const DAYS = [
+  { key: "saturday", label: "السبت" },
   { key: "sunday", label: "الأحد" },
   { key: "monday", label: "الاثنين" },
   { key: "tuesday", label: "الثلاثاء" },
   { key: "wednesday", label: "الأربعاء" },
   { key: "thursday", label: "الخميس" },
   { key: "friday", label: "الجمعة" },
-  { key: "saturday", label: "السبت" },
 ];
 
 const AddDoctor = () => {
@@ -143,7 +142,7 @@ const AddDoctor = () => {
       const token = localStorage.getItem("token");
       if (!token) return navigate("/auth");
 
-      const res = await fetch(`${API_BASE}/RegisterDoctor`, {
+      const res = await fetch(`${API_BASE}/authentication/RegisterDoctor`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -267,17 +266,18 @@ const AddDoctor = () => {
             <div className="label" style={{ marginBottom: 8 }}>
               جدول الطبيب (الأيام المتاحة وأوقات العمل)
             </div>
-            <div className="days-row">
+            <div className="days-row mb-4">
               {DAYS.map((d) => (
-                <label key={d.key} style={{ marginLeft: 12 }}>
+                <label key={d.key} style={{display: "flex", flexDirection: "row-reverse", justifyContent: "space-between" }}>
                   <input
                     type="checkbox"
                     checked={!!schedule[d.key]}
+                    style={{width: "fit-content"}}
                     onChange={(e) =>
                       handleScheduleDayChange(d.key, e.target.checked)
                     }
                   />
-                  {d.label}
+                  <span>{d.label}</span>
                 </label>
               ))}
             </div>
@@ -288,6 +288,8 @@ const AddDoctor = () => {
                   <div key={dayKey} className="schedule-time-row">
                     <span style={{ minWidth: 70, display: "inline-block" }}>
                       {DAYS.find((d) => d.key === dayKey)?.label}:
+                      <br />
+                      من
                     </span>
                     <input
                       type="time"

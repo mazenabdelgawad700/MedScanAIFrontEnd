@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import "./BookAppointment.css";
 import { Link } from "react-router-dom";
+import { API_BASE } from "../../../utils/Constants.ts";
 
-const API_BASE = "https://localhost:7196/api/appointment";
 
 const BookAppointment = () => {
   const [doctors, setDoctors] = useState([]);
@@ -33,7 +33,7 @@ const BookAppointment = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/GetDoctors`, {
+        const res = await fetch(`${API_BASE}/appointment/GetDoctors`, {
           method: "GET",
           headers: {
             Accept: "*/*",
@@ -87,7 +87,7 @@ const BookAppointment = () => {
         .toLocaleString("sv-SE", { hour12: false }) // ISO-like but local
         .replace(" ", "T");
 
-      const res = await fetch(`${API_BASE}/MakeAppointment`, {
+      const res = await fetch(`${API_BASE}/appointment/MakeAppointment`, {
         method: "POST",
         headers: {
           Accept: "*/*",
