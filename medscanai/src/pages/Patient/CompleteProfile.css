@@ -1,17 +1,45 @@
 /* CompleteProfile.css */
 .complete-profile-bg {
   min-height: 100vh;
-  background: linear-gradient(180deg, #e9f0ff 0%, #f5f8ff 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   direction: rtl;
+  position: relative;
+  overflow: hidden;
+}
+
+.complete-profile-bg::before {
+  content: "";
+  position: fixed;
+  top: -500px;
+  right: -500px;
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.complete-profile-bg::after {
+  content: "";
+  position: fixed;
+  bottom: -500px;
+  left: -500px;
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(118, 75, 162, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .complete-profile-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   padding: 32px 32px 24px 32px;
   max-width: 520px;
   width: 100%;
@@ -19,6 +47,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 1;
 }
 
 .profile-header {
@@ -30,17 +62,31 @@
 
 .profile-logo {
   margin-bottom: 8px;
+  font-size: 48px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .profile-header h2 {
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 6px 0;
-  color: #222b45;
+  color: #fff;
 }
 
 .profile-subtitle {
-  color: #6b7a99;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1rem;
   margin-bottom: 8px;
 }
@@ -54,7 +100,7 @@
 
 .profile-section-title {
   font-weight: 700;
-  color: #222b45;
+  color: #fff;
   margin-bottom: 8px;
   font-size: 1.1rem;
 }
@@ -67,7 +113,7 @@
 
 .profile-label {
   font-weight: 500;
-  color: #222b45;
+  color: #fff;
   margin-bottom: 2px;
 }
 

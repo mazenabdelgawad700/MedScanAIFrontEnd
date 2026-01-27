@@ -3,48 +3,95 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(180deg, #eef6ff 0%, #eef3fb 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   direction: rtl;
   padding: 48px 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page::before {
+  content: "";
+  position: absolute;
+  top: -300px;
+  right: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.auth-page::after {
+  content: "";
+  position: absolute;
+  bottom: -300px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(118, 75, 162, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 .auth-top {
   text-align: center;
   margin-bottom: 18px;
+  position: relative;
+  z-index: 2;
 }
 
 .logo-badge {
   width: 56px;
   height: 56px;
   border-radius: 12px;
-  background: #1673ff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
   margin-bottom: 12px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .auth-title {
   margin: 0;
   font-size: 28px;
-  color: #071428;
+  color: #fff;
+  font-weight: 800;
 }
 
 .auth-sub {
   margin: 8px 0 0 0;
-  color: #577086;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .auth-card {
   width: 100%;
   max-width: 520px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 22px;
-  box-shadow: 0 6px 18px rgba(6, 6, 26, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
   margin-top: 18px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 2;
 }
 
 .auth-card-head {
@@ -52,21 +99,31 @@
   gap: 12px;
   justify-content: flex-end;
   margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
 }
 
 .tab {
-  background: #ececf0;
+  background: transparent;
   border: none;
   padding: 10px 22px;
-  border-radius: 22px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  color: black;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .tab.active {
-  background: #a0a0a0;
-  color: white;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  color: #fff;
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .auth-form {
@@ -78,40 +135,111 @@
 .field .label {
   margin-bottom: 6px;
   font-weight: 600;
-  color: #071428;
+  color: #fff;
 }
 
 .field input {
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #eee;
-  background: #f6f7f8;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.field input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.field input:focus {
+  outline: none;
+  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
 }
 
 .field select {
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #eee;
-  background: #f6f7f8;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.field select option {
+  background: #1e293b;
+  color: #fff;
+}
+
+.field select:focus {
+  outline: none;
+  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .auth-message {
-  color: #0b63ff;
-  background: rgba(11, 99, 255, 0.06);
-  padding: 10px 12px;
-  border-radius: 8px;
+  color: #a5b4fc;
+  background: rgba(102, 126, 234, 0.15);
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  font-size: 14px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .submit-btn {
-  background: #06061a;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
   padding: 12px 18px;
   border-radius: 10px;
   border: none;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+.submit-btn:active {
+  transform: translateY(-1px);
 }
 
 .forgot-password-link {
@@ -122,15 +250,17 @@
 .text-button {
   background: none;
   border: none;
-  color: #0b63ff;
+  color: #a5b4fc;
   cursor: pointer;
   padding: 0;
   font-size: 0.9rem;
-  text-decoration: underline;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .text-button:hover {
-  color: #0842b8;
+  color: #c7d2fe;
+  text-decoration: underline;
 }
 
 @media (max-width:520px) {

@@ -1,28 +1,86 @@
-/* RTL Arabic form styling */
+/* RTL Arabic form styling - Interactive KPI Style */
 .appointment-container {
   direction: rtl;
-  max-width: 600px;
+  max-width: 700px;
   margin: 40px auto;
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
   font-family: "Cairo", sans-serif;
-  color: #333;
+  color: #fff;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-image:
+    linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%),
+    radial-gradient(circle at 80% 0%, rgba(102, 126, 234, 0.1), transparent 50%),
+    radial-gradient(circle at 20% 100%, rgba(118, 75, 162, 0.1), transparent 50%);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .go-to-dashboard {
   text-decoration: none;
-  display: block;
-  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #a5b4fc;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: 600;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(165, 180, 252, 0.2);
+}
+
+.go-to-dashboard:hover {
+  color: #fff;
+  background: rgba(165, 180, 252, 0.1);
+  transform: translateX(-4px);
+  border-color: rgba(165, 180, 252, 0.4);
+}
+
+.go-to-dashboard i {
+  transition: transform 0.3s ease;
+}
+
+.go-to-dashboard:hover i {
+  transform: translateX(-4px);
 }
 
 .appointment-title {
   text-align: center;
-  margin-bottom: 24px;
-  color: #007bff;
-  font-size: 1.8rem;
-  font-weight: 700;
+  margin-bottom: 32px;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  animation: slideInDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .loading,
@@ -32,80 +90,160 @@
 }
 
 .error-text {
-  color: red;
+  color: #fca5a5;
 }
 
 .appointment-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  position: relative;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.15s; }
+.form-group:nth-child(3) { animation-delay: 0.2s; }
+.form-group:nth-child(4) { animation-delay: 0.25s; }
+.form-group:nth-child(5) { animation-delay: 0.3s; }
+.form-group:nth-child(6) { animation-delay: 0.35s; }
+
 label {
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #a5b4fc;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 select,
 textarea,
 input {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+select::placeholder,
+textarea::placeholder,
+input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 select:focus,
 textarea:focus,
 input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+  border-color: rgba(102, 126, 234, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.3), inset 0 0 20px rgba(102, 126, 234, 0.05);
+  transform: translateY(-2px);
+}
+
+select option {
+  background: #1e293b;
+  color: #fff;
 }
 
 textarea {
   resize: none;
+  min-height: 110px;
 }
 
 .submit-btn {
-  background: #007bff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 14px;
+  padding: 16px 24px;
   font-size: 1.1rem;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.submit-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
 }
 
 .submit-btn:hover {
-  background: #0056b3;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 18px 50px rgba(102, 126, 234, 0.5);
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+.submit-btn:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 .submit-btn:disabled {
-  background: #6c757d;
+  background: rgba(255, 255, 255, 0.1);
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .submit-message {
   text-align: center;
   font-weight: 600;
   font-size: 1rem;
-  padding: 8px 0;
+  padding: 12px 16px;
+  animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .submit-message.success {
-  color: #28a745;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .submit-message.error {
-  color: #dc3545;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 /* Responsive design */

@@ -4,6 +4,39 @@
   max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  position: relative;
+}
+
+.medical-profile::before {
+  content: "";
+  position: fixed;
+  top: -500px;
+  right: -500px;
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.medical-profile::after {
+  content: "";
+  position: fixed;
+  bottom: -500px;
+  left: -500px;
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(118, 75, 162, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.medical-profile>* {
+  position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -14,34 +47,37 @@
 }
 
 .back-link {
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .back-link:hover {
-  color: #333;
+  color: #fff;
 }
 
 .section-title {
-  color: #333;
+  color: #fff;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 800;
   margin: 0;
 }
 
 .profile-container {
-  background: white;
-  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .subtitle {
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1.1rem;
   margin-bottom: 24px;
   font-weight: normal;
@@ -58,11 +94,11 @@
 
 .info-label {
   min-width: 180px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .info-value {
-  color: #333;
+  color: #fff;
 }
 
 .medical-section {
@@ -70,7 +106,7 @@
 }
 
 .medical-section h3 {
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 1.1rem;
   margin-bottom: 16px;
   font-weight: normal;
