@@ -1,103 +1,186 @@
 .navbar {
   width: 100%;
-  height: 60px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(180deg, rgba(10, 25, 47, 0.85) 0%, rgba(10, 25, 47, 0.7) 100%);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .navbar-container {
-  width: 100%;
+  max-width: 1400px;
   height: 100%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 40px;
   direction: rtl;
+  gap: 25px;
 }
 
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
-  font-size: 24px;
-  font-weight: 600;
-  color: #000;
+  gap: 10px;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.02);
 }
 
 .logo-icon {
-  margin-left: 4px;
-  color: #0066ff;
-  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: #fff;
+  transform: none;
 }
 
+.logo-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Login Button Area */
 .login-button {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
 }
 
-.login-button a {
-  background: none;
-  border: 1px solid #d1d3d7;
-  border-radius: 15px;
-  font-size: 16px;
-  cursor: pointer;
-  color: #000;
-  font-weight: 700;
-  padding: 8px 16px;
-  transition: 0.2s;
-  text-decoration: none;
-}
-
-.login-button a:hover {
-  background-color: #d1d3d7;
-}
-
+.login-button a,
 .login-button button {
-  background: none;
-  border: 1px solid #d1d3d7;
-  border-radius: 15px;
-  font-size: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
   cursor: pointer;
-  color: #000;
-  font-weight: 700;
-  padding: 8px 16px;
-  transition: 0.2s;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 22px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
 }
 
+.login-button a:hover,
 .login-button button:hover {
-  background-color: #d1d3d7;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .login-button .admin-inline-link {
-  background: none;
-  border: 1px solid #d1d3d7;
-  border-radius: 15px;
-  font-size: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 15px;
   cursor: pointer;
-  color: #000;
-  font-weight: 700;
-  padding: 8px 16px;
-  transition: 0.2s;
+  font-weight: 600;
+  padding: 10px 22px;
+  transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-block;
-  width: fit-content;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .login-button .admin-inline-link:hover {
-  background-color: #d1d3d7;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 }
 
+/* Admin Link */
 .admin-link a {
-  background: none;
-  border: 1px solid #d1d3d7;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
   border-radius: 12px;
-  padding: 8px 12px;
-  color: #000;
+  padding: 10px 18px;
+  color: #fff;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .admin-link a:hover {
-  background: #d1d3d7;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .logo-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .login-button a,
+  .login-button button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .login-button .admin-inline-link {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0 12px;
+  }
+
+  .logo span:not(.logo-icon) {
+    display: none;
+  }
+
+  .login-button {
+    gap: 8px;
+  }
+
+  .login-button a,
+  .login-button button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
