@@ -196,6 +196,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 24px;
+  position: relative;
+  overflow: visible !important;
 }
 
 .pd-info-card {
@@ -203,28 +205,11 @@
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  overflow: visible;
+  overflow: visible !important;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   backdrop-filter: blur(20px);
-}
-
-.pd-info-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #10b981);
-  border-radius: 24px 24px 0 0;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.pd-info-card:hover::before {
-  transform: scaleX(1);
+  z-index: 1;
 }
 
 .pd-info-card:hover {
@@ -285,7 +270,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow: visible;
+  overflow: visible !important;
   position: relative;
 }
 
@@ -294,6 +279,8 @@
   align-items: flex-start;
   gap: 16px;
   animation: slideInLeft 0.5s ease forwards;
+  position: relative;
+  overflow: visible !important;
 }
 
 .pd-info-item:nth-child(2) {
@@ -357,6 +344,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  position: relative;
+  overflow: visible !important;
 }
 
 .pd-tag {
@@ -368,6 +357,13 @@
   white-space: nowrap;
   transition: all 0.2s ease;
   animation: popIn 0.3s ease;
+  position: relative;
+  overflow: visible !important;
+  z-index: 10;
+}
+
+.pd-tag.pd-tag-active {
+  pointer-events: none;
 }
 
 @keyframes popIn {
@@ -594,8 +590,8 @@
 .pd-tag-popup {
   position: absolute;
   top: calc(100% + 8px);
-  right: 50%;
-  transform: translateX(50%);
+  left: 50%;
+  transform: translateX(-50%);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
   border-radius: 12px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
@@ -603,17 +599,21 @@
   padding: 8px;
   display: flex;
   gap: 6px;
-  z-index: 9999;
+  z-index: 100000;
   animation: popupFadeIn 0.15s ease-out;
   backdrop-filter: blur(20px);
+  pointer-events: auto;
+  white-space: nowrap;
 }
 
 .pd-tag-popup::before {
   content: '';
   position: absolute;
-  top: -6px;
-  right: 50%;
-  transform: translateX(50%) rotate(45deg);
+  bottom: -6px;
+  /* Position at the bottom */
+  left: 50%;
+  transform: translateX(-50%) rotate(225deg);
+  /* Rotate to point down */
   width: 12px;
   height: 12px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
@@ -647,6 +647,7 @@
   white-space: nowrap;
   position: relative;
   overflow: hidden;
+  pointer-events: auto;
 }
 
 .pd-tag-popup-btn i {
@@ -831,6 +832,9 @@
   animation: modalSlideIn 0.25s ease-out;
   border: 1px solid rgba(102, 126, 234, 0.2);
   backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 100000;
+  pointer-events: auto;
 }
 
 @keyframes modalSlideIn {
@@ -946,6 +950,7 @@
   min-width: 120px;
   position: relative;
   overflow: hidden;
+  pointer-events: auto;
 }
 
 .pd-modal-btn i {

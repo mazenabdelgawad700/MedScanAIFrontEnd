@@ -85,9 +85,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 0;
+  padding: 12px 10px;
   margin-bottom: 20px;
   transition: all 0.3s ease;
+  border-radius: 10px;
 }
 
 .up-back-btn:hover {
@@ -116,7 +117,7 @@
 .up-title-section h1 {
   font-size: 28px;
   font-weight: 700;
-  color: #0f172a;
+  color: #fff;
   margin: 0 0 4px 0;
 }
 

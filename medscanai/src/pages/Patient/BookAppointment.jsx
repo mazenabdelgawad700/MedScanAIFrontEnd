@@ -125,13 +125,13 @@ const BookAppointment = () => {
             العودة الي لوحة التحكم
           </Link>
 
-          {isThereDoctors && (
+          {!isThereDoctors && (
             <p className="text-danger">
               لا يوجد أطباء متاحين الآن، حاول مرة أخرى لاحقًا
             </p>
           )}
 
-          {!isThereDoctors && (
+          {isThereDoctors && (
             <>
               {loading ? (
                 <p className="loading">جاري تحميل الأطباء...</p>
