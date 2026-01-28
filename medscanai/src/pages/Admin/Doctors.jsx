@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Doctors.css";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import { API_BASE } from "../../../utils/Constants.ts";
+import activeDoctorsImg from "../../assets/activeDoctors.jpg";
+import allDoctorsImg from "../../assets/allDoctors.jpg";
 
 function decodeJwtPayload(token) {
   try {
@@ -54,7 +56,9 @@ const Doctors = () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
-      const url = activeFilter ? `${API_BASE}/doctor/GetActive` : `${API_BASE}/doctor/GetAll`;
+      const url = activeFilter
+        ? `${API_BASE}/doctor/GetActive`
+        : `${API_BASE}/doctor/GetAll`;
       const res = await fetch(url, { headers });
       const data = await res.json();
       if (data && data.succeeded) {
@@ -131,63 +135,143 @@ const Doctors = () => {
 
   return (
     <div className="doctors-page">
-      <div className="doctors-card">
-        <h1>قائمة الأطباء {activeFilter ? "(النشطون)" : ""}</h1>
-        {loading && <div className="loading">جارٍ التحميل...</div>}
-        {error && <div className="error">{error}</div>}
-
-        {!loading && !error && (
-          <div className="doctors-list">
-            {doctors.length === 0 && <div className="empty">لا توجد سجلات</div>}
-            {doctors.map((d) => (
-              <div key={d.id} className="doctor-row">
-                <div className="doctor-main">
-                  <div className="doctor-name">{d.fullName}</div>
-                  <div className="doctor-email">{d.email}</div>
-                </div>
-                <div className="doctor-right">
-                  <div className="doctor-phone">{d.phoneNumber}</div>
-                  {/* On the active-doctors view we don't show action buttons */}
-                  {!activeFilter && (
-                    <div className="doctor-actions">
-                      <button
-                        className={d.isActive ? "btn-danger" : "btn-success"}
-                        onClick={() => onRequestToggle(d)}
-                      >
-                        {d.isActive ? "تعطيل" : "استعادة"}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+      <div className="doctors-container">
+        <div className="doctors-header">
+          <div className="page-info">
+            <span className="page-breadcrumb">لوحة التحكم</span>
+            <i className="bi bi-chevron-left"></i>
+            <span className="page-title">
+              {activeFilter ? "الأطباء النشطون" : "قائمة الأطباء المسجلين"}
+            </span>
           </div>
-        )}
-        <ConfirmModal
-          open={confirmOpen}
-          title={
-            selectedDoctor
-              ? selectedDoctor.isActive
-                ? "تعطيل الطبيب"
-                : "استعادة الطبيب"
-              : "تأكيد"
-          }
-          message={
-            selectedDoctor
-              ? `${selectedDoctor.fullName} — هل أنت متأكد من المتابعة؟`
-              : "هل أنت متأكد؟"
-          }
-          onConfirm={performToggle}
-          onCancel={() => {
-            setConfirmOpen(false);
-            setSelectedDoctor(null);
-          }}
-          confirmLabel={
-            selectedDoctor && selectedDoctor.isActive ? "تعطيل" : "استعادة"
-          }
-          cancelLabel={"إلغاء"}
-          loading={confirmLoading}
-        />
+          <button className="back-link" onClick={() => navigate("/admin")}>
+            <i className="bi bi-arrow-right"></i>
+            لوحة التحكم
+          </button>
+        </div>
+
+        <div className="doctors-content-wrapper">
+          {/* Image Section */}
+          <div className="doctors-image-section">
+            <div className="image-card">
+              <img
+                src={activeFilter ? activeDoctorsImg : allDoctorsImg}
+                alt={activeFilter ? "Active Doctors" : "All Doctors"}
+                className="content-image"
+              />
+              <div className="image-overlay">
+                <h2 className="image-title">
+                  {activeFilter ? "الأطباء النشطون" : "قائمة الأطباء المسجلين"}
+                </h2>
+                <p className="image-subtitle">
+                  {activeFilter
+                    ? "إدارة الأطباء النشطين في النظام"
+                    : "عرض جميع الأطباء المسجلين"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* List Section */}
+          <div className="doctors-card">
+            {loading && (
+              <div className="loading">
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                جارٍ تحميل البيانات...
+              </div>
+            )}
+
+            {error && (
+              <div className="error">
+                <i className="bi bi-exclamation-triangle me-2"></i>
+                {error}
+              </div>
+            )}
+
+            {!loading && !error && (
+              <div className="doctors-list">
+                {doctors.length === 0 && (
+                  <div className="empty">
+                    <i className="bi bi-inbox fs-1 d-block mb-3 opacity-50"></i>
+                    لا توجد سجلات حالياً
+                  </div>
+                )}
+                {doctors.map((d) => (
+                  <div key={d.id} className="doctor-row">
+                    <div className="doctor-main">
+                      <div className="doctor-name">
+                        <i className="bi bi-person-badge-fill text-primary"></i>
+                        {d.fullName}
+                      </div>
+                      <div className="doctor-email">
+                        <i className="bi bi-envelope"></i>
+                        {d.email}
+                      </div>
+                    </div>
+                    <div className="doctor-right">
+                      <div className="doctor-phone">
+                        <i className="bi bi-telephone"></i>
+                        {d.phoneNumber}
+                      </div>
+                      {/* On the active-doctors view we don't show action buttons */}
+                      {!activeFilter && (
+                        <div className="doctor-actions">
+                          <button
+                            className={
+                              d.isActive ? "btn-danger" : "btn-success"
+                            }
+                            onClick={() => onRequestToggle(d)}
+                          >
+                            {d.isActive ? (
+                              <>
+                                <i className="bi bi-person-x-fill"></i>
+                                تعطيل
+                              </>
+                            ) : (
+                              <>
+                                <i className="bi bi-person-check-fill"></i>
+                                استعادة
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <ConfirmModal
+              open={confirmOpen}
+              title={
+                selectedDoctor
+                  ? selectedDoctor.isActive
+                    ? "تعطيل الطبيب"
+                    : "استعادة الطبيب"
+                  : "تأكيد"
+              }
+              message={
+                selectedDoctor
+                  ? `${selectedDoctor.fullName} — هل أنت متأكد من المتابعة؟`
+                  : "هل أنت متأكد؟"
+              }
+              onConfirm={performToggle}
+              onCancel={() => {
+                setConfirmOpen(false);
+                setSelectedDoctor(null);
+              }}
+              confirmLabel={
+                selectedDoctor && selectedDoctor.isActive ? "تعطيل" : "استعادة"
+              }
+              cancelLabel={"إلغاء"}
+              loading={confirmLoading}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,24 +1,167 @@
 .doctors-page {
   min-height: 100vh;
-  padding: 32px;
+  padding: 40px 20px;
   direction: rtl;
-  background: #f8f9fd;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   display: flex;
   justify-content: center;
+  position: relative;
+  overflow-x: hidden;
 }
 
+.doctors-container {
+  width: 100%;
+  max-width: 1400px;
+}
+
+.doctors-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 32px;
+}
+
+.page-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.page-breadcrumb {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.page-info i {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+}
+
+.page-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.back-link {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(-4px);
+}
+
+/* Main Content Wrapper - Side by Side Layout */
+.doctors-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Image Section */
+.doctors-image-section {
+  position: sticky;
+  top: 20px;
+}
+
+.image-card {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.content-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.image-card:hover .content-image {
+  transform: scale(1.05);
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.95) 100%);
+  z-index: 2;
+  text-align: right;
+}
+
+.image-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 8px 0;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: slideInUp 0.6s ease;
+}
+
+.image-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: slideInUp 0.6s ease 0.1s both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Doctor Card */
 .doctors-card {
   width: 100%;
-  max-width: 980px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid #edf2f7;
-  box-shadow: 0 4px 16px rgba(8, 35, 63, 0.06);
-}
-
-.doctors-card h1 {
-  margin: 0 0 12px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 1;
 }
 
 .doctors-list {
@@ -31,10 +174,37 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f8fafc;
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #eef2f7;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+  padding: 18px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.doctor-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0) 0%, rgba(59, 130, 246, 0.1) 50%, rgba(59, 130, 246, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.doctor-row:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateX(-6px);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+}
+
+.doctor-row:hover::before {
+  opacity: 1;
 }
 
 .doctor-main {
@@ -43,57 +213,181 @@
 
 .doctor-name {
   font-weight: 700;
+  color: #fff !important;
+  font-size: 16px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .doctor-email {
-  color: #718096;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .doctor-right {
   display: flex;
-  gap: 12px;
+  gap: 24px;
   align-items: center;
 }
 
 .doctor-phone {
-  color: #4a5568;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: monospace;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 8px;
 }
 
 .doctor-actions button {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: 1px solid transparent;
   cursor: pointer;
   font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-danger {
-  background: #e53e3e;
-  color: white
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.15) 100%);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(239, 68, 68, 0.25) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.6);
 }
 
 .btn-success {
-  background: #16a34a;
-  color: white
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.15) 100%);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(16, 185, 129, 0.25) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.6);
 }
 
 .loading,
 .error,
 .empty {
-  padding: 12px;
-  color: #4a5568
+  padding: 60px 40px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading {
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(59, 130, 246, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.error {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.empty {
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+@media (max-width: 1024px) {
+  .doctors-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .doctors-image-section {
+    position: static;
+  }
+
+  .image-card {
+    height: 350px;
+  }
 }
 
 @media (max-width: 720px) {
+  .doctors-page {
+    padding: 20px 16px;
+  }
+
+  .doctors-container {
+    max-width: 100%;
+  }
+
+  .doctors-header {
+    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .page-info {
+    width: 100%;
+    justify-content: center;
+    order: -1;
+  }
+
+  .page-title {
+    font-size: 16px;
+  }
+
+  .back-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .image-card {
+    height: 280px;
+  }
+
+  .image-title {
+    font-size: 20px;
+  }
+
+  .image-subtitle {
+    font-size: 12px;
+  }
+
+  .doctors-card {
+    padding: 20px;
+  }
+
   .doctor-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px
+    gap: 16px;
   }
 
   .doctor-right {
     width: 100%;
-    justify-content: space-between
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 }

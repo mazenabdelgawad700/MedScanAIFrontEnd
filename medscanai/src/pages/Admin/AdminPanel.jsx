@@ -176,25 +176,31 @@ const AdminPanel = () => {
             <h1>لوحة تحكم المدير</h1>
             <p className="sub">نظرة عامة على النظام والإجراءات السريعة</p>
           </div>
-          <button onClick={handleSignOut} className="logout-btn btn-danger">
+          <button onClick={handleSignOut} className="logout-btn">
+            <i className="bi bi-box-arrow-left ms-2"></i>
             تسجيل الخروج
           </button>
         </header>
 
+        {/* KPI Stats Grid */}
         <section className="stats-grid">
           <div
-            className="stat-card clickable"
+            className="stat-card-admin blue clickable"
             onClick={() => navigate("/admin/doctors")}
           >
-            <div className="icon">👩‍⚕️</div>
+            <div className="icon-wrapper">
+              <i className="bi bi-person-badge-fill"></i>
+            </div>
             <div className="stat-body">
               <div className="stat-title">الأطباء المسجلون</div>
               <div className="stat-value">{doctorsCount}</div>
             </div>
           </div>
 
-          <div className="stat-card">
-            <div className="icon">🗓️</div>
+          <div className="stat-card-admin purple">
+            <div className="icon-wrapper">
+              <i className="bi bi-calendar-check-fill"></i>
+            </div>
             <div className="stat-body">
               <div className="stat-title">مواعيد اليوم</div>
               <div className="stat-value">{todayAppointments.length}</div>
@@ -202,10 +208,12 @@ const AdminPanel = () => {
           </div>
 
           <div
-            className="stat-card clickable"
+            className="stat-card-admin green clickable"
             onClick={() => navigate("/admin/doctors?active=1")}
           >
-            <div className="icon">👥</div>
+            <div className="icon-wrapper">
+              <i className="bi bi-activity"></i>
+            </div>
             <div className="stat-body">
               <div className="stat-title">الأطباء النشطون</div>
               <div className="stat-value">{activeDoctorsCount}</div>
@@ -213,44 +221,68 @@ const AdminPanel = () => {
           </div>
         </section>
 
-        {/* ✅ Today Appointments Section */}
+        {/* Today Appointments Section */}
         <section className="appointments-section">
-          <h2>مواعيد اليوم</h2>
+          <h2>
+            <i className="bi bi-calendar-day text-primary"></i>
+            مواعيد اليوم
+          </h2>
           <p className="appointments-date">
-            المواعيد المحددة لـ{" "}
-            {new Date().getDate() +
-              "/" +
-              (new Date().getMonth() + 1) +
-              "/" +
-              new Date().getFullYear()}
+            <i className="bi bi-clock me-2"></i>
+            {new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
 
           <div className="appointments-list">
             {appointmentsLoading ? (
-              <div className="loading-text">جاري تحميل المواعيد...</div>
+              <div className="loading-text">
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                جاري تحميل المواعيد...
+              </div>
             ) : todayAppointments.length === 0 ? (
-              <div className="empty-text">لا توجد مواعيد اليوم.</div>
+              <div className="empty-text">
+                <i className="bi bi-calendar-x fs-1 d-block mb-3 opacity-25"></i>
+                لا توجد مواعيد لهذا اليوم.
+              </div>
             ) : (
               todayAppointments.map((appt, idx) => (
                 <div key={idx} className="appointment-item">
                   <div className="appointment-time">{appt.time}</div>
                   <div className="appointment-info">
                     <div className="patient-name">{appt.patientName}</div>
-                    <div className="doctor-name">مع {appt.doctorName}</div>
+                    <div className="doctor-name">
+                      <i className="bi bi-stethoscope ms-1"></i>
+                      مع د. {appt.doctorName}
+                    </div>
                   </div>
                   {confirmedIds.includes(appt.id) ? (
-                    <div className="confirmed-msg">تم التأكيد ✅</div>
+                    <div className="confirmed-msg">
+                      <i className="bi bi-check-circle-fill"></i>
+                      تم التأكيد
+                    </div>
                   ) : appt.status === "Pending" ? (
                     <button
                       className="btn btn-primary"
+                      style={{ width: 'fit-content' }}
                       onClick={() => handleConfirmAppointment(appt.id)}
                       disabled={confirmingId === appt.id}
-                      style={{ width: "fit-content" }}
                     >
-                      {confirmingId === appt.id ? "جاري التأكيد..." : "تأكيد"}
+                      {confirmingId === appt.id ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          جاري...
+                        </>
+                      ) : (
+                        <>
+                          <i className="bi bi-check-lg ms-1"></i>
+                          تأكيد
+                        </>
+                      )}
                     </button>
                   ) : (
-                    <div className="confirmed-msg">تم التأكيد ✅</div>
+                    <div className="confirmed-msg">
+                       <i className="bi bi-check-circle-fill"></i>
+                       تم التأكيد
+                    </div>
                   )}
                 </div>
               ))
@@ -258,42 +290,43 @@ const AdminPanel = () => {
           </div>
         </section>
 
+        {/* Quick Actions */}
         <section className="actions-row">
-          <div className="action-card doctor">
-            <div className="action-head">
-              <div className="action-icon">+</div>
+          <div className="action-card" onClick={() => navigate("/admin/add-doctor")}>
+            <div className="action-icon" style={{background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa'}}>
+              <i className="bi bi-person-plus-fill"></i>
             </div>
             <div className="action-body">
               <h3>إضافة طبيب جديد</h3>
-              <p>تسجيل طبيب جديد في النظام</p>
+              <p>تسجيل طبيب جديد في النظام وإعداد الملف الشخصي</p>
               <NavLink className="action-link" to="/admin/add-doctor">
-                الانتقال
+                الانتقال <i className="bi bi-arrow-left"></i>
               </NavLink>
             </div>
           </div>
 
-          <div className="action-card admin">
-            <div className="action-head">
-              <div className="action-icon">👤</div>
+          <div className="action-card" onClick={() => navigate("/admin/create-admin")}>
+            <div className="action-icon" style={{background: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa'}}>
+              <i className="bi bi-shield-lock-fill"></i>
             </div>
             <div className="action-body">
               <h3>إنشاء مشرف جديد</h3>
-              <p>إنشاء حساب مشرف آخر</p>
+              <p>إضافة حساب مشرف جديد بصلاحيات إدارية كاملة</p>
               <NavLink className="action-link" to="/admin/create-admin">
-                الانتقال
+                الانتقال <i className="bi bi-arrow-left"></i>
               </NavLink>
             </div>
           </div>
 
-          <div className="action-card admin">
-            <div className="action-head">
-              <div className="action-icon">👤</div>
+          <div className="action-card" onClick={() => navigate("/admin/book-appointment")}>
+            <div className="action-icon" style={{background: 'rgba(16, 185, 129, 0.2)', color: '#34d399'}}>
+              <i className="bi bi-calendar-plus-fill"></i>
             </div>
             <div className="action-body">
-              <h3>حدد موعدًا</h3>
-              <p>حجز موعد للمريض</p>
+              <h3>حجز موعد</h3>
+              <p>حجز موعد جديد لمريض مع أحد الأطباء المتاحين</p>
               <NavLink className="action-link" to="/admin/book-appointment">
-                الانتقال
+                الانتقال <i className="bi bi-arrow-left"></i>
               </NavLink>
             </div>
           </div>

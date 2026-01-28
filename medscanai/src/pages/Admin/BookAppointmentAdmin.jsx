@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import "../Patient/BookAppointment.css";
+import "./BookAppointmentAdmin.css"; // New CSS file
 import { Link } from "react-router-dom";
 import { API_BASE } from "../../../utils/Constants.ts";
+import bookImage from "../../assets/bookAppointment.jpg"; // Import image
 
 const BookAppointmentAdmin = () => {
   const [doctors, setDoctors] = useState([]);
@@ -10,12 +11,12 @@ const BookAppointmentAdmin = () => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [reason, setReason] = useState("");
-  const [patientName, setPatientName] = useState(""); // ✅ new field
+  const [patientName, setPatientName] = useState("");
   const [submitMsg, setSubmitMsg] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [isThereDoctors, setIsThereDoctors] = useState(false);
 
-  // ✅ use admin token directly (no patientId)
+  // Use admin token directly
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -50,7 +51,6 @@ const BookAppointmentAdmin = () => {
     if (token) fetchDoctors();
   }, [token]);
 
-  // ✅ updated submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitMsg(null);
@@ -69,7 +69,6 @@ const BookAppointmentAdmin = () => {
       if (period === "PM" && hours < 12) hours += 12;
       if (period === "AM" && hours === 12) hours = 0;
 
-      // ✅ Create a Date object in local time (Egypt time)
       const appointmentDate = new Date(
         today.getFullYear(),
         today.getMonth(),
@@ -78,16 +77,14 @@ const BookAppointmentAdmin = () => {
         minutes
       );
 
-      // ✅ Format without converting to UTC (keep it local)
       const formattedDate = appointmentDate
         .toLocaleString("sv-SE", { hour12: false }) // ISO-like but local
-        .replace(" ", "T"); // e.g. "2025-10-30T15:55:00"
+        .replace(" ", "T");
 
-      // ✅ Updated payload
       const payload = {
         patientName,
         doctorId: selectedDoctor,
-        date: formattedDate, // <--- send this one
+        date: formattedDate,
         reason,
         status: "Pending",
       };
@@ -118,106 +115,142 @@ const BookAppointmentAdmin = () => {
   };
 
   return (
-    <div className="appointment-container">
-      <h2 className="appointment-title">📅 حجز موعد جديد (للمشرف)</h2>
+    <div className="admin-book-page">
+      <div className="book-card">
+        {/* Image Side */}
+        <div className="book-image-side">
+          <img src={bookImage} alt="Book Appointment" />
+          <div className="book-image-overlay">
+            <h3>حجز موعد جديد</h3>
+            <p>قم بحجز موعد للمريض مع أحد الأطباء المتاحين بسهولة وسرعة.</p>
+          </div>
+        </div>
 
-      <Link to="/admin" className="go-to-dashboard">
-        ← العودة إلى لوحة التحكم
-      </Link>
+        {/* Form Side */}
+        <div className="book-form-side">
+          <div className="book-header">
+            <h2>
+              <i className="bi bi-calendar-plus-fill text-primary"></i>
+              حجز موعد
+            </h2>
+            <Link to="/admin" className="go-back-link">
+              <i className="bi bi-arrow-right"></i>
+              عودة للوحة التحكم
+            </Link>
+          </div>
 
-      {!isThereDoctors && <p className="text-red">لا يوجد أطباء متاحين الآن</p>}
+          {!isThereDoctors && <p className="error-text">لا يوجد أطباء متاحين الآن</p>}
 
-      {isThereDoctors && (
-        <>
-          {loading ? (
-            <p className="loading">جاري تحميل الأطباء...</p>
-          ) : error ? (
-            <p className="error-text">{error}</p>
-          ) : (
-            <form onSubmit={handleSubmit} className="appointment-form">
-              <div className="form-group">
-                <label>اسم المريض:</label>
-                <input
-                  type="text"
-                  value={patientName}
-                  onChange={(e) => setPatientName(e.target.value)}
-                  placeholder="اكتب اسم المريض..."
-                  required
-                />
-              </div>
+          {isThereDoctors && (
+            <>
+              {loading ? (
+                <p className="loading">جاري تحميل الأطباء...</p>
+              ) : error ? (
+                <p className="error-text">{error}</p>
+              ) : (
+                <form onSubmit={handleSubmit} className="admin-book-form">
+                  <div className="form-group">
+                    <label>
+                      <i className="bi bi-person"></i>
+                      اسم المريض
+                    </label>
+                    <input
+                      type="text"
+                      value={patientName}
+                      onChange={(e) => setPatientName(e.target.value)}
+                      placeholder="اكتب اسم المريض..."
+                      required
+                    />
+                  </div>
 
-              <div className="form-group">
-                <label>اختر الطبيب:</label>
-                <select
-                  value={selectedDoctor}
-                  onChange={(e) => {
-                    setSelectedDoctor(e.target.value);
-                    setSelectedTime("");
-                  }}
-                  required
-                >
-                  <option value="">-- اختر الطبيب --</option>
-                  {doctors.map((doc) => (
-                    <option key={doc.id} value={doc.id}>
-                      {doc.fullName} ({doc.specialization})
-                    </option>
-                  ))}
-                </select>
-              </div>
+                  <div className="form-group">
+                    <label>
+                      <i className="bi bi-person-badge"></i>
+                      اختر الطبيب
+                    </label>
+                    <select
+                      value={selectedDoctor}
+                      onChange={(e) => {
+                        setSelectedDoctor(e.target.value);
+                        setSelectedTime("");
+                      }}
+                      required
+                    >
+                      <option value="">-- اختر الطبيب --</option>
+                      {doctors.map((doc) => (
+                        <option key={doc.id} value={doc.id}>
+                          {doc.fullName} ({doc.specialization})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-              {selectedDoctor && (
-                <div className="form-group">
-                  <label>اختر الوقت المتاح:</label>
-                  <select
-                    value={selectedTime}
-                    onChange={(e) => setSelectedTime(e.target.value)}
-                    required
+                  {selectedDoctor && (
+                    <div className="form-group">
+                      <label>
+                        <i className="bi bi-clock"></i>
+                        اختر الوقت المتاح
+                      </label>
+                      <select
+                        value={selectedTime}
+                        onChange={(e) => setSelectedTime(e.target.value)}
+                        required
+                      >
+                        <option value="">-- اختر الوقت --</option>
+                        {(
+                          doctors.find((d) => d.id === selectedDoctor)
+                            ?.availableStartTimes || []
+                        ).map((t, idx) => (
+                          <option key={idx} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="form-group">
+                    <label>
+                      <i className="bi bi-card-text"></i>
+                      سبب الحجز
+                    </label>
+                    <textarea
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      rows={3}
+                      required
+                      placeholder="اكتب سبب الحجز..."
+                    />
+                  </div>
+
+                  {submitMsg && (
+                    <div
+                      className={`submit-message ${
+                        submitMsg.includes("نجاح") ? "success" : "error"
+                      }`}
+                    >
+                      {submitMsg}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="submit-btn"
                   >
-                    <option value="">-- اختر الوقت --</option>
-                    {(
-                      doctors.find((d) => d.id === selectedDoctor)
-                        ?.availableStartTimes || []
-                    ).map((t, idx) => (
-                      <option key={idx} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                    {submitting ? (
+                        <>
+                           <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                           جاري الحجز...
+                        </>
+                    ) : "حجز الموعد"}
+                  </button>
+                </form>
               )}
-
-              <div className="form-group">
-                <label>سبب الحجز:</label>
-                <textarea
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  rows={3}
-                  required
-                  placeholder="اكتب سبب الحجز..."
-                />
-              </div>
-
-              {submitMsg && (
-                <div
-                  className={`submit-message ${
-                    submitMsg.includes("نجاح") ? "success" : "error"
-                  }`}
-                >
-                  {submitMsg}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="submit-btn"
-              >
-                {submitting ? "جاري الحجز..." : "حجز الموعد"}
-              </button>
-            </form>
+            </>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

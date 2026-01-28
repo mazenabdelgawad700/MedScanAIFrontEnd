@@ -122,63 +122,98 @@ const CreateAdmin = () => {
   return (
     <div className="create-admin-page">
       <div className="create-admin-card">
-        <h1>إنشاء مشرف جديد</h1>
+        <h1>
+          <i className="bi bi-shield-lock-fill me-2 text-primary"></i>
+          إنشاء مشرف جديد
+        </h1>
         <p>
           يمكنك هنا إنشاء حساب مشرف آخر. هذا الإجراء خاص بمستخدمين المشرف فقط.
         </p>
 
         <div className="back-to-admin">
-          <NavLink to="/admin">العودة إلى لوحة المشرف</NavLink>
+          <NavLink to="/admin">
+            <i className="bi bi-arrow-right me-2"></i>
+            العودة إلى لوحة المشرف
+          </NavLink>
         </div>
 
         <form onSubmit={handleSubmit} className="create-admin-form">
           <label>
-            <div className="label">اسم المستخدم</div>
+            <div className="label">
+              <i className="bi bi-person me-2"></i>
+              اسم المستخدم
+            </div>
             <input
               name="userName"
               value={form.userName}
               onChange={handleChange}
               required
+              placeholder="Username"
             />
           </label>
 
           <label>
-            <div className="label">البريد الإلكتروني</div>
+            <div className="label">
+              <i className="bi bi-envelope me-2"></i>
+              البريد الإلكتروني
+            </div>
             <input
               name="email"
               type="email"
               value={form.email}
               onChange={handleChange}
               required
+              placeholder="name@example.com"
             />
           </label>
 
           <label>
-            <div className="label">كلمة المرور</div>
+            <div className="label">
+              <i className="bi bi-lock me-2"></i>
+              كلمة المرور
+            </div>
             <input
               name="password"
               type="password"
               value={form.password}
               onChange={handleChange}
               required
+              placeholder="••••••••"
             />
           </label>
 
           <label>
-            <div className="label">تأكيد كلمة المرور</div>
+            <div className="label">
+              <i className="bi bi-lock-fill me-2"></i>
+              تأكيد كلمة المرور
+            </div>
             <input
               name="confirmPassword"
               type="password"
               value={form.confirmPassword}
               onChange={handleChange}
               required
+              placeholder="••••••••"
             />
           </label>
 
-          {message && <div className="message">{message}</div>}
+          {message && <div className="message">
+             <i className="bi bi-info-circle me-2"></i>
+             {message}
+          </div>}
 
           <button type="submit" disabled={loading}>
-            {loading ? "جارٍ الإنشاء..." : "إنشاء مشرف"}
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                جارٍ الإنشاء...
+              </>
+            ) : (
+              <>
+                <i className="bi bi-person-plus-fill me-2"></i>
+                إنشاء مشرف
+              </>
+            )}
           </button>
         </form>
       </div>

@@ -187,12 +187,18 @@ const AddDoctor = () => {
   return (
     <div className="add-doctor-page">
       <div className="add-doctor-card">
-        <h1>إضافة طبيب جديد</h1>
+        <h1>
+          <i className="bi bi-person-plus-fill text-primary"></i>
+          إضافة طبيب جديد
+        </h1>
         <p className="sub">أدخل معلومات الطبيب لإضافته إلى النظام</p>
 
         <form className="doctor-form" onSubmit={handleSubmit}>
           <label>
-            <div className="label">الاسم الكامل</div>
+            <div className="label">
+              <i className="bi bi-person me-2"></i>
+              الاسم الكامل
+            </div>
             <input
               name="fullName"
               value={form.fullName}
@@ -203,7 +209,10 @@ const AddDoctor = () => {
           </label>
 
           <label>
-            <div className="label">التخصص</div>
+            <div className="label">
+              <i className="bi bi-briefcase me-2"></i>
+              التخصص
+            </div>
             <select
               name="specializationID"
               value={form.specializationID}
@@ -218,7 +227,10 @@ const AddDoctor = () => {
           </label>
 
           <label>
-            <div className="label">البريد الإلكتروني</div>
+            <div className="label">
+              <i className="bi bi-envelope me-2"></i>
+              البريد الإلكتروني
+            </div>
             <input
               name="email"
               type="email"
@@ -230,7 +242,10 @@ const AddDoctor = () => {
           </label>
 
           <label>
-            <div className="label">رقم الهاتف</div>
+            <div className="label">
+              <i className="bi bi-phone me-2"></i>
+              رقم الهاتف
+            </div>
             <input
               name="phoneNumber"
               value={form.phoneNumber}
@@ -240,7 +255,10 @@ const AddDoctor = () => {
           </label>
 
           <label>
-            <div className="label">سنوات الخبرة</div>
+            <div className="label">
+              <i className="bi bi-award me-2"></i>
+              سنوات الخبرة
+            </div>
             <input
               name="yearsOfExperience"
               type="number"
@@ -251,7 +269,10 @@ const AddDoctor = () => {
           </label>
 
           <label>
-            <div className="label">كلمة المرور</div>
+            <div className="label">
+              <i className="bi bi-key me-2"></i>
+              كلمة المرور
+            </div>
             <input
               name="password"
               type="password"
@@ -263,16 +284,17 @@ const AddDoctor = () => {
 
           {/* Doctor Schedule Section */}
           <div className="schedule-section">
-            <div className="label" style={{ marginBottom: 8 }}>
+            <div className="label" style={{ marginBottom: 16, fontSize: '16px' }}>
+              <i className="bi bi-calendar-week ms-2 text-info"></i>
               جدول الطبيب (الأيام المتاحة وأوقات العمل)
             </div>
             <div className="days-row mb-4">
               {DAYS.map((d) => (
-                <label key={d.key} style={{display: "flex", flexDirection: "row-reverse", justifyContent: "space-between" }}>
+                <label key={d.key}>
                   <input
                     type="checkbox"
                     checked={!!schedule[d.key]}
-                    style={{width: "fit-content"}}
+                    style={{width: "auto"}}
                     onChange={(e) =>
                       handleScheduleDayChange(d.key, e.target.checked)
                     }
@@ -286,39 +308,46 @@ const AddDoctor = () => {
               <div className="schedule-times">
                 {Object.keys(schedule).map((dayKey) => (
                   <div key={dayKey} className="schedule-time-row">
-                    <span style={{ minWidth: 70, display: "inline-block" }}>
+                    <span style={{ minWidth: 80, display: "flex", alignItems: "center", gap: "6px" }}>
+                       <i className="bi bi-clock"></i>
                       {DAYS.find((d) => d.key === dayKey)?.label}:
-                      <br />
-                      من
                     </span>
-                    <input
-                      type="time"
-                      value={schedule[dayKey].start}
-                      onChange={(e) =>
-                        handleScheduleTimeChange(
-                          dayKey,
-                          "start",
-                          e.target.value
-                        )
-                      }
-                      style={{ margin: "0 8px" }}
-                    />
-                    <span>إلى</span>
-                    <input
-                      type="time"
-                      value={schedule[dayKey].end}
-                      onChange={(e) =>
-                        handleScheduleTimeChange(dayKey, "end", e.target.value)
-                      }
-                      style={{ margin: "0 8px" }}
-                    />
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="text-white-50 small">من</span>
+                      <input
+                        type="time"
+                        value={schedule[dayKey].start}
+                        onChange={(e) =>
+                          handleScheduleTimeChange(
+                            dayKey,
+                            "start",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="text-white-50 small">إلى</span>
+                      <input
+                        type="time"
+                        value={schedule[dayKey].end}
+                        onChange={(e) =>
+                          handleScheduleTimeChange(dayKey, "end", e.target.value)
+                        }
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          {message && <div className="message">{message}</div>}
+          {message && <div className="message">
+            <i className="bi bi-info-circle me-2"></i>
+            {message}
+          </div>}
 
           <div className="buttons-row">
             <button
@@ -329,7 +358,17 @@ const AddDoctor = () => {
               إلغاء
             </button>
             <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? "جارٍ الإضافة..." : "إضافة طبيب"}
+              {loading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  جارٍ الإضافة...
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-check-lg me-2"></i>
+                  إضافة الطبيب
+                </>
+              )}
             </button>
           </div>
         </form>
