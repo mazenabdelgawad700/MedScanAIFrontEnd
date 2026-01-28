@@ -44,8 +44,8 @@ const ChatView = () => {
             <i className="bi bi-robot fs-4"></i>
           </div>
           <div>
-            <h5 className="mb-0 fw-bold text-dark">مساعد الدردشة الطبية</h5>
-            <small className="text-muted">دائمًا هنا لمساعدتك</small>
+            <h5 className="mb-0 fw-bold text-white">مساعد الدردشة الطبية</h5>
+            <small className="text-white">دائمًا هنا لمساعدتك</small>
           </div>
         </div>
       </div>
