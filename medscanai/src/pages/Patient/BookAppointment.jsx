@@ -33,13 +33,16 @@ const BookAppointment = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/appointment/GetDoctors`, {
-          method: "GET",
-          headers: {
-            Accept: "*/*",
-            Authorization: `bearer ${token}`,
+        const res = await fetch(
+          `${API_BASE}/appointment/GetDoctors?patientId=${patientId}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+              Authorization: `bearer ${token}`,
+            },
           },
-        });
+        );
         if (!res.ok) throw new Error("فشل في جلب الأطباء");
 
         const result = await res.json();
@@ -80,7 +83,7 @@ const BookAppointment = () => {
         today.getMonth(),
         today.getDate(),
         hours,
-        minutes
+        minutes,
       );
 
       const formattedDate = appointmentDate

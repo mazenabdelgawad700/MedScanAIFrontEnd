@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./BookAppointmentAdmin.css"; // New CSS file
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_BASE } from "../../../utils/Constants.ts";
 import bookImage from "../../assets/bookAppointment.jpg"; // Import image
 
@@ -16,6 +16,8 @@ const BookAppointmentAdmin = () => {
   const [submitting, setSubmitting] = useState(false);
   const [isThereDoctors, setIsThereDoctors] = useState(false);
 
+
+  const navigate = useNavigate();
   // Use admin token directly
   const token = localStorage.getItem("token");
 
@@ -24,13 +26,16 @@ const BookAppointmentAdmin = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/appointment/GetDoctors`, {
-          method: "GET",
-          headers: {
-            Accept: "*/*",
-            Authorization: `bearer ${token}`,
+        const res = await fetch(
+          `${API_BASE}/appointment/GetDoctors?patientId=null`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+              Authorization: `bearer ${token}`,
+            },
           },
-        });
+        );
         if (!res.ok) throw new Error("فشل في جلب الأطباء");
 
         const result = await res.json();
@@ -106,6 +111,7 @@ const BookAppointmentAdmin = () => {
       setSelectedTime("");
       setReason("");
       setPatientName("");
+      navigate("/patient/appointments");
     } catch (err) {
       console.error(err);
       setSubmitMsg("حدث خطأ أثناء الحجز. حاول مرة أخرى.");

@@ -121,7 +121,7 @@ const WhyUs = () => {
   const stats = [
     {
       icon: <IconUsers />,
-      value: isLoading ? "..." : `${patientCount.data.count * 10}+`,
+      value: isLoading ? "..." : `${patientCount?.data?.count * 10}+`,
       label: "مريض يثق بنا",
       color: "stat-blue",
     },
