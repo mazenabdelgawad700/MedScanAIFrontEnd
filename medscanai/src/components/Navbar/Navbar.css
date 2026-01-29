@@ -63,8 +63,7 @@
   align-items: center;
 }
 
-.login-button a,
-.login-button button {
+.login-button .auth-link {
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
@@ -81,13 +80,37 @@
   backdrop-filter: blur(10px);
 }
 
-.login-button a:hover,
-.login-button button:hover {
+.login-button .auth-link:hover {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-color: transparent;
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.login-button .logout-btn-nav {
+  background: transparent;
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #fca5a5;
+  font-weight: 600;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: none;
+}
+
+.login-button .logout-btn-nav:hover {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.6);
+  color: #fca5a5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.2);
 }
 
 .login-button .admin-inline-link {

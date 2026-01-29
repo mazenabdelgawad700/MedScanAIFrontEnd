@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import ResultCard from './ResultCard';
+import React, { useState } from "react";
+import ResultCard from "./ResultCard";
 
-const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, titleCard }) => {
+const ModelView = ({
+  title,
+  description,
+  icon,
+  color = "primary",
+  apiEndpoint,
+  titleCard,
+}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -23,16 +30,47 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
 
     setIsAnalyzing(true);
     setError(null);
-    
+
     // If API endpoint is provided, use it
     if (apiEndpoint && selectedFile) {
       try {
         const formData = new FormData();
-        formData.append('file', selectedFile);
+        formData.append("file", selectedFile);
 
-        const response = await fetch(apiEndpoint, {
-          method: 'POST',
+        // Get token from localStorage
+        const token = localStorage.getItem("token");
+
+        // Determine user role from token
+        let userRole = "patient"; // default
+        if (token) {
+          try {
+            const parts = token.split(".");
+            if (parts.length >= 2) {
+              const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+              const pad = payload.length % 4;
+              const padded = pad ? payload + "=".repeat(4 - pad) : payload;
+              const json = atob(padded);
+              const claims = JSON.parse(json);
+              const role =
+                claims[
+                  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                ] || claims.role;
+              if (role === "Doctor") {
+                userRole = "doctor";
+              }
+            }
+          } catch (e) {
+            console.warn("Failed to decode token role:", e);
+          }
+        }
+
+        // Build URL with user_role query parameter
+        const urlWithRole = `${apiEndpoint}?user_role=${userRole}`;
+
+        const response = await fetch(urlWithRole, {
+          method: "POST",
           body: formData,
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
         if (!response.ok) {
@@ -40,7 +78,7 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
         }
 
         const data = await response.json();
-        
+
         // Map API response to our internal format
         setResult({
           diagnosis: data.class_label_ar || data.class_label_en,
@@ -48,7 +86,7 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
           confidence: data.confidence_level,
           advice: data.generated_advice,
           // Keep raw data just in case
-          raw: data
+          raw: data,
         });
       } catch (err) {
         console.error("Analysis failed:", err);
@@ -61,12 +99,13 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
       setTimeout(() => {
         setIsAnalyzing(false);
         setResult({
-          diagnosis: "بناءً على تحليل الصورة المقدمة، هناك مؤشرات تشير إلى شذوذ محتمل يتوافق مع الأنماط المبكرة. ومع ذلك، يتطلب التشخيص النهائي الارتباط السريري.",
+          diagnosis:
+            "بناءً على تحليل الصورة المقدمة، هناك مؤشرات تشير إلى شذوذ محتمل يتوافق مع الأنماط المبكرة. ومع ذلك، يتطلب التشخيص النهائي الارتباط السريري.",
           nextSteps: JSON.stringify([
             "استشر أخصائيًا للحصول على مراجعة تفصيلية",
             "حدد موعدًا لفحص متابعة بالرنين المغناطيسي/الأشعة المقطعية إذا أوصى الطبيب",
-            "راقب أي أعراض مصاحبة"
-          ])
+            "راقب أي أعراض مصاحبة",
+          ]),
         });
       }, 2000);
     }
@@ -75,7 +114,9 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
   return (
     <div className="h-100 d-flex flex-column" dir="rtl">
       <div className="text-center mb-4">
-        <div className={`d-inline-flex align-items-center justify-content-center p-3 rounded-circle bg-${color} bg-opacity-10 text-${color} mb-3`}>
+        <div
+          className={`d-inline-flex align-items-center justify-content-center p-3 rounded-circle bg-${color} bg-opacity-10 text-${color} mb-3`}
+        >
           <i className={`bi ${icon} display-6`}></i>
         </div>
         <h2 className="fw-bold text-white">{title}</h2>
@@ -87,48 +128,60 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
           <div className="card border-0 shadow-none bg-transparent">
             <div className="card-body p-0">
               <div className="mb-4 position-relative">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="position-absolute w-100 h-100 opacity-0" 
-                  style={{ zIndex: 10, cursor: 'pointer' }}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="position-absolute w-100 h-100 opacity-0"
+                  style={{ zIndex: 10, cursor: "pointer" }}
                   onChange={handleImageChange}
                   id="imageUpload"
                 />
-                <div className={`upload-area p-5 text-center ${isAnalyzing ? 'pulse-animation' : ''}`}>
+                <div
+                  className={`upload-area p-5 text-center ${isAnalyzing ? "pulse-animation" : ""}`}
+                >
                   {selectedImage ? (
                     <div className="position-relative">
-                      <img 
-                        src={selectedImage} 
-                        alt="معاينة" 
-                        className="img-fluid rounded shadow-sm" 
-                        style={{ maxHeight: '300px', objectFit: 'contain' }} 
+                      <img
+                        src={selectedImage}
+                        alt="معاينة"
+                        className="img-fluid rounded shadow-sm"
+                        style={{ maxHeight: "300px", objectFit: "contain" }}
                       />
                       {isAnalyzing && (
                         <div className="position-absolute top-50 start-50 translate-middle">
-                          <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-                            <span className="visually-hidden">جاري التحميل...</span>
+                          <div
+                            className="spinner-border text-primary"
+                            style={{ width: "3rem", height: "3rem" }}
+                            role="status"
+                          >
+                            <span className="visually-hidden">
+                              جاري التحميل...
+                            </span>
                           </div>
                         </div>
                       )}
                     </div>
                   ) : (
                     <div className="text-white py-4">
-                      <i className={`bi bi-cloud-arrow-up display-4 text-${color} mb-3 d-block`}></i>
-                      <h5 className="fw-semibold">اسحب الصورة هنا أو انقر للتصفح</h5>
+                      <i
+                        className={`bi bi-cloud-arrow-up display-4 text-${color} mb-3 d-block`}
+                      ></i>
+                      <h5 className="fw-semibold">
+                        اسحب الصورة هنا أو انقر للتصفح
+                      </h5>
                       <p className="small mb-0">يدعم JPG، PNG، DICOM</p>
                     </div>
                   )}
                 </div>
               </div>
 
-              <button 
-                className={`btn btn-${color} w-100 py-3 rounded-pill fw-bold shadow-sm transition-all`} 
+              <button
+                className={`btn btn-${color} text-white w-100 py-3 rounded-pill fw-bold shadow-sm transition-all`}
                 onClick={handleAnalyze}
                 disabled={!selectedImage || isAnalyzing}
-                style={{ transform: isAnalyzing ? 'scale(0.98)' : 'scale(1)' }}
+                style={{ transform: isAnalyzing ? "scale(0.98)" : "scale(1)" }}
               >
-                {isAnalyzing ? 'جاري تحليل الصورة...' : 'بدء التحليل'}
+                {isAnalyzing ? "جاري تحليل الصورة..." : "بدء التحليل"}
               </button>
             </div>
             {error && (
@@ -141,14 +194,14 @@ const ModelView = ({ title, description, icon, color = 'primary', apiEndpoint, t
 
           {result && (
             <div className="fade-in-up mt-4">
-              <ResultCard 
-                diagnosis={result.diagnosis || result.Diagnose} 
+              <ResultCard
+                diagnosis={result.diagnosis || result.Diagnose}
                 diagnosisEn={result.diagnosisEn}
                 nextSteps={result.nextSteps || result.NextSteps}
                 advice={result.advice}
                 confidence={result.confidence}
                 color={color}
-                title = {titleCard} 
+                title={titleCard}
               />
             </div>
           )}

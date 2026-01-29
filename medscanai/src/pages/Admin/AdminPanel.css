@@ -66,22 +66,24 @@
 }
 
 .logout-btn {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  color: #fca5a5;
+  background: transparent;
   width: fit-content;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-size: 15px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: none;
 }
 
 .logout-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(220, 38, 38, 0.4);
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.6);
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.2);
+  transform: translateY(-2px);
 }
 
 /* KPI Stats Grid */

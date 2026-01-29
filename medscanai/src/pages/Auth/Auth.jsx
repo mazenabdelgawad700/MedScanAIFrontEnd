@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
-import {API_BASE} from "../../../utils/Constants.ts"
-
+import { API_BASE } from "../../../utils/Constants.ts";
 
 const Auth = () => {
   const [mode, setMode] = useState("login"); // 'login' or 'register'
@@ -73,7 +72,7 @@ const Auth = () => {
                 navigate("/patient/dashboard");
               } else if (role === "Admin") {
                 navigate("/admin");
-              } else if(role === "Doctor"){
+              } else if (role === "Doctor") {
                 navigate("/doctor/dashboard");
               }
             } else {
@@ -120,6 +119,13 @@ const Auth = () => {
       <div className="auth-top">
         <h1 className="auth-title">مرحبًا بك في MedScanAI</h1>
         <p className="auth-sub">سجل الدخول للوصول إلى لوحة التحكم الصحية</p>
+        <button
+          className="back-to-home-btn"
+          onClick={() => navigate("/")}
+          aria-label="العودة للصفحة الرئيسية"
+        >
+          ← العودة للصفحة الرئيسية
+        </button>
       </div>
 
       <div className="auth-card">
@@ -228,7 +234,7 @@ const Auth = () => {
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-button"
+                className="text-button p-2 rounded-3"
               >
                 هل نسيت كلمة المرور؟
               </button>

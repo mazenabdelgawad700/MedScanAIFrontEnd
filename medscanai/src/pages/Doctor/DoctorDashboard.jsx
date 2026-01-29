@@ -192,8 +192,7 @@ export default function DoctorDashboard() {
         <div className="header">
           <div>
             <h1>
-              مرحباً، د.{" "}
-              <span className="doctor-name">{doctor.doctorName}</span>
+              مرحباً، د.{" "}{doctor.doctorName}
             </h1>
             <p className="subtitle">هؤلاء هم مرضاك لهذا اليوم</p>
           </div>

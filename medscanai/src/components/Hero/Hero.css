@@ -175,6 +175,8 @@
   padding: 10px;
   animation: fadeInUp 0.8s ease-out 1s both;
   transition: transform 0.3s ease;
+  width: fit-content;
+  box-shadow: none;
 }
 
 .scroll-indicator:hover {

@@ -74,7 +74,7 @@ const BookAppointmentAdmin = () => {
         today.getMonth(),
         today.getDate(),
         hours,
-        minutes
+        minutes,
       );
 
       const formattedDate = appointmentDate
@@ -117,13 +117,9 @@ const BookAppointmentAdmin = () => {
   return (
     <div className="admin-book-page">
       <div className="book-card">
-        {/* Image Side */}
+        {/* Image Side - Clean Image Only */}
         <div className="book-image-side">
           <img src={bookImage} alt="Book Appointment" />
-          <div className="book-image-overlay">
-            <h3>حجز موعد جديد</h3>
-            <p>قم بحجز موعد للمريض مع أحد الأطباء المتاحين بسهولة وسرعة.</p>
-          </div>
         </div>
 
         {/* Form Side */}
@@ -139,7 +135,9 @@ const BookAppointmentAdmin = () => {
             </Link>
           </div>
 
-          {!isThereDoctors && <p className="error-text">لا يوجد أطباء متاحين الآن</p>}
+          {!isThereDoctors && (
+            <p className="error-text">لا يوجد أطباء متاحين الآن</p>
+          )}
 
           {isThereDoctors && (
             <>
@@ -239,11 +237,17 @@ const BookAppointmentAdmin = () => {
                     className="submit-btn"
                   >
                     {submitting ? (
-                        <>
-                           <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                           جاري الحجز...
-                        </>
-                    ) : "حجز الموعد"}
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        جاري الحجز...
+                      </>
+                    ) : (
+                      "حجز الموعد"
+                    )}
                   </button>
                 </form>
               )}

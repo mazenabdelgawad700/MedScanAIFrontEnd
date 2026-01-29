@@ -94,9 +94,15 @@ const Navbar = () => {
         {/* left area: auth controls + role-based links */}
         <div className="login-button">
           {!isLogged ? (
-            <NavLink to="/auth">تسجيل الدخول</NavLink>
+            <NavLink to="/auth" className="auth-link">
+              تسجيل الدخول
+            </NavLink>
           ) : (
-            <button onClick={handleSignOut} aria-label="تسجيل الخروج">
+            <button
+              onClick={handleSignOut}
+              className="logout-btn-nav"
+              aria-label="تسجيل الخروج"
+            >
               تسجيل الخروج
             </button>
           )}
