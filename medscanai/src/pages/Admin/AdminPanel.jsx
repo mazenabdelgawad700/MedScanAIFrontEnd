@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { API_BASE } from "../../../utils/Constants.ts"
+import SignalRService from "../../services/SignalRService";
 import "./AdminPanel.css";
 
 function decodeJwtPayload(token) {
@@ -110,6 +111,28 @@ const AdminPanel = () => {
 
   useEffect(() => {
     fetchTodayAppointments();
+  }, []);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      console.log("AdminPanel: SignalR update received! Refreshing data...");
+      fetchCounts();
+      fetchTodayAppointments();
+    };
+
+    const startSignalR = async () => {
+      console.log("AdminPanel: Starting SignalR connection...");
+      await SignalRService.startConnection();
+      SignalRService.on("AppointmentCreated", handleUpdate);
+      SignalRService.on("AppointmentCancelled", handleUpdate);
+    };
+
+    startSignalR();
+
+    return () => {
+      SignalRService.off("AppointmentCreated", handleUpdate);
+      SignalRService.off("AppointmentCancelled", handleUpdate);
+    };
   }, []);
 
 

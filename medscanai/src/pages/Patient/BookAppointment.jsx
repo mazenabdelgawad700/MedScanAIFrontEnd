@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "./BookAppointment.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_BASE } from "../../../utils/Constants.ts";
+import SignalRService from "../../services/SignalRService";
 import bookAppointmentImg from "../../assets/bookAppointment.jpg";
 
 const BookAppointment = () => {
@@ -14,6 +15,8 @@ const BookAppointment = () => {
   const [submitMsg, setSubmitMsg] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [isThereDoctors, setIsThereDoctors] = useState(false);
+
+  const navigate = useNavigate();
 
   // Get token and patientId from localStorage/token
   const token = localStorage.getItem("token");
@@ -61,7 +64,7 @@ const BookAppointment = () => {
       }
     };
     if (token) fetchDoctors();
-  }, [token]);
+  }, [patientId, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,10 +109,20 @@ const BookAppointment = () => {
         }),
       });
       if (!res.ok) throw new Error("فشل الحجز");
+      
+      try {
+        await SignalRService.invoke("AppointmentCreated");
+      } catch (e) {
+        console.error("SignalR Booking Error", e);
+      }
+
       setSubmitMsg("تم حجز الموعد بنجاح ✅");
       setSelectedDoctor("");
       setSelectedTime("");
       setReason("");
+      setTimeout(() => {
+        navigate("/patient/dashboard");
+      }, 1000)
     } catch {
       setSubmitMsg("حدث خطأ أثناء الحجز. حاول مرة أخرى.");
     } finally {

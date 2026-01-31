@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { API_BASE } from "../../../utils/Constants.ts";
+import SignalRService from "../../services/SignalRService";
 import "./Appointments.css";
 import { useNavigate } from "react-router-dom";
 
@@ -86,6 +87,12 @@ const Appointments = () => {
       });
 
       if (response.ok) {
+        // SignalR Notification
+        try {
+          await SignalRService.invoke("AppointmentCancelled", selectedAptId);
+        } catch (e) {
+          console.error("SignalR Notify Error", e);
+        }
         // Refresh list
         await fetchAppointments();
       } else {
