@@ -33,11 +33,6 @@
   z-index: 0;
 }
 
-.apt-page>* {
-  position: relative;
-  z-index: 1;
-}
-
 .apt-hero {
   margin-bottom: 40px;
 }

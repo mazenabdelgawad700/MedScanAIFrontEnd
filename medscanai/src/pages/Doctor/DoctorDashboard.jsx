@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import {API_BASE} from "../../../utils/Constants.ts"
+import { API_BASE } from "../../../utils/Constants.ts";
+import SignalRService from "../../services/SignalRService";
 import "./DoctorDashboard.css";
 
 function decodeJwtPayload(token) {
@@ -29,17 +30,13 @@ export default function DoctorDashboard() {
   const [actionLoading, setActionLoading] = useState(false);
   const [actionMsg, setActionMsg] = useState("");
 
-  useEffect(() => {
+
+  const fetchDoctorData = useCallback(async (showLoading = true) => {
     const token = localStorage.getItem("token");
-    if (!token) return navigate("/auth");
+    if (!token) return;
 
     const payload = decodeJwtPayload(token);
-    if (!payload) return navigate("/auth");
-
-    const role =
-      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
-      payload.role;
-    if (role !== "Doctor") return navigate("/");
+    if (!payload) return;
 
     const doctorId =
       payload[
@@ -48,13 +45,9 @@ export default function DoctorDashboard() {
       payload.UserId ||
       payload.sub;
 
-    if (!doctorId) return navigate("/auth");
+    if (!doctorId) return;
 
-    fetchDoctorData(doctorId, token);
-  }, [navigate]);
-
-  const fetchDoctorData = async (doctorId, token) => {
-    setLoading(true);
+    if (showLoading) setLoading(true);
     setError("");
     try {
       const res = await fetch(
@@ -79,9 +72,56 @@ export default function DoctorDashboard() {
       setError("تعذر تحميل بيانات الطبيب. حاول لاحقًا.");
       setDoctor(null);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
-  };
+  }, []);
+
+
+  // Auth check on mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/auth");
+
+    const payload = decodeJwtPayload(token);
+    if (!payload) return navigate("/auth");
+
+    const role =
+      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+      payload.role;
+    if (role !== "Doctor") return navigate("/");
+
+    const doctorId =
+      payload[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+      ] ||
+      payload.UserId ||
+      payload.sub;
+
+    if (!doctorId) return navigate("/auth");
+
+    fetchDoctorData();
+  }, [navigate, fetchDoctorData]);
+
+  // SignalR real-time updates
+  useEffect(() => {
+    const handleUpdate = () => {
+      console.log("DoctorDashboard: SignalR update received, refreshing...");
+      fetchDoctorData(false); // Don't show loading spinner for real-time updates
+    };
+
+    const startSignalR = async () => {
+      await SignalRService.startConnection();
+      SignalRService.on("AppointmentConfirmed", handleUpdate);
+      SignalRService.on("AppointmentCancelled", handleUpdate);
+    };
+
+    startSignalR();
+
+    return () => {
+      SignalRService.off("AppointmentConfirmed", handleUpdate);
+      SignalRService.off("AppointmentCancelled", handleUpdate);
+    };
+  }, [fetchDoctorData]);
 
   const openPatientModal = (patient) => {
     setSelectedPatient(patient);
