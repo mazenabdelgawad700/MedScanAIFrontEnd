@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import "./BookAppointment.css";
 import { Link, useNavigate } from "react-router-dom";
-import { API_BASE } from "../../../utils/Constants.ts";
+import { getToken, getUserId } from "../../utils/auth";
+import { API_BASE } from "../../utils/constants";
 import SignalRService from "../../services/SignalRService";
 import bookAppointmentImg from "../../assets/bookAppointment.jpg";
+import "./BookAppointment.css";
 
 const BookAppointment = () => {
+  const navigate = useNavigate();
+
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,20 +19,8 @@ const BookAppointment = () => {
   const [submitting, setSubmitting] = useState(false);
   const [isThereDoctors, setIsThereDoctors] = useState(false);
 
-  const navigate = useNavigate();
-
-  // Get token and patientId from localStorage/token
-  const token = localStorage.getItem("token");
-  const getUserIdFromToken = (token) => {
-    try {
-      const base64Payload = token.split(".")[1];
-      const payload = JSON.parse(atob(base64Payload));
-      return payload.UserId;
-    } catch {
-      return null;
-    }
-  };
-  const patientId = getUserIdFromToken(token);
+  const token = getToken();
+  const patientId = getUserId();
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -42,17 +33,16 @@ const BookAppointment = () => {
             method: "GET",
             headers: {
               Accept: "*/*",
-              Authorization: `bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         if (!res.ok) throw new Error("فشل في جلب الأطباء");
 
         const result = await res.json();
         if (result.succeeded && Array.isArray(result.data)) {
           setDoctors(result.data);
-          if (result.data.length > 0) setIsThereDoctors(true);
-          else setIsThereDoctors(false);
+          setIsThereDoctors(result.data.length > 0);
         } else {
           throw new Error(result.message || "استجابة غير متوقعة من الخادم");
         }
@@ -63,18 +53,22 @@ const BookAppointment = () => {
         setLoading(false);
       }
     };
+
     if (token) fetchDoctors();
   }, [patientId, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitMsg(null);
+
     if (!selectedDoctor || !selectedTime || !reason) {
       setSubmitMsg("يرجى اختيار طبيب ووقت وكتابة سبب الحجز.");
       return;
     }
+
     setSubmitting(true);
     try {
+      // Parse selected time and create appointment date
       const today = new Date();
       const [time, period] = selectedTime.split(" ");
       let [hours, minutes] = time.split(":").map(Number);
@@ -86,11 +80,11 @@ const BookAppointment = () => {
         today.getMonth(),
         today.getDate(),
         hours,
-        minutes,
+        minutes
       );
 
       const formattedDate = appointmentDate
-        .toLocaleString("sv-SE", { hour12: false }) // ISO-like but local
+        .toLocaleString("sv-SE", { hour12: false })
         .replace(" ", "T");
 
       const res = await fetch(`${API_BASE}/appointment/MakeAppointment`, {
@@ -98,7 +92,7 @@ const BookAppointment = () => {
         headers: {
           Accept: "*/*",
           "Content-Type": "application/json",
-          Authorization: `bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           patientId,
@@ -108,8 +102,10 @@ const BookAppointment = () => {
           status: "Pending",
         }),
       });
+
       if (!res.ok) throw new Error("فشل الحجز");
-      
+
+      // SignalR notification
       try {
         await SignalRService.invoke("AppointmentCreated");
       } catch (e) {
@@ -120,9 +116,10 @@ const BookAppointment = () => {
       setSelectedDoctor("");
       setSelectedTime("");
       setReason("");
+
       setTimeout(() => {
         navigate("/patient/dashboard");
-      }, 1000)
+      }, 1000);
     } catch {
       setSubmitMsg("حدث خطأ أثناء الحجز. حاول مرة أخرى.");
     } finally {

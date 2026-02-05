@@ -1,0 +1,327 @@
+/* Hub View Styles */
+.hub-container {
+  padding: 0.25rem 0;
+}
+
+.hub-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.hub-title {
+  font-weight: bold;
+  margin-bottom: 0;
+  color: white;
+  font-size: 20px;
+}
+
+.hub-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  margin: 0;
+}
+
+/* Featured Tool Card (Chatbot) */
+.hub-featured-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.featured-tool-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 95, 70, 0.4) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px rgba(16, 185, 129, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.featured-tool-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(16, 185, 129, 0.25);
+}
+
+.featured-tool-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.3), transparent 60%);
+  pointer-events: none;
+}
+
+.featured-tool-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.featured-tool-icon {
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-tool-icon i {
+  font-size: 32px;
+}
+
+.featured-tool-title {
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.25rem;
+  font-size: 24px;
+}
+
+.featured-tool-description {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+  max-width: 430px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.featured-tool-button {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s;
+}
+
+.featured-tool-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.featured-tool-button i {
+  font-size: 11px;
+}
+
+/* Section Titles */
+.hub-section-title {
+  color: white;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+  text-align: center;
+  opacity: 0.75;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.hub-section-title i {
+  color: #3b82f6;
+}
+
+.hub-section-title-pink i {
+  color: #ec4899;
+}
+
+/* Tool Cards Grid */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.hub-grid-single {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Standard Tool Card */
+.tool-card {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+}
+
+.tool-card:hover {
+  transform: translateY(-8px);
+}
+
+.tool-card-primary:hover {
+  border-color: rgba(37, 99, 235, 0.5);
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+}
+
+.tool-card-warning:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15);
+}
+
+.tool-card-info:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 20px 40px rgba(6, 182, 212, 0.15);
+}
+
+.tool-card-pink {
+  background: linear-gradient(180deg, rgba(236, 72, 153, 0.15), rgba(219, 39, 119, 0.08));
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.tool-card-pink:hover {
+  border-color: rgba(236, 72, 153, 0.6);
+  box-shadow: 0 20px 40px rgba(236, 72, 153, 0.25);
+}
+
+/* Tool Card Icon */
+.tool-card-icon-wrapper {
+  position: relative;
+  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.tool-card-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  filter: blur(20px);
+  z-index: 0;
+}
+
+.tool-card-glow-primary {
+  background: rgba(37, 99, 235, 0.2);
+}
+
+.tool-card-glow-warning {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.tool-card-glow-info {
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.tool-card-glow-pink {
+  background: rgba(236, 72, 153, 0.2);
+}
+
+.tool-card-icon {
+  font-size: 34px;
+  position: relative;
+  z-index: 1;
+}
+
+.tool-card-icon-primary {
+  color: #60a5fa;
+}
+
+.tool-card-icon-warning {
+  color: #fbbf24;
+}
+
+.tool-card-icon-info {
+  color: #22d3ee;
+}
+
+.tool-card-icon-pink {
+  color: #f472b6;
+}
+
+/* Tool Card Content */
+.tool-card-title {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: white;
+  font-size: 15px;
+}
+
+.tool-card-description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+  padding: 0 0.25rem;
+  min-height: 24px;
+}
+
+/* Tool Card Button */
+.tool-card-button-wrapper {
+  margin-top: auto;
+  width: 100%;
+}
+
+.tool-card-button {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tool-card-button-primary:hover {
+  background: #2563eb;
+  border-color: transparent;
+}
+
+.tool-card-button-warning:hover {
+  background: #d97706;
+  border-color: transparent;
+}
+
+.tool-card-button-info:hover {
+  background: #0891b2;
+  border-color: transparent;
+}
+
+.tool-card-button-pink {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f9a8d4;
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.tool-card-button-pink:hover {
+  background: #db2777;
+  color: white;
+  border-color: transparent;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ResultCard from "./ResultCard";
+import { getToken, getUserRole } from "../../utils/auth";
 
 const ModelView = ({
   title,
@@ -31,38 +32,13 @@ const ModelView = ({
     setIsAnalyzing(true);
     setError(null);
 
-    // If API endpoint is provided, use it
     if (apiEndpoint && selectedFile) {
       try {
         const formData = new FormData();
         formData.append("file", selectedFile);
 
-        // Get token from localStorage
-        const token = localStorage.getItem("token");
-
-        // Determine user role from token
-        let userRole = "patient"; // default
-        if (token) {
-          try {
-            const parts = token.split(".");
-            if (parts.length >= 2) {
-              const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-              const pad = payload.length % 4;
-              const padded = pad ? payload + "=".repeat(4 - pad) : payload;
-              const json = atob(padded);
-              const claims = JSON.parse(json);
-              const role =
-                claims[
-                  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-                ] || claims.role;
-              if (role === "Doctor") {
-                userRole = "doctor";
-              }
-            }
-          } catch (e) {
-            console.warn("Failed to decode token role:", e);
-          }
-        }
+        const token = getToken();
+        const userRole = getUserRole().toLowerCase();
 
         // Build URL with user_role query parameter
         const urlWithRole = `${apiEndpoint}?user_role=${userRole}`;
@@ -79,13 +55,12 @@ const ModelView = ({
 
         const data = await response.json();
 
-        // Map API response to our internal format
+        // Map API response to internal format
         setResult({
           diagnosis: data.class_label_ar || data.class_label_en,
           diagnosisEn: data.class_label_en,
           confidence: data.confidence_level,
           advice: data.generated_advice,
-          // Keep raw data just in case
           raw: data,
         });
       } catch (err) {

@@ -1,8 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { ConfirmModal } from "../../components/common";
+import { getToken, getUserId } from "../../utils/auth";
+import { API_BASE } from "../../utils/constants";
 import "./PatientDashboard.css";
-import { API_BASE } from "../../../utils/Constants.ts";
 
+/**
+ * Configuration for medical item types (chronic diseases, allergies, medications).
+ * Enables generic CRUD operations with type-specific endpoints.
+ */
+const MEDICAL_ITEM_CONFIG = {
+  chronicDisease: {
+    endpoint: "chronicdisease",
+    updateMethod: "UpdateChronicDisease",
+    deleteMethod: "DeleteChronicDisease",
+    addMethod: "AddChronicDisease",
+    bodyKey: "chronicDisease",
+    labelAr: "مرض مزمن",
+    deleteErrorMsg: "فشل حذف المرض. حاول مرة أخرى.",
+    tagClass: "pd-tag-danger",
+    addBtnClass: "pd-tag-add-danger",
+  },
+  allergy: {
+    endpoint: "allergy",
+    updateMethod: "UpdateAllergy",
+    deleteMethod: "DeleteAllergy",
+    addMethod: "AddAllergy",
+    bodyKey: "allergy",
+    labelAr: "حساسية",
+    deleteErrorMsg: "فشل حذف الحساسية. حاول مرة أخرى.",
+    tagClass: "pd-tag-warning",
+    addBtnClass: "pd-tag-add-warning",
+  },
+  medication: {
+    endpoint: "currentmedication",
+    updateMethod: "UpdateCurrentMedication",
+    deleteMethod: "DeleteCurrentMedication",
+    addMethod: "AddCurrentMedication",
+    bodyKey: "currentMedication",
+    labelAr: "دواء",
+    deleteErrorMsg: "فشل حذف الدواء. حاول مرة أخرى.",
+    tagClass: "pd-tag-info",
+    addBtnClass: "pd-tag-add-info",
+  },
+};
+
+/** Dashboard quick action card */
 const Card = ({ title, subtitle, icon, onClick }) => (
   <div className="pd-card" onClick={onClick} role="button" tabIndex={0}>
     <div className="pd-card-left">
@@ -13,29 +56,26 @@ const Card = ({ title, subtitle, icon, onClick }) => (
   </div>
 );
 
-// Interactive Medical Tag Component
+/** Interactive medical tag with edit/delete capabilities */
 const MedicalTag = ({
   item,
   type,
   tagClass,
   onUpdate,
-  onDelete,
   isEditing,
   onShowActions,
   onCancelEdit,
 }) => {
   const [editValue, setEditValue] = useState(item?.name || "");
   const [isLoading, setIsLoading] = useState(false);
-  const tagRef = React.useRef(null);
 
   const handleTagClick = (e) => {
     e.stopPropagation();
     if (!isEditing) {
-      // Calculate position for the popup
       const rect = e.currentTarget.getBoundingClientRect();
       const position = {
-        top: rect.top, // Top edge of the tag
-        left: rect.left + rect.width / 2, // Center of the tag
+        top: rect.top,
+        left: rect.left + rect.width / 2,
       };
       onShowActions(e, item, type, position);
     }
@@ -44,7 +84,7 @@ const MedicalTag = ({
   const handleUpdate = async () => {
     if (!editValue.trim()) return;
     setIsLoading(true);
-    await onUpdate(item, editValue);
+    await onUpdate(item, editValue, type);
     setIsLoading(false);
     onCancelEdit();
   };
@@ -60,7 +100,7 @@ const MedicalTag = ({
 
   if (isEditing) {
     return (
-      <div className={`pd-tag ${tagClass} pd-tag-editing`} ref={tagRef}>
+      <div className={`pd-tag ${tagClass} pd-tag-editing`}>
         <input
           type="text"
           value={editValue}
@@ -98,28 +138,27 @@ const MedicalTag = ({
   }
 
   return (
-    <>
-      <div
-        ref={tagRef}
-        className={`pd-tag ${tagClass} pd-tag-interactive`}
-        onClick={handleTagClick}
-      >
-        {item?.name}
-        <span className="pd-tag-tooltip">اضغط للتعديل أو الحذف</span>
-      </div>
-    </>
+    <div
+      className={`pd-tag ${tagClass} pd-tag-interactive`}
+      onClick={handleTagClick}
+    >
+      {item?.name}
+      <span className="pd-tag-tooltip">اضغط للتعديل أو الحذف</span>
+    </div>
   );
 };
 
 const PatientDashboard = () => {
   const navigate = useNavigate();
+  const dashboardRef = useRef(null);
+
   const [profile, setProfile] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [addType, setAddType] = useState(null); // 'chronicDisease', 'allergy', 'medication'
+  const [addType, setAddType] = useState(null);
   const [newItemName, setNewItemName] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 
-  // Global Delete Modal State
+  // Delete modal state
   const [deleteModal, setDeleteModal] = useState({
     show: false,
     type: null,
@@ -127,7 +166,7 @@ const PatientDashboard = () => {
   });
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Global Action Menu State
+  // Action menu state
   const [actionMenu, setActionMenu] = useState({
     show: false,
     x: 0,
@@ -136,16 +175,6 @@ const PatientDashboard = () => {
     type: null,
   });
   const [editingId, setEditingId] = useState(null);
-  const dashboardRef = React.useRef(null);
-
-  const getToken = () => localStorage.getItem("token");
-
-  const getUserId = () => {
-    const token = getToken();
-    if (!token) return null;
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.UserId;
-  };
 
   const fetchProfile = async () => {
     try {
@@ -177,14 +206,20 @@ const PatientDashboard = () => {
     navigate("/auth");
   };
 
-  // Update handlers
-  const handleUpdateChronicDisease = async (disease, newName) => {
+  /**
+   * Generic update handler for all medical item types.
+   * Replaces 3 separate near-identical functions.
+   */
+  const handleUpdateMedicalItem = async (item, newName, type) => {
+    const config = MEDICAL_ITEM_CONFIG[type];
+    if (!config) return;
+
     try {
       const token = getToken();
       const userId = getUserId();
 
       const response = await fetch(
-        `${API_BASE}/chronicdisease/UpdateChronicDisease`,
+        `${API_BASE}/${config.endpoint}/${config.updateMethod}`,
         {
           method: "PUT",
           headers: {
@@ -192,9 +227,9 @@ const PatientDashboard = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            chronicDisease: {
+            [config.bodyKey]: {
               patientId: userId,
-              id: disease.id,
+              id: item.id,
               name: newName,
             },
           }),
@@ -205,77 +240,21 @@ const PatientDashboard = () => {
         await fetchProfile();
       }
     } catch (error) {
-      console.error("Failed to update chronic disease", error);
+      console.error(`Failed to update ${type}`, error);
     }
   };
 
-  const handleUpdateAllergy = async (allergy, newName) => {
+  /**
+   * Generic delete handler for all medical item types.
+   * Replaces 3 separate near-identical functions.
+   */
+  const handleDeleteMedicalItem = async (item, type) => {
+    const config = MEDICAL_ITEM_CONFIG[type];
+    if (!config) return;
+
     try {
       const token = getToken();
-      const userId = getUserId();
-
-      const response = await fetch(`${API_BASE}/allergy/UpdateAllergy`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          allergy: {
-            patientId: userId,
-            id: allergy.id,
-            name: newName,
-          },
-        }),
-      });
-
-      if (response.ok) {
-        await fetchProfile();
-      }
-    } catch (error) {
-      console.error("Failed to update allergy", error);
-    }
-  };
-
-  const handleUpdateMedication = async (medication, newName) => {
-    try {
-      const token = getToken();
-      const userId = getUserId();
-
-      const response = await fetch(
-        `${API_BASE}/currentmedication/UpdateCurrentMedication`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            currentMedication: {
-              patientId: userId,
-              id: medication.id,
-              name: newName,
-            },
-          }),
-        }
-      );
-
-      if (response.ok) {
-        await fetchProfile();
-      }
-    } catch (error) {
-      console.error("Failed to update medication", error);
-    }
-  };
-
-  // Delete handlers
-  const handleDeleteChronicDisease = async (disease) => {
-    try {
-      const token = getToken();
-      // Some backends ignore DELETE bodies; include id in query and body for robustness
-      const url = `${API_BASE}/chronicdisease/DeleteChronicDisease?id=${encodeURIComponent(
-        disease.id
-      )}`;
+      const url = `${API_BASE}/${config.endpoint}/${config.deleteMethod}?id=${encodeURIComponent(item.id)}`;
 
       const response = await fetch(url, {
         method: "DELETE",
@@ -283,76 +262,18 @@ const PatientDashboard = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ id: disease.id }),
+        body: JSON.stringify({ id: item.id }),
       });
 
       if (response.ok) {
         await fetchProfile();
       } else {
         const txt = await response.text();
-        console.error("Delete chronic disease failed:", txt || response.status);
-        alert("فشل حذف المرض. حاول مرة أخرى.");
+        console.error(`Delete ${type} failed:`, txt || response.status);
+        alert(config.deleteErrorMsg);
       }
     } catch (error) {
-      console.error("Failed to delete chronic disease", error);
-      alert("حدث خطأ أثناء الحذف. تحقق من الاتصال وحاول مرة أخرى.");
-    }
-  };
-
-  const handleDeleteAllergy = async (allergy) => {
-    try {
-      const token = getToken();
-      const url = `${API_BASE}/allergy/DeleteAllergy?id=${encodeURIComponent(
-        allergy.id
-      )}`;
-
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ id: allergy.id }),
-      });
-
-      if (response.ok) {
-        await fetchProfile();
-      } else {
-        const txt = await response.text();
-        console.error("Delete allergy failed:", txt || response.status);
-        alert("فشل حذف الحساسية. حاول مرة أخرى.");
-      }
-    } catch (error) {
-      console.error("Failed to delete allergy", error);
-      alert("حدث خطأ أثناء الحذف. تحقق من الاتصال وحاول مرة أخرى.");
-    }
-  };
-
-  const handleDeleteMedication = async (medication) => {
-    try {
-      const token = getToken();
-      const url = `${API_BASE}/currentmedication/DeleteCurrentMedication?id=${encodeURIComponent(
-        medication.id
-      )}`;
-
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ id: medication.id }),
-      });
-
-      if (response.ok) {
-        await fetchProfile();
-      } else {
-        const txt = await response.text();
-        console.error("Delete medication failed:", txt || response.status);
-        alert("فشل حذف الدواء. حاول مرة أخرى.");
-      }
-    } catch (error) {
-      console.error("Failed to delete medication", error);
+      console.error(`Failed to delete ${type}`, error);
       alert("حدث خطأ أثناء الحذف. تحقق من الاتصال وحاول مرة أخرى.");
     }
   };
@@ -364,33 +285,15 @@ const PatientDashboard = () => {
   const executeDelete = async () => {
     if (!deleteModal.item) return;
     setIsDeleting(true);
-
-    if (deleteModal.type === "chronicDisease") {
-      await handleDeleteChronicDisease(deleteModal.item);
-    } else if (deleteModal.type === "allergy") {
-      await handleDeleteAllergy(deleteModal.item);
-    } else if (deleteModal.type === "medication") {
-      await handleDeleteMedication(deleteModal.item);
-    }
-
+    await handleDeleteMedicalItem(deleteModal.item, deleteModal.type);
     setIsDeleting(false);
     setDeleteModal({ show: false, type: null, item: null });
   };
 
   const handleShowActions = (e, item, type, position) => {
     if (!dashboardRef.current) return;
-    
-    // Calculate position relative to the dashboard container
+
     const dashboardRect = dashboardRef.current.getBoundingClientRect();
-    // position arg contains viewport-relative coords from render logic? 
-    // Wait, the child component sends 'position' which it calculated from rect.top
-    // Let's ignore the passed 'position' object partially and re-calculate or adjust
-    
-    // Actually, let's grab the rect from the event target again for safety/clarity or just trust the child passed raw rect?
-    // The child passed: top = rect.top, left = rect.left + width/2.
-    // viewport relative.
-    
-    // We want relative to dashboard:
     const relativeTop = position.top - dashboardRect.top;
     const relativeLeft = position.left - dashboardRect.left;
 
@@ -417,64 +320,45 @@ const PatientDashboard = () => {
     }
   };
 
-  // Helper to open add modal with correct type
   const openAddModal = (type) => {
     setAddType(type);
     setNewItemName("");
     setShowAddModal(true);
   };
 
-  // Get label for add modal based on type
   const getAddTypeLabel = () => {
-    switch (addType) {
-      case "chronicDisease":
-        return "مرض مزمن";
-      case "allergy":
-        return "حساسية";
-      case "medication":
-        return "دواء";
-      default:
-        return "";
-    }
+    return MEDICAL_ITEM_CONFIG[addType]?.labelAr || "";
   };
 
-  // Handle add item submission
+  /**
+   * Generic add handler for all medical item types.
+   * Replaces scattered add logic.
+   */
   const handleAddItem = async () => {
     if (!newItemName.trim()) return;
+
+    const config = MEDICAL_ITEM_CONFIG[addType];
+    if (!config) return;
 
     setIsAdding(true);
     try {
       const token = getToken();
       const userId = getUserId();
 
-      let url = "";
-      let bodyKey = "";
-
-      switch (addType) {
-        case "chronicDisease":
-          url = `${API_BASE}/chronicdisease/AddChronicDisease`;
-          break;
-        case "allergy":
-          url = `${API_BASE}/allergy/AddAllergy`;
-          break;
-        case "medication":
-          url = `${API_BASE}/currentmedication/AddCurrentMedication`;
-          break;
-        default:
-          return;
-      }
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          patientId: userId,
-          name: newItemName.trim(),
-        }),
-      });
+      const response = await fetch(
+        `${API_BASE}/${config.endpoint}/${config.addMethod}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            patientId: userId,
+            name: newItemName.trim(),
+          }),
+        }
+      );
 
       if (response.ok) {
         await fetchProfile();
@@ -487,6 +371,34 @@ const PatientDashboard = () => {
     } finally {
       setIsAdding(false);
     }
+  };
+
+  /** Renders a list of medical tags with add button */
+  const renderMedicalTags = (items, type) => {
+    const config = MEDICAL_ITEM_CONFIG[type];
+    return (
+      <div className="pd-tags">
+        {items?.map((item) => (
+          <MedicalTag
+            key={item?.id}
+            item={item}
+            type={type}
+            tagClass={config.tagClass}
+            isEditing={editingId === item.id}
+            onShowActions={handleShowActions}
+            onCancelEdit={() => setEditingId(null)}
+            onUpdate={handleUpdateMedicalItem}
+          />
+        ))}
+        <button
+          className={`pd-tag-add ${config.addBtnClass}`}
+          onClick={() => openAddModal(type)}
+          title={`إضافة ${config.labelAr}`}
+        >
+          <i className="bi bi-plus-lg"></i>
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -530,7 +442,7 @@ const PatientDashboard = () => {
           <h2 className="pd-section-title">ملخص ملفك الطبي</h2>
 
           <div className="pd-profile-grid">
-            {/* Personal Info Card - Clickable */}
+            {/* Personal Info Card */}
             <div
               className="pd-info-card pd-info-card-clickable"
               onClick={() => navigate("/patient/update-profile")}
@@ -585,98 +497,21 @@ const PatientDashboard = () => {
                   <i className="bi bi-clipboard2-pulse"></i>
                   <div>
                     <span className="pd-info-label">الأمراض المزمنة</span>
-                    <div className="pd-tags">
-                      {profile.chronicDiseases &&
-                      profile.chronicDiseases.length > 0
-                        ? profile.chronicDiseases.map((disease) => (
-                            <MedicalTag
-                              key={disease?.id}
-                              item={disease}
-                              type="chronicDisease"
-                              tagClass="pd-tag-danger"
-                              isEditing={editingId === disease.id}
-                              onShowActions={handleShowActions}
-                              onCancelEdit={() => setEditingId(null)}
-                              onUpdate={handleUpdateChronicDisease}
-                              onDelete={(item) =>
-                                confirmDelete(item, "chronicDisease")
-                              }
-                            />
-                          ))
-                        : null}
-                      <button
-                        className="pd-tag-add pd-tag-add-danger"
-                        onClick={() => openAddModal("chronicDisease")}
-                        title="إضافة مرض مزمن"
-                      >
-                        <i className="bi bi-plus-lg"></i>
-                      </button>
-                    </div>
+                    {renderMedicalTags(profile.chronicDiseases, "chronicDisease")}
                   </div>
                 </div>
                 <div className="pd-info-item">
                   <i className="bi bi-exclamation-triangle"></i>
                   <div>
                     <span className="pd-info-label">الحساسية</span>
-                    <div className="pd-tags">
-                      {profile.allergies && profile.allergies.length > 0
-                        ? profile.allergies.map((allergy) => (
-                            <MedicalTag
-                              key={allergy?.id}
-                              item={allergy}
-                              type="allergy"
-                              tagClass="pd-tag-warning"
-                              isEditing={editingId === allergy.id}
-                              onShowActions={handleShowActions}
-                              onCancelEdit={() => setEditingId(null)}
-                              onUpdate={handleUpdateAllergy}
-                              onDelete={(item) =>
-                                confirmDelete(item, "allergy")
-                              }
-                            />
-                          ))
-                        : null}
-                      <button
-                        className="pd-tag-add pd-tag-add-warning"
-                        onClick={() => openAddModal("allergy")}
-                        title="إضافة حساسية"
-                      >
-                        <i className="bi bi-plus-lg"></i>
-                      </button>
-                    </div>
+                    {renderMedicalTags(profile.allergies, "allergy")}
                   </div>
                 </div>
                 <div className="pd-info-item">
                   <i className="bi bi-capsule"></i>
                   <div>
                     <span className="pd-info-label">الأدوية الحالية</span>
-                    <div className="pd-tags">
-                      {profile.currentMedication &&
-                      profile.currentMedication.length > 0
-                        ? profile.currentMedication.map((med) => (
-                            <MedicalTag
-                              key={med?.id}
-                              item={med}
-                              type="medication"
-                              tagClass="pd-tag-info"
-                              isEditing={editingId === med.id}
-                              onShowActions={handleShowActions}
-                              onCancelEdit={() => setEditingId(null)}
-                              onUpdate={handleUpdateMedication}
-                              onDelete={(item) =>
-                                confirmDelete(item, "medication")
-                              }
-                            />
-                          ))
-                        : null}
-                      <button
-                        className="pd-tag-add pd-tag-add-info"
-                        onClick={() => openAddModal("medication")}
-                        title="إضافة دواء"
-                      >
-                        <i className="bi bi-plus-lg"></i>
-                      </button>
-                    </div>
+                    {renderMedicalTags(profile.currentMedication, "medication")}
                   </div>
                 </div>
               </div>
@@ -684,6 +519,7 @@ const PatientDashboard = () => {
           </div>
         </div>
       )}
+
       {/* Add Item Modal */}
       {showAddModal && (
         <div
@@ -736,55 +572,29 @@ const PatientDashboard = () => {
         </div>
       )}
 
-      {/* Global Delete Confirmation Modal */}
-      {deleteModal.show && (
-        <div
-          className="pd-modal-overlay"
-          onClick={() =>
-            setDeleteModal({ show: false, type: null, item: null })
-          }
-        >
-          <div className="pd-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="pd-modal-icon">
-              <i className="bi bi-exclamation-triangle-fill"></i>
-            </div>
-            <h3 className="pd-modal-title">تأكيد الحذف</h3>
-            <p className="pd-modal-message">
-              هل أنت متأكد من حذف <strong>"{deleteModal.item?.name}"</strong>؟
-            </p>
-            <div className="pd-modal-actions">
-              <button
-                className="pd-modal-btn pd-modal-btn-cancel"
-                onClick={() =>
-                  setDeleteModal({ show: false, type: null, item: null })
-                }
-                disabled={isDeleting}
-              >
-                إلغاء
-              </button>
-              <button
-                className="pd-modal-btn pd-modal-btn-delete"
-                onClick={executeDelete}
-                disabled={isDeleting}
-              >
-                {isDeleting ? (
-                  <>
-                    <span className="pd-tag-spinner"></span>
-                    جاري الحذف...
-                  </>
-                ) : (
-                  <>
-                    <i className="bi bi-trash"></i>
-                    نعم، احذف
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        show={deleteModal.show}
+        title="تأكيد الحذف"
+        message={
+          <>
+            هل أنت متأكد من حذف <strong>"{deleteModal.item?.name}"</strong>؟
+          </>
+        }
+        confirmText={
+          <>
+            <i className="bi bi-trash"></i>
+            نعم، احذف
+          </>
+        }
+        cancelText="إلغاء"
+        onConfirm={executeDelete}
+        onCancel={() => setDeleteModal({ show: false, type: null, item: null })}
+        isLoading={isDeleting}
+        variant="danger"
+      />
 
-      {/* Global Action Menu / Popup */}
+      {/* Action Menu Popup */}
       {actionMenu.show && (
         <div
           className="pd-global-popup-overlay"
@@ -805,7 +615,7 @@ const PatientDashboard = () => {
               position: "absolute",
               top: `${actionMenu.y}px`,
               left: `${actionMenu.x}px`,
-              transform: "translate(-50%, -100%) translateY(-8px)", // Center horizontally, place above with 8px gap
+              transform: "translate(-50%, -100%) translateY(-8px)",
               margin: 0,
               zIndex: 99999,
             }}

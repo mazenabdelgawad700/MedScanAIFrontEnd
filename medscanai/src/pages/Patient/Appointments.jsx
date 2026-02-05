@@ -1,32 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { API_BASE } from "../../../utils/Constants.ts";
+import { useNavigate } from "react-router-dom";
+import { ConfirmModal } from "../../components/common";
+import { getToken, getUserId } from "../../utils/auth";
+import { formatDate, formatTime, isToday } from "../../utils/formatters";
+import { API_BASE } from "../../utils/constants";
 import SignalRService from "../../services/SignalRService";
 import "./Appointments.css";
-import { useNavigate } from "react-router-dom";
+
+/** Returns CSS class for appointment status styling */
+const getStatusClass = (status) => {
+  const classMap = {
+    pending: "status-pending",
+    confirmed: "status-confirmed",
+    completed: "status-completed",
+  };
+  return classMap[status?.toLowerCase()] || "status-cancelled";
+};
+
+/** Translates status to Arabic */
+const translateStatus = (status) => {
+  const statusMap = {
+    pending: "قيد الانتظار",
+    confirmed: "مؤكد",
+    completed: "مكتمل",
+    cancelled: "ملغي",
+  };
+  return statusMap[status?.toLowerCase()] || status;
+};
 
 const Appointments = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cancellingId, setCancellingId] = useState(null);
-  
-  // Modal State
+
+  // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState(null);
-
-  const getToken = () => localStorage.getItem("token");
-
-  const getUserId = () => {
-    const token = getToken();
-    if (!token) return null;
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      return payload.UserId;
-    } catch (e) {
-      console.error("Error decoding token", e);
-      return null;
-    }
-  };
 
   const fetchAppointments = async () => {
     try {
@@ -65,14 +75,8 @@ const Appointments = () => {
 
   const executeCancel = async () => {
     if (!selectedAptId) return;
-    
+
     setCancellingId(selectedAptId);
-    // Close modal immediately or keep it open with loading state?
-    // Let's close it and show loading on the card button or just keep modal open with loading.
-    // The user wants UI standards. Dashboard usually shows loading in modal.
-    // But here the button on card has loading spinner logic `cancellingId === apt.appointmentId`.
-    // Let's simple close modal and let card show spinner or keep modal open.
-    // Let's close modal and let the card show the spinner (existing logic).
     setShowModal(false);
 
     try {
@@ -87,13 +91,12 @@ const Appointments = () => {
       });
 
       if (response.ok) {
-        // SignalR Notification
+        // SignalR notification
         try {
           await SignalRService.invoke("AppointmentCancelled", selectedAptId);
         } catch (e) {
           console.error("SignalR Notify Error", e);
         }
-        // Refresh list
         await fetchAppointments();
       } else {
         alert("فشل إلغاء الموعد. حاول مرة أخرى.");
@@ -107,65 +110,10 @@ const Appointments = () => {
     }
   };
 
-  const isToday = (dateString) => {
-    const d = new Date(dateString);
-    const today = new Date();
-    return (
-      d.getDate() === today.getDate() &&
-      d.getMonth() === today.getMonth() &&
-      d.getFullYear() === today.getFullYear()
-    );
-  };
-
   const todayAppointments = appointments.filter((apt) => isToday(apt.date));
   const otherAppointments = appointments.filter((apt) => !isToday(apt.date));
 
-  const getStatusClass = (status) => {
-    switch (status?.toLowerCase()) {
-      case "pending":
-        return "status-pending";
-      case "confirmed":
-        return "status-confirmed";
-      case "completed":
-        return "status-completed";
-      default:
-        return "status-cancelled";
-    }
-  };
-
-  const translateStatus = (status) => {
-    switch (status?.toLowerCase()) {
-      case "pending":
-        return "قيد الانتظار";
-      case "confirmed":
-        return "مؤكد";
-      case "completed":
-        return "مكتمل";
-      case "cancelled":
-        return "ملغي";
-      default:
-        return status;
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const d = new Date(dateString);
-    return d.toLocaleDateString("ar-EG", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (dateString) => {
-    const d = new Date(dateString);
-    return d.toLocaleTimeString("ar-EG", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
+  /** Appointment card component */
   const AppointmentCard = ({ apt, showCancel }) => (
     <div className="apt-card">
       <div className="apt-card-header">
@@ -208,7 +156,7 @@ const Appointments = () => {
             disabled={cancellingId === apt.appointmentId}
           >
             {cancellingId === apt.appointmentId ? (
-              <span className="apt-spinner" style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff' }}></span>
+              <span className="apt-spinner"></span>
             ) : (
               <i className="bi bi-x-circle"></i>
             )}
@@ -222,31 +170,17 @@ const Appointments = () => {
   return (
     <div className="apt-page">
       <div className="apt-hero">
-        <div className="apt-hero-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="apt-hero-content">
           <div>
             <h1>مواعيدي</h1>
             <p className="apt-sub">تابع حالة مواعيدك الطبية القادمة والسابقة</p>
           </div>
-          <button 
-            className="apt-back-btn" 
+          <button
+            className="apt-back-btn"
             onClick={() => navigate("/patient/dashboard")}
-            style={{
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              padding: '10px 20px',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontWeight: '600',
-              transition: 'all 0.2s',
-              width: 'fit-content',
-            }}
           >
             <i className="bi bi-arrow-right"></i>
-            العودة الي لوحة التحكم 
+            العودة الي لوحة التحكم
           </button>
         </div>
       </div>
@@ -305,36 +239,27 @@ const Appointments = () => {
         </>
       )}
 
-      {/* Confirmation Modal */}
-      {showModal && (
-        <div className="apt-modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="apt-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="apt-modal-icon">
-              <i className="bi bi-exclamation-triangle-fill"></i>
-            </div>
-            <h3 className="apt-modal-title">تأكيد الإلغاء</h3>
-            <p className="apt-modal-message">
-              هل أنت متأكد من أنك تريد إلغاء هذا الموعد؟ <br />
-              لا يمكن التراجع عن هذا الإجراء.
-            </p>
-            <div className="apt-modal-actions">
-              <button
-                className="apt-modal-btn apt-modal-btn-cancel"
-                onClick={() => setShowModal(false)}
-              >
-                تراجع
-              </button>
-              <button
-                className="apt-modal-btn apt-modal-btn-delete"
-                onClick={executeCancel}
-              >
-                <i className="bi bi-x-circle"></i>
-                تأكيد الإلغاء
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Cancel Confirmation Modal */}
+      <ConfirmModal
+        show={showModal}
+        title="تأكيد الإلغاء"
+        message={
+          <>
+            هل أنت متأكد من أنك تريد إلغاء هذا الموعد؟ <br />
+            لا يمكن التراجع عن هذا الإجراء.
+          </>
+        }
+        confirmText={
+          <>
+            <i className="bi bi-x-circle"></i>
+            تأكيد الإلغاء
+          </>
+        }
+        cancelText="تراجع"
+        onConfirm={executeCancel}
+        onCancel={() => setShowModal(false)}
+        variant="danger"
+      />
     </div>
   );
 };

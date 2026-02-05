@@ -1,55 +1,42 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { API_BASE } from "../../../utils/Constants.ts"
+import { getToken, decodeJwtPayload, isTokenExpired, getAuthHeaders } from "../../utils/auth";
+import { formatTodayDate } from "../../utils/formatters";
+import { API_BASE } from "../../utils/constants";
 import SignalRService from "../../services/SignalRService";
 import "./AdminPanel.css";
-
-function decodeJwtPayload(token) {
-  try {
-    const parts = token.split(".");
-    if (parts.length < 2) return null;
-    const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-    const pad = payload.length % 4;
-    const padded = pad ? payload + "=".repeat(4 - pad) : payload;
-    const json = atob(padded);
-    return JSON.parse(json);
-  } catch {
-    return null;
-  }
-}
 
 const AdminPanel = () => {
   const navigate = useNavigate();
 
-  // ✅ Auth check
+  // Auth check on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) return navigate("/auth");
+    
     const payload = decodeJwtPayload(token);
     if (!payload) {
       localStorage.removeItem("token");
       return navigate("/auth");
     }
-    const role =
-      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
-      payload.role;
-    const exp = payload.exp;
-    const now = Math.floor(Date.now() / 1000);
-    if (exp && exp < now) {
+    
+    const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || payload.role;
+    
+    if (isTokenExpired()) {
       localStorage.removeItem("token");
       return navigate("/auth");
     }
+    
     if (role !== "Admin") return navigate("/");
   }, [navigate]);
 
-  // ✅ Doctor counts
+  // Doctor counts
   const [doctorsCount, setDoctorsCount] = useState("—");
   const [activeDoctorsCount, setActiveDoctorsCount] = useState("—");
 
   const fetchCounts = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const headers = getAuthHeaders();
 
       const [allRes, activeRes] = await Promise.all([
         fetch(`${API_BASE}/doctor/GetCount`, { headers }),
@@ -76,26 +63,24 @@ const AdminPanel = () => {
     return () => window.removeEventListener("countsUpdated", onCounts);
   }, []);
 
-  // ✅ Today's Appointments
+  // Today's Appointments
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [appointmentsLoading, setAppointmentsLoading] = useState(true);
 
   const fetchTodayAppointments = async () => {
     try {
       setAppointmentsLoading(true);
-      const token = localStorage.getItem("token");
-      const res = await fetch(
-        `${API_BASE}/appointment/GetForToday`,
-        {
-          headers: {
-            Accept: "*/*",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const token = getToken();
+      const res = await fetch(`${API_BASE}/appointment/GetForToday`, {
+        headers: {
+          Accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
       if (!res.ok) throw new Error("فشل في تحميل مواعيد اليوم");
+      
       const result = await res.json();
-
       if (result.succeeded && Array.isArray(result.data)) {
         setTodayAppointments(result.data);
       } else {
@@ -113,15 +98,15 @@ const AdminPanel = () => {
     fetchTodayAppointments();
   }, []);
 
+  // SignalR real-time updates
   useEffect(() => {
     const handleUpdate = () => {
-      console.log("AdminPanel: SignalR update received! Refreshing data...");
+      console.log("AdminPanel: SignalR update received, refreshing...");
       fetchCounts();
       fetchTodayAppointments();
     };
 
     const startSignalR = async () => {
-      console.log("AdminPanel: Starting SignalR connection...");
       await SignalRService.startConnection();
       SignalRService.on("AppointmentCreated", handleUpdate);
       SignalRService.on("AppointmentCancelled", handleUpdate);
@@ -135,10 +120,8 @@ const AdminPanel = () => {
     };
   }, []);
 
-
   const [confirmingId, setConfirmingId] = useState(null);
   const [confirmedIds, setConfirmedIds] = useState([]);
-
 
   const handleConfirmAppointment = async (appointmentId) => {
     if (!appointmentId) return;
@@ -146,29 +129,25 @@ const AdminPanel = () => {
     setConfirmingId(appointmentId);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
       if (!token) {
         setConfirmingId(null);
         return navigate("/auth");
       }
 
-      const res = await fetch(
-        `${API_BASE}/appointment/Confirm`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "*/*",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ appointmentId }),
-        }
-      );
+      const res = await fetch(`${API_BASE}/appointment/Confirm`, {
+        method: "POST",
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ appointmentId }),
+      });
 
       const result = await res.json();
 
       if (res.ok && result.succeeded) {
-        // ✅ Mark as confirmed in local state
         setConfirmedIds((prev) => [...prev, appointmentId]);
       } else {
         console.error("فشل في تأكيد الموعد:", result.message);
@@ -180,16 +159,10 @@ const AdminPanel = () => {
     }
   };
 
-
   const handleSignOut = () => {
-    try {
-      localStorage.removeItem("token");
-    } catch (err) {
-      console.warn(err);
-    }
+    localStorage.removeItem("token");
     navigate("/auth");
   };
-
 
   return (
     <div className="admin-panel-page">
@@ -252,7 +225,7 @@ const AdminPanel = () => {
           </h2>
           <p className="appointments-date">
             <i className="bi bi-clock me-2"></i>
-            {new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            {formatTodayDate()}
           </p>
 
           <div className="appointments-list">
@@ -285,7 +258,6 @@ const AdminPanel = () => {
                   ) : appt.status === "Pending" ? (
                     <button
                       className="btn btn-primary"
-                      style={{ width: 'fit-content' }}
                       onClick={() => handleConfirmAppointment(appt.id)}
                       disabled={confirmingId === appt.id}
                     >
@@ -303,8 +275,8 @@ const AdminPanel = () => {
                     </button>
                   ) : (
                     <div className="confirmed-msg">
-                       <i className="bi bi-check-circle-fill"></i>
-                       تم التأكيد
+                      <i className="bi bi-check-circle-fill"></i>
+                      تم التأكيد
                     </div>
                   )}
                 </div>
@@ -316,7 +288,7 @@ const AdminPanel = () => {
         {/* Quick Actions */}
         <section className="actions-row">
           <div className="action-card" onClick={() => navigate("/admin/add-doctor")}>
-            <div className="action-icon" style={{background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa'}}>
+            <div className="action-icon action-icon-blue">
               <i className="bi bi-person-plus-fill"></i>
             </div>
             <div className="action-body">
@@ -329,7 +301,7 @@ const AdminPanel = () => {
           </div>
 
           <div className="action-card" onClick={() => navigate("/admin/create-admin")}>
-            <div className="action-icon" style={{background: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa'}}>
+            <div className="action-icon action-icon-purple">
               <i className="bi bi-shield-lock-fill"></i>
             </div>
             <div className="action-body">
@@ -342,7 +314,7 @@ const AdminPanel = () => {
           </div>
 
           <div className="action-card" onClick={() => navigate("/admin/book-appointment")}>
-            <div className="action-icon" style={{background: 'rgba(16, 185, 129, 0.2)', color: '#34d399'}}>
+            <div className="action-icon action-icon-green">
               <i className="bi bi-calendar-plus-fill"></i>
             </div>
             <div className="action-body">

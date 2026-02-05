@@ -1,6 +1,122 @@
 import React from "react";
+import "./HubView.css";
 
-const HubView = ({ onSelectTool }) => {
+/** Color configuration for tool cards */
+const COLOR_CONFIG = {
+  success: {
+    gradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 95, 70, 0.4) 100%)",
+    border: "rgba(16, 185, 129, 0.4)",
+    shadow: "rgba(16, 185, 129, 0.15)",
+    shadowHover: "rgba(16, 185, 129, 0.25)",
+    icon: "#10b981",
+    buttonBg: "linear-gradient(90deg, #10b981 0%, #059669 100%)",
+  },
+  primary: {
+    gradient: "linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03))",
+    border: "rgba(255, 255, 255, 0.1)",
+    borderHover: "rgba(37, 99, 235, 0.5)",
+    shadow: "rgba(37, 99, 235, 0.15)",
+    icon: "#60a5fa",
+    buttonHover: "#2563eb",
+    glow: "rgba(37, 99, 235, 0.2)",
+  },
+  warning: {
+    gradient: "linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03))",
+    border: "rgba(255, 255, 255, 0.1)",
+    borderHover: "rgba(245, 158, 11, 0.5)",
+    shadow: "rgba(245, 158, 11, 0.15)",
+    icon: "#fbbf24",
+    buttonHover: "#d97706",
+    glow: "rgba(245, 158, 11, 0.2)",
+  },
+  info: {
+    gradient: "linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03))",
+    border: "rgba(255, 255, 255, 0.1)",
+    borderHover: "rgba(6, 182, 212, 0.5)",
+    shadow: "rgba(6, 182, 212, 0.15)",
+    icon: "#22d3ee",
+    buttonHover: "#0891b2",
+    glow: "rgba(6, 182, 212, 0.2)",
+  },
+  pink: {
+    gradient: "linear-gradient(180deg, rgba(236, 72, 153, 0.15), rgba(219, 39, 119, 0.08))",
+    border: "rgba(236, 72, 153, 0.3)",
+    borderHover: "rgba(236, 72, 153, 0.6)",
+    shadow: "rgba(236, 72, 153, 0.25)",
+    icon: "#f472b6",
+    buttonHover: "#db2777",
+    glow: "rgba(236, 72, 153, 0.2)",
+  },
+};
+
+/** Featured tool card (chatbot) */
+const FeaturedToolCard = ({ tool, onSelect }) => (
+  <div
+    className="featured-tool-card"
+    onClick={() => onSelect(tool.id)}
+  >
+    <div className="featured-tool-glow" />
+    <div className="featured-tool-content">
+      <div className="featured-tool-icon">
+        <i className={`bi ${tool.icon} text-white`}></i>
+      </div>
+      <h3 className="featured-tool-title">{tool.title}</h3>
+      <p className="featured-tool-description">{tool.description}</p>
+      <button className="featured-tool-button">
+        <i className="bi bi-play-fill"></i>
+        ابدأ المحادثة الآن
+      </button>
+    </div>
+  </div>
+);
+
+/** Standard tool card for AI models */
+const ToolCard = ({ tool, onSelect }) => {
+  const colorClass = `tool-card-${tool.color}`;
+  
+  return (
+    <div
+      className={`tool-card ${colorClass}`}
+      onClick={() => onSelect(tool.id)}
+    >
+      <div className="tool-card-icon-wrapper">
+        <div className={`tool-card-glow tool-card-glow-${tool.color}`} />
+        <i className={`bi ${tool.icon} tool-card-icon tool-card-icon-${tool.color}`}></i>
+      </div>
+      <h5 className="tool-card-title">{tool.title}</h5>
+      <p className="tool-card-description">{tool.description}</p>
+      <div className="tool-card-button-wrapper">
+        <button className={`tool-card-button tool-card-button-${tool.color}`}>
+          فتح النموذج
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/** Women's health tool card (breast self-check) */
+const WomensHealthCard = ({ onSelect }) => (
+  <div
+    className="tool-card tool-card-pink"
+    onClick={() => onSelect("breastCheck")}
+  >
+    <div className="tool-card-icon-wrapper">
+      <div className="tool-card-glow tool-card-glow-pink" />
+      <i className="bi bi-heart-pulse tool-card-icon tool-card-icon-pink"></i>
+    </div>
+    <h5 className="tool-card-title">الفحص الذاتي لسرطان الثدي</h5>
+    <p className="tool-card-description">
+      تعلمي خطوات الفحص الذاتي للثدي للكشف المبكر عن سرطان الثدي
+    </p>
+    <div className="tool-card-button-wrapper">
+      <button className="tool-card-button tool-card-button-pink">
+        ابدأي الفحص
+      </button>
+    </div>
+  </div>
+);
+
+const HubView = ({ onSelectTool, userGender }) => {
   const tools = [
     {
       id: "chat",
@@ -35,230 +151,48 @@ const HubView = ({ onSelectTool }) => {
     },
   ];
 
-  const commanderTool = tools.find((t) => t.id === "chat");
-  const soldierTools = tools.filter((t) => t.id !== "chat");
+  const chatTool = tools.find((t) => t.id === "chat");
+  const aiTools = tools.filter((t) => t.id !== "chat");
 
   return (
-    <div className="container-xl py-1" dir="rtl">
-      <div className="mb-2 text-center">
-        <h2 className="fw-bold mb-0 text-white" style={{ fontSize: "20px" }}>
-          مركز نماذج الذكاء الاصطناعي
-        </h2>
-        <p className="text-white-50" style={{ fontSize: "12px", margin: 0 }}>
-          اختر أداة ذكاء اصطناعي لبدء التحليل
-        </p>
+    <div className="hub-container" dir="rtl">
+      {/* Header */}
+      <div className="hub-header">
+        <h2 className="hub-title">مركز نماذج الذكاء الاصطناعي</h2>
+        <p className="hub-subtitle">اختر أداة ذكاء اصطناعي لبدء التحليل</p>
       </div>
 
-      {/* Commander Section - Chatbot */}
-      {commanderTool && (
-        <div className="row justify-content-center mb-2">
-          <div className="col-12 text-center mt-2">
-            <div
-              className="featured-tool-card position-relative overflow-hidden rounded-5 p-4 mx-auto"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 95, 70, 0.4) 100%)",
-                border: "1px solid rgba(16, 185, 129, 0.4)",
-                backdropFilter: "blur(20px)",
-                maxWidth: "400px",
-                boxShadow: "0 20px 50px rgba(16, 185, 129, 0.15)",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              onClick={() => onSelectTool(commanderTool.id)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform =
-                  "translateY(-10px) scale(1.02)";
-                e.currentTarget.style.boxShadow =
-                  "0 30px 60px rgba(16, 185, 129, 0.25)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow =
-                  "0 20px 50px rgba(16, 185, 129, 0.15)";
-              }}
-            >
-              <div
-                className="position-absolute top-0 start-0 w-100 h-100"
-                style={{
-                  background:
-                    "radial-gradient(circle at top right, rgba(16, 185, 129, 0.3), transparent 60%)",
-                  pointerEvents: "none",
-                }}
-              />
-
-              <div
-                className="d-flex flex-column align-items-center position-relative"
-                style={{ zIndex: 2 }}
-              >
-                <div
-                  className="feature-icon-wrapper mb-2 p-2 rounded-circle"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-                    boxShadow: "0 0 40px rgba(16, 185, 129, 0.4)",
-                  }}
-                >
-                  <i
-                    className={`bi ${commanderTool.icon} text-white`}
-                    style={{ fontSize: "32px" }}
-                  ></i>
-                </div>
-
-                <h3
-                  className="fw-bold text-white mb-1"
-                  style={{ fontSize: "24px" }}
-                >
-                  {commanderTool.title}
-                </h3>
-                <p
-                  className="text-white-50 mb-2"
-                  style={{ maxWidth: "430px", fontSize: "16px" }}
-                >
-                  {commanderTool.description}
-                </p>
-
-                <button
-                  className="btn btn-success text-white px-3 py-1 rounded-pill fw-bold shadow-lg"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, #10b981 0%, #059669 100%)",
-                    border: "none",
-                    letterSpacing: "0.5px",
-                    fontSize: "12px",
-                  }}
-                >
-                  <i
-                    className="bi bi-play-fill me-1 align-middle"
-                    style={{ fontSize: "11px" }}
-                  ></i>
-                  ابدأ المحادثة الآن
-                </button>
-              </div>
-            </div>
-          </div>
+      {/* Featured Chatbot Section */}
+      {chatTool && (
+        <div className="hub-featured-section">
+          <FeaturedToolCard tool={chatTool} onSelect={onSelectTool} />
         </div>
       )}
 
-      {/* Soldiers Section - Other Models */}
-      <h4
-        className="text-white fw-bold mb-2 mt-4 text-center opacity-75"
-        style={{ fontSize: "17px" }}
-      >
-        <i className="bi bi-grid-fill me-1 text-primary"></i>
+      {/* AI Models Section */}
+      <h4 className="hub-section-title">
+        <i className="bi bi-grid-fill text-primary"></i>
         أدوات التحليل الطبي المتخصصة
       </h4>
 
       <div className="hub-grid">
-        {soldierTools.map((tool) => (
-          <div
-            key={tool.id}
-            className="hub-card p-3 d-flex flex-column align-items-center text-center position-relative overflow-hidden"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03))",
-              borderRadius: "24px",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              backdropFilter: "blur(10px)",
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              cursor: "pointer",
-              height: "100%",
-            }}
-            onClick={() => onSelectTool(tool.id)}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-8px)";
-              e.currentTarget.style.borderColor =
-                tool.color === "primary"
-                  ? "rgba(37, 99, 235, 0.5)"
-                  : tool.color === "warning"
-                    ? "rgba(245, 158, 11, 0.5)"
-                    : "rgba(37, 99, 235, 0.5)";
-              e.currentTarget.style.boxShadow = `0 20px 40px ${tool.color === "primary" ? "rgba(37, 99, 235, 0.15)" : tool.color === "warning" ? "rgba(245, 158, 11, 0.15)" : "rgba(37, 99, 235, 0.15)"}`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            <div className="mb-2 mt-1 position-relative">
-              <div
-                className="position-absolute top-50 start-50 translate-middle"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  background:
-                    tool.color === "primary"
-                      ? "rgba(37, 99, 235, 0.2)"
-                      : tool.color === "warning"
-                        ? "rgba(245, 158, 11, 0.2)"
-                        : "rgba(6, 182, 212, 0.2)",
-                  borderRadius: "50%",
-                  filter: "blur(20px)",
-                  zIndex: 0,
-                }}
-              />
-              <i
-                className={`bi ${tool.icon} position-relative`}
-                style={{
-                  fontSize: "34px",
-                  color:
-                    tool.color === "primary"
-                      ? "#60a5fa"
-                      : tool.color === "warning"
-                        ? "#fbbf24"
-                        : "#22d3ee",
-                  zIndex: 1,
-                }}
-              ></i>
-            </div>
-
-            <h5
-              className="fw-bold mb-1 text-white"
-              style={{ fontSize: "15px" }}
-            >
-              {tool.title}
-            </h5>
-            <p
-              className="small text-white-50 mb-2 px-1"
-              style={{ minHeight: "24px", fontSize: "16px" }}
-            >
-              {tool.description}
-            </p>
-
-            <div className="mt-auto w-100">
-              <button
-                className={`btn rounded-3 fw-medium`}
-                style={{
-                  background: "rgba(255, 255, 255, 0.05)",
-                  color: "white",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  transition: "all 0.2s",
-                  fontSize: "15px",
-                  padding: "8px !important",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background =
-                    tool.color === "primary"
-                      ? "#2563eb"
-                      : tool.color === "warning"
-                        ? "#d97706"
-                        : "#0891b2";
-                  e.currentTarget.style.borderColor = "transparent";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background =
-                    "rgba(255, 255, 255, 0.05)";
-                  e.currentTarget.style.borderColor =
-                    "rgba(255, 255, 255, 0.1)";
-                }}
-              >
-                فتح النموذج
-              </button>
-            </div>
-          </div>
+        {aiTools.map((tool) => (
+          <ToolCard key={tool.id} tool={tool} onSelect={onSelectTool} />
         ))}
       </div>
+
+      {/* Women's Health Section (female users only) */}
+      {userGender === "Female" && (
+        <>
+          <h4 className="hub-section-title hub-section-title-pink">
+            <i className="bi bi-heart-pulse"></i>
+            فحوصات صحة المرأة
+          </h4>
+          <div className="hub-grid hub-grid-single">
+            <WomensHealthCard onSelect={onSelectTool} />
+          </div>
+        </>
+      )}
     </div>
   );
 };
