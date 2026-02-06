@@ -175,7 +175,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   width: 100%;
-  max-width: 280px;
+  max-width: 400px;
 }
 
 .tool-card:hover {
@@ -297,6 +297,7 @@
   width: 100%;
   cursor: pointer;
   transition: all 0.2s;
+  margin-top: 10px;
 }
 
 .tool-card-button-primary:hover {
@@ -324,4 +325,41 @@
   background: #db2777;
   color: white;
   border-color: transparent;
+}
+
+/* Result Card Styles - Glassmorphism */
+.result-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.result-card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-card-body {
+  padding: 1.5rem;
+  background: transparent !important;
+}
+
+.result-card-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.text-glass {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.text-glass-muted {
+  color: rgba(255, 255, 255, 0.6);
 }

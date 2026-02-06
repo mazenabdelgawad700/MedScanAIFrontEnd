@@ -4,7 +4,7 @@ import ModelView from "./ModelView";
 import ChatView from "./ChatView";
 import HubView from "./HubView";
 import BreastSelfCheckView from "./BreastSelfCheckView";
-import { getToken, getUserId } from "../../utils/auth";
+import { getToken, getUserId, getUserRole } from "../../utils/auth";
 import { API_BASE } from "../../utils/constants";
 import "./AIAssistant.css";
 
@@ -45,6 +45,9 @@ const AssistantLayout = () => {
   useEffect(() => {
     const fetchUserGender = async () => {
       try {
+        const role = getUserRole();
+        if (role === "Doctor") return;
+
         const token = getToken();
         if (!token) return;
 
@@ -112,7 +115,10 @@ const AssistantLayout = () => {
           <button
             className="btn btn-outline-primary shadow-sm rounded-pill px-4 fw-bold"
             style={{ color: "#fff" }}
-            onClick={() => navigate("/patient/dashboard")}
+            onClick={() => {
+              const role = getUserRole();
+              navigate(role === "Doctor" ? "/doctor/dashboard" : "/patient/dashboard");
+            }}
           >
             <i className="bi bi-house-door ms-2"></i>
             العودة إلى لوحة التحكم

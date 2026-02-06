@@ -238,6 +238,14 @@ export default function DoctorDashboard() {
           </div>
 
           <div className="header-actions">
+            <button 
+              className="btn-ai-glow" 
+              onClick={() => navigate("/doctor/ai")}
+              style={{ marginLeft: "10px" }}
+            >
+              <i className="bi bi-stars"></i>
+              <span>مساعد الذكاء الاصطناعي</span>
+            </button>
             <button className="btn-ghost" onClick={handleSignOut}>
               تسجيل الخروج
             </button>

@@ -43,6 +43,7 @@ function App() {
         <Route path="/patient/ai" element={<AIAssistant />} />
         <Route path="/patient/update-profile" element={<UpdateProfile />} />
         <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+        <Route path="/doctor/ai" element={<AIAssistant />} />
       </Routes>
     </main>
   );
