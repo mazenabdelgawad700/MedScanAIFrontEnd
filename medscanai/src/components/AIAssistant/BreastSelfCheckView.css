@@ -1,36 +1,39 @@
 /* BreastSelfCheckView.css - Pink/Rose themed for breast health awareness */
 
 .breast-check-container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header Section */
 .breast-check-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .breast-check-icon-wrapper {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin: 0 auto 16px;
   background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 40px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.4);
 }
 
 .breast-check-icon-wrapper i {
-  font-size: 40px;
+  font-size: 32px;
   color: white;
 }
 
 .breast-check-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: #fff;
   margin-bottom: 8px;
@@ -42,56 +45,74 @@
   margin: 0;
 }
 
-/* Introduction Card */
-.breast-check-intro-card {
+/* Common Card Styles */
+.breast-check-intro-card,
+.breast-check-conclusion-card {
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(219, 39, 119, 0.1) 100%);
   border: 1px solid rgba(236, 72, 153, 0.3);
   border-radius: 20px;
-  padding: 24px;
+  padding: 32px;
   margin-bottom: 32px;
   backdrop-filter: blur(10px);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.intro-header {
+.breast-check-conclusion-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.intro-header,
+.conclusion-header {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.intro-header i {
+.intro-header i,
+.conclusion-header i {
   font-size: 24px;
   color: #f472b6;
 }
 
-.intro-header h3 {
-  font-size: 20px;
+.conclusion-header i {
+  color: #34d399;
+}
+
+.intro-header h3,
+.conclusion-header h3 {
+  font-size: 22px;
   font-weight: 600;
   color: #fff;
   margin: 0;
 }
 
 .intro-text {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 16px;
-  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  margin-bottom: 24px;
+  line-height: 1.6;
 }
 
 .warning-signs-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 32px 0;
   display: grid;
   gap: 12px;
+  text-align: right;
 }
 
 .warning-signs-list li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 15px;
-  padding: 10px 16px;
+  font-size: 16px;
+  padding: 12px 18px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -99,146 +120,194 @@
 
 .warning-signs-list li i {
   color: #fbbf24;
+  font-size: 18px;
+}
+
+/* Navigation Buttons */
+.breast-check-btn-primary,
+.breast-check-btn-secondary {
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 14px 32px;
   font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  font-family: inherit;
 }
 
-/* Steps Section */
-.breast-check-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin-bottom: 32px;
+.breast-check-btn-primary {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
 }
 
+.breast-check-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+}
+
+.breast-check-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.breast-check-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Progress Bar */
+.breast-check-progress {
+  margin-bottom: 24px;
+}
+
+.step-counter {
+  display: block;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ec4899, #f472b6);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+/* Step Card */
 .breast-check-step-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 24px;
+  padding: 32px;
   position: relative;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  margin-bottom: 24px;
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.breast-check-step-card:hover {
+.active-step {
   border-color: rgba(236, 72, 153, 0.4);
   box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15);
-  transform: translateY(-4px);
-}
-
-.step-number {
-  position: absolute;
-  top: -12px;
-  right: 24px;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 700;
-  color: white;
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
-}
-
-.step-content {
-  padding-top: 8px;
 }
 
 .step-title {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 700;
   color: #f9a8d4;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .step-image-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .step-image {
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 100%;
+  max-height: 300px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.95);
-  padding: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   object-fit: contain;
+  padding: 10px;
 }
 
 .step-description {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* Conclusion Card */
-.breast-check-conclusion-card {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 24px;
-  backdrop-filter: blur(10px);
-}
-
-.conclusion-header {
+/* Navigation Container */
+.breast-check-navigation {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
 }
 
-.conclusion-header i {
-  font-size: 28px;
-  color: #34d399;
-}
-
-.conclusion-header h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #fff;
-  margin: 0;
-}
-
+/* Conclusion Specifics */
 .conclusion-content {
   display: grid;
   gap: 16px;
+  text-align: right;
+  margin-bottom: 32px;
 }
 
 .conclusion-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 18px;
+  padding: 16px 20px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .conclusion-item i {
-  font-size: 22px;
+  font-size: 24px;
   color: #10b981;
 }
 
 .conclusion-item p {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   color: rgba(255, 255, 255, 0.9);
+}
+
+.restart-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 /* Credits */
 .breast-check-credits {
   text-align: center;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: auto;
 }
 
 .breast-check-credits p {
@@ -249,10 +318,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
-
-.breast-check-credits i {
-  color: rgba(255, 255, 255, 0.4);
 }
 
 /* Responsive */
@@ -266,26 +331,30 @@
   }
 
   .breast-check-step-card {
-    padding: 20px 16px;
-  }
-
-  .step-number {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
-    right: 16px;
+    padding: 24px 16px;
+    min-height: auto;
   }
 
   .step-title {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .step-image {
-    max-width: 160px;
-    max-height: 160px;
+    max-height: 200px;
   }
 
   .step-description {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .breast-check-navigation {
+    flex-direction: column-reverse;
+    /* Stack buttons on mobile */
+  }
+
+  .breast-check-btn-primary,
+  .breast-check-btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }

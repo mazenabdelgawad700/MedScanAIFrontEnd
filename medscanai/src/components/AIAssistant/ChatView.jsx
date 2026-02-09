@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getUserRole } from "../../utils/auth";
+import { sendMessageToChatbot } from "../../services/aiService";
 import "./HubView.css";
 
 const ChatView = () => {
@@ -41,7 +42,7 @@ const ChatView = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
@@ -50,15 +51,43 @@ const ChatView = () => {
     setInputText("");
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const role = getUserRole(); 
+      // Ensure we pass 'patient' or 'doctor' in lowercase as backend expectation might be case sensitive or specific keys
+      // The user example showed "user_role": "patient", so we will format it accordingly.
+      // getUserRole() returns "patient" by default or "Doctor" etc. 
+      // We will lowercase it to be safe: "patient", "doctor".
+      const formattedRole = role ? role.toLowerCase() : "patient";
+
+      const data = await sendMessageToChatbot({
+        message: newMessage.text,
+        userRole: formattedRole
+      });
+
+      // Assuming backend returns { response: "..." } or similar.
+      // If the backend returns just the string or a different field, this might need adjustment.
+      // Based on common patterns and the user's focus on "text report", we expect a 'response' or 'message' field.
+      // We'll check for 'response' first, then 'message', then string.
+      const botReplyText = data.response || data.message || (typeof data === 'string' ? data : t.response);
+
       const botResponse = { 
         id: Date.now() + 1, 
-        text: t.response, 
+        text: botReplyText, 
         sender: 'bot' 
       };
       setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      // Optional: Add an error message to the chat
+      const errorResponse = {
+        id: Date.now() + 1,
+        text: isDoctor ? "Sorry, I'm having trouble connecting right now." : "عذراً، أواجه مشكلة في الاتصال حالياً.",
+        sender: 'bot'
+      };
+       setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (

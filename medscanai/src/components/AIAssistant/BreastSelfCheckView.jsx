@@ -2,14 +2,17 @@ import React from "react";
 import "./BreastSelfCheckView.css";
 
 // Import step images
-import step1Img from "../../assets/step1.png";
-import step2Img from "../../assets/step2.png";
-import step3Img from "../../assets/step3.png";
-import step4Img from "../../assets/step4.png";
-import step5Img from "../../assets/step5.png";
-import step6Img from "../../assets/step6.png";
+import step1Img from "../../assets/step1.gif";
+import step2Img from "../../assets/step2.gif";
+import step3Img from "../../assets/step3.gif";
+import step4Img from "../../assets/step4.gif";
+import step5Img from "../../assets/step5.gif";
+import step6Img from "../../assets/step6.gif";
 
 const BreastSelfCheckView = () => {
+  const [viewState, setViewState] = React.useState('intro'); // 'intro', 'steps', 'conclusion'
+  const [currentStepIndex, setCurrentStepIndex] = React.useState(0);
+
   const steps = [
     {
       id: 1,
@@ -77,6 +80,129 @@ const BreastSelfCheckView = () => {
     "تغيرات في الحلمة، زي انقلاب الحلمة أو انسحابها للداخل",
   ];
 
+  const handleStart = () => {
+    setViewState('steps');
+    setCurrentStepIndex(0);
+  };
+
+  const handleNext = () => {
+    if (currentStepIndex < steps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    } else {
+      setViewState('conclusion');
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    } else {
+      setViewState('intro');
+    }
+  };
+
+  const handleRestart = () => {
+    setViewState('intro');
+    setCurrentStepIndex(0);
+  };
+
+  const renderIntro = () => (
+    <div className="breast-check-intro-card fade-in">
+      <div className="intro-header">
+        <i className="bi bi-info-circle"></i>
+        <h3>ابدأي بالبحث عن الفروقات بين الثديين</h3>
+      </div>
+      <p className="intro-text">
+        قفي قدام المراية وبصي على ثدييكِ. دوري على:
+      </p>
+      <ul className="warning-signs-list">
+        {warningSignsIntro.map((sign, index) => (
+          <li key={index}>
+            <i className="bi bi-exclamation-triangle"></i>
+            <span>{sign}</span>
+          </li>
+        ))}
+      </ul>
+      <button className="breast-check-btn-primary" onClick={handleStart}>
+        ابدأي الفحص
+        <i className="bi bi-arrow-left"></i>
+      </button>
+    </div>
+  );
+
+  const renderStep = () => {
+    const step = steps[currentStepIndex];
+    return (
+      <div className="breast-check-step-container fade-in" key={step.id}>
+        <div className="breast-check-progress">
+          <span className="step-counter">خطوة {currentStepIndex + 1} من {steps.length}</span>
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+
+        <div className="breast-check-step-card active-step">
+          <div className="step-content">
+            <h4 className="step-title">{step.title}</h4>
+            {step.image && (
+              <div className="step-image-container">
+                <img
+                  src={step.image}
+                  alt={`خطوة ${step.id}`}
+                  className="step-image"
+                />
+              </div>
+            )}
+            <p className="step-description">{step.description}</p>
+          </div>
+        </div>
+
+        <div className="breast-check-navigation">
+          <button className="breast-check-btn-secondary" onClick={handlePrev}>
+            <i className="bi bi-arrow-right"></i>
+            السابق
+          </button>
+          <button className="breast-check-btn-primary" onClick={handleNext}>
+            {currentStepIndex === steps.length - 1 ? 'إنهاء الفحص' : 'التالي'}
+            <i className="bi bi-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderConclusion = () => (
+    <div className="breast-check-conclusion-card fade-in">
+      <div className="conclusion-header">
+        <i className="bi bi-check-circle"></i>
+        <h3>ملاحظات مهمة</h3>
+      </div>
+      <div className="conclusion-content">
+        <div className="conclusion-item">
+          <i className="bi bi-calendar-check"></i>
+          <p>اعملي الفحص بشكل منتظم كل شهر في نفس الوقت</p>
+        </div>
+        <div className="conclusion-item">
+          <i className="bi bi-hospital"></i>
+          <p>
+            لو لاحظتي أي تغيير غير طبيعي، استشيري الطبيب فوراً
+          </p>
+        </div>
+        <div className="conclusion-item">
+          <i className="bi bi-share"></i>
+          <p>شاركي المعلومات دي مع صحابك وقرايبك</p>
+        </div>
+      </div>
+      <button className="breast-check-btn-primary restart-btn" onClick={handleRestart}>
+        <i className="bi bi-arrow-clockwise"></i>
+        إعادة الفحص
+      </button>
+    </div>
+  );
+
   return (
     <div className="breast-check-container" dir="rtl">
       {/* Header Section */}
@@ -90,69 +216,10 @@ const BreastSelfCheckView = () => {
         </p>
       </div>
 
-      {/* Introduction Card */}
-      <div className="breast-check-intro-card">
-        <div className="intro-header">
-          <i className="bi bi-info-circle"></i>
-          <h3>ابدأي بالبحث عن الفروقات بين الثديين</h3>
-        </div>
-        <p className="intro-text">
-          قفي قدام المراية وبصي على ثدييكِ. دوري على:
-        </p>
-        <ul className="warning-signs-list">
-          {warningSignsIntro.map((sign, index) => (
-            <li key={index}>
-              <i className="bi bi-exclamation-triangle"></i>
-              <span>{sign}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Steps Grid */}
-      <div className="breast-check-steps">
-        {steps.map((step) => (
-          <div key={step.id} className="breast-check-step-card">
-            <div className="step-number">{step.id}</div>
-            <div className="step-content">
-              <h4 className="step-title">{step.title}</h4>
-              {step.image && (
-                <div className="step-image-container">
-                  <img
-                    src={step.image}
-                    alt={`خطوة ${step.id}`}
-                    className="step-image"
-                  />
-                </div>
-              )}
-              <p className="step-description">{step.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Conclusion Card */}
-      <div className="breast-check-conclusion-card">
-        <div className="conclusion-header">
-          <i className="bi bi-check-circle"></i>
-          <h3>ملاحظات مهمة</h3>
-        </div>
-        <div className="conclusion-content">
-          <div className="conclusion-item">
-            <i className="bi bi-calendar-check"></i>
-            <p>اعملي الفحص بشكل منتظم كل شهر في نفس الوقت</p>
-          </div>
-          <div className="conclusion-item">
-            <i className="bi bi-hospital"></i>
-            <p>
-              لو لاحظتي أي تغيير غير طبيعي، استشيري الطبيب فوراً
-            </p>
-          </div>
-          <div className="conclusion-item">
-            <i className="bi bi-share"></i>
-            <p>شاركي المعلومات دي مع صحابك وقرايبك</p>
-          </div>
-        </div>
+      <div className="breast-check-content-area">
+        {viewState === 'intro' && renderIntro()}
+        {viewState === 'steps' && renderStep()}
+        {viewState === 'conclusion' && renderConclusion()}
       </div>
 
       {/* Credits */}
