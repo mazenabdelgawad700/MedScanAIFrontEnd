@@ -47,6 +47,15 @@ const COLOR_CONFIG = {
     buttonHover: "#db2777",
     glow: "rgba(236, 72, 153, 0.2)",
   },
+  danger: {
+    gradient: "linear-gradient(180deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.08))",
+    border: "rgba(239, 68, 68, 0.3)",
+    borderHover: "rgba(239, 68, 68, 0.6)",
+    shadow: "rgba(239, 68, 68, 0.25)",
+    icon: "#f87171",
+    buttonHover: "#dc2626",
+    glow: "rgba(239, 68, 68, 0.2)",
+  },
 };
 
 /** Featured tool card (chatbot) */
@@ -148,6 +157,13 @@ const HubView = ({ onSelectTool, userGender }) => {
       description: "قم بتحميل صور الجلد لتقييم الحالات الجلدية",
       icon: "bi-person-bounding-box",
       color: "warning",
+    },
+    {
+      id: "lab",
+      title: "تحليل نتائج المختبر",
+      description: "قم بتحميل صور نتائج التحاليل للحصول على قراءة وتفسير",
+      icon: "bi-file-earmark-medical",
+      color: "danger",
     },
   ];
 

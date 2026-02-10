@@ -9,6 +9,8 @@ const ModelView = ({
   color = "primary",
   apiEndpoint,
   titleCard,
+  requiresPatientId = false,
+  patientId = null,
 }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -36,12 +38,18 @@ const ModelView = ({
       try {
         const formData = new FormData();
         formData.append("file", selectedFile);
+        
+        if (requiresPatientId && patientId) {
+          formData.append("patient_id", patientId);
+        }
 
         const token = getToken();
         const userRole = getUserRole().toLowerCase();
 
         // Build URL with user_role query parameter
-        const urlWithRole = `${apiEndpoint}?user_role=${userRole}`;
+        // If the endpoint already has query params, append with &
+        const separator = apiEndpoint.includes('?') ? '&' : '?';
+        const urlWithRole = `${apiEndpoint}${separator}user_role=${userRole}`;
 
         const response = await fetch(urlWithRole, {
           method: "POST",
@@ -56,8 +64,9 @@ const ModelView = ({
         const data = await response.json();
 
         // Map API response to internal format
+        // Handle different response structures
         setResult({
-          diagnosis: data.class_label_ar || data.class_label_en,
+          diagnosis: data.analysis || data.class_label_ar || data.class_label_en,
           diagnosisEn: data.class_label_en,
           confidence: data.confidence_level,
           advice: data.generated_advice,

@@ -34,6 +34,15 @@ const MODEL_CONFIG = {
     titleCard: "نتيجة تحليل الصورة",
     apiEndpoint: "http://localhost:8000/predict",
   },
+  lab: {
+    title: "Lab Results Analysis",
+    description: "Analyze medical lab reports for insights.",
+    icon: "bi-file-earmark-medical",
+    color: "danger",
+    titleCard: "نتيجة تحليل المختبر",
+    apiEndpoint: "http://localhost:8005/images/analyze-with-history",
+    requiresPatientId: true,
+  },
 };
 
 const AssistantLayout = () => {
@@ -82,8 +91,10 @@ const AssistantLayout = () => {
       
       case "brain":
       case "xray":
-      case "skin": {
+      case "skin": 
+      case "lab": {
         const config = MODEL_CONFIG[currentView];
+        const userId = getUserId();
         return (
           <ModelView
             title={config.title}
@@ -92,6 +103,8 @@ const AssistantLayout = () => {
             color={config.color}
             titleCard={config.titleCard}
             apiEndpoint={config.apiEndpoint}
+            requiresPatientId={config.requiresPatientId}
+            patientId={userId}
           />
         );
       }
