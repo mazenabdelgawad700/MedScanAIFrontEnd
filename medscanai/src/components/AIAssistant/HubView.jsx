@@ -72,7 +72,6 @@ const FeaturedToolCard = ({ tool, onSelect }) => (
       <h3 className="featured-tool-title">{tool.title}</h3>
       <p className="featured-tool-description">{tool.description}</p>
       <button className="featured-tool-button">
-        <i className="bi bi-play-fill"></i>
         ابدأ المحادثة الآن
       </button>
     </div>

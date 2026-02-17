@@ -104,11 +104,11 @@
   padding: 0.25rem 0.75rem;
   border-radius: 50px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 16px;
   letter-spacing: 0.5px;
-  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
   transition: all 0.2s;
@@ -362,4 +362,8 @@
 
 .text-glass-muted {
   color: rgba(255, 255, 255, 0.6);
+}
+
+.bi-file-earmark-medical {
+  color: #82bceb;
 }
