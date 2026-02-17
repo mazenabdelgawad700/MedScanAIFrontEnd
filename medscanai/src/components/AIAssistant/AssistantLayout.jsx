@@ -24,7 +24,7 @@ const MODEL_CONFIG = {
     icon: "bi-lungs",
     color: "info",
     titleCard: "تقرير الاشعة المقطعية",
-    apiEndpoint: null,
+    apiEndpoint: "http://localhost:8002/predict",
   },
   skin: {
     title: "Dermatology AI",
