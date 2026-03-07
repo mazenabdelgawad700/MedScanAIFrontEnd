@@ -4,6 +4,7 @@ import ModelView from "./ModelView";
 import ChatView from "./ChatView";
 import HubView from "./HubView";
 import BreastSelfCheckView from "./BreastSelfCheckView";
+import BrainTumorCheckView from "./BrainTumorCheckView";
 import { getToken, getUserId, getUserRole } from "../../utils/auth";
 import { API_BASE } from "../../utils/constants";
 import "./AIAssistant.css";
@@ -41,6 +42,15 @@ const MODEL_CONFIG = {
     color: "danger",
     titleCard: "نتيجة تحليل المختبر",
     apiEndpoint: "http://localhost:8005/images/analyze-with-history",
+    requiresPatientId: true,
+  },
+  breast: {
+    title: "Breast Cancer Detection",
+    description: "Advanced AI analysis for early detection of breast cancer from mammography and imaging scans.",
+    icon: "bi-heart-pulse",
+    color: "pink",
+    titleCard: "نتيجة تحليل سرطان الثدي",
+    apiEndpoint: "http://localhost:8006/predict",
     requiresPatientId: true,
   },
 };
@@ -92,7 +102,8 @@ const AssistantLayout = () => {
       case "brain":
       case "xray":
       case "skin": 
-      case "lab": {
+      case "lab":
+      case "breast": {
         const config = MODEL_CONFIG[currentView];
         const userId = getUserId();
         return (
@@ -114,6 +125,9 @@ const AssistantLayout = () => {
       
       case "breastCheck":
         return <BreastSelfCheckView />;
+      
+      case "brainCheck":
+        return <BrainTumorCheckView />;
       
       default:
         return <HubView onSelectTool={setCurrentView} userGender={userGender} />;

@@ -124,6 +124,41 @@ const WomensHealthCard = ({ onSelect }) => (
   </div>
 );
 
+/** AI Medical Model Card (breast cancer detection) */
+const BreastCancerModelCard = ({ tool, onSelect }) => (
+  <div
+    className="breast-cancer-model-card"
+    onClick={() => onSelect(tool.id)}
+  >
+    <div className="breast-model-header">
+      <div className="breast-model-badge">
+        <i className="bi bi-robot"></i>
+        <span>أداة ذكاء اصطناعي</span>
+      </div>
+      <div className="breast-model-icon-wrapper">
+        <i className="bi bi-shield-check"></i>
+      </div>
+    </div>
+    <h5 className="breast-model-title">{tool.title}</h5>
+    <p className="breast-model-description">{tool.description}</p>
+    <div className="breast-model-features">
+      <div className="feature-item">
+        <i className="bi bi-check-circle"></i>
+        <span>تحليل متقدم بالذكاء الاصطناعي</span>
+      </div>
+      <div className="feature-item">
+        <i className="bi bi-check-circle"></i>
+        <span>نتائج دقيقة وموثوقة</span>
+      </div>
+    </div>
+    <button className="breast-model-button">
+      ابدأي التحليل
+      <i className="bi bi-arrow-left"></i>
+    </button>
+  </div>
+);
+
+
 const HubView = ({ onSelectTool, userGender }) => {
   const tools = [
     {
@@ -164,10 +199,25 @@ const HubView = ({ onSelectTool, userGender }) => {
       icon: "bi-file-earmark-medical",
       color: "danger",
     },
+    {
+      id: "brainCheck",
+      title: "اختبارات الدماغ",
+      description: "اختبارات عصبية بسيطة للكشف المبكر عن مشاكل الدماغ",
+      icon: "bi-activity",
+      color: "primary",
+    },
   ];
 
   const chatTool = tools.find((t) => t.id === "chat");
   const aiTools = tools.filter((t) => t.id !== "chat");
+
+  const breastCancerTool = {
+    id: "breast",
+    title: "كشف سرطان الثدي",
+    description: "تحليل صور الثدي بالذكاء الاصطناعي للكشف المبكر عن سرطان الثدي",
+    icon: "bi-heart-pulse",
+    color: "pink",
+  };
 
   return (
     <div className="hub-container" dir="rtl">
@@ -203,7 +253,8 @@ const HubView = ({ onSelectTool, userGender }) => {
             <i className="bi bi-heart-pulse"></i>
             فحوصات صحة المرأة
           </h4>
-          <div className="hub-grid hub-grid-single">
+          <div className="hub-grid">
+            <BreastCancerModelCard tool={breastCancerTool} onSelect={onSelectTool} />
             <WomensHealthCard onSelect={onSelectTool} />
           </div>
         </>
