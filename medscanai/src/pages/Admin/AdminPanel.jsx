@@ -259,6 +259,7 @@ const AdminPanel = () => {
                     <button
                       className="btn btn-primary"
                       onClick={() => handleConfirmAppointment(appt.id)}
+                      style={{width: "fit-content"}}
                       disabled={confirmingId === appt.id}
                     >
                       {confirmingId === appt.id ? (
