@@ -147,16 +147,13 @@
 }
 
 /* Tool Cards Grid */
-.hub-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  justify-items: center;
-}
 
-.hub-grid-single {
-  max-width: 400px;
-  margin: 0 auto;
+.hub-grid {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
 }
 
 /* Standard Tool Card */

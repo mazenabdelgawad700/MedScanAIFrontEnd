@@ -160,10 +160,10 @@ const BreastCancerModelCard = ({ tool, onSelect }) => (
 
 
 const HubView = ({ onSelectTool, userGender }) => {
-  const tools = [
+const tools = [
     {
       id: "chat",
-      title: "محادثة صحية ذكية",
+      title: "اسأل الدكتور الذكي",
       description:
         "احصل على إجابات فورية مدعومة بالذكاء الاصطناعي للاستفسارات الطبية الشائعة",
       icon: "bi-chat-dots",
@@ -171,7 +171,7 @@ const HubView = ({ onSelectTool, userGender }) => {
     },
     {
       id: "brain",
-      title: "تحليل ورم الدماغ",
+      title: "كشف أورام المخ",
       description:
         "تحليل صور الرنين المغناطيسي/الأشعة المقطعية للكشف عن الأورام المحتملة داخل الجمجمة",
       icon: "bi-activity",
@@ -179,7 +179,7 @@ const HubView = ({ onSelectTool, userGender }) => {
     },
     {
       id: "xray",
-      title: "تشخيص الأشعة السينية",
+      title: "قراءة الأشعة",
       description:
         "يساعد في تحديد الأنماط في صور الصدر بالأشعة السينية لحالات مختلفة",
       icon: "bi-lungs",
@@ -187,21 +187,21 @@ const HubView = ({ onSelectTool, userGender }) => {
     },
     {
       id: "skin",
-      title: "ذكاء اصطناعي للأمراض الجلدية",
+      title: "تشخيص أمراض الجلد",
       description: "قم بتحميل صور الجلد لتقييم الحالات الجلدية",
       icon: "bi-person-bounding-box",
       color: "warning",
     },
     {
       id: "lab",
-      title: "تحليل نتائج المختبر",
+      title: "تفسير نتايج التحاليل",
       description: "قم بتحميل صور نتائج التحاليل للحصول على قراءة وتفسير",
       icon: "bi-file-earmark-medical",
       color: "danger",
     },
     {
       id: "brainCheck",
-      title: "اختبارات الدماغ",
+      title: "فحص وظائف المخ",
       description: "اختبارات عصبية بسيطة للكشف المبكر عن مشاكل الدماغ",
       icon: "bi-activity",
       color: "primary",
@@ -236,7 +236,7 @@ const HubView = ({ onSelectTool, userGender }) => {
 
       {/* AI Models Section */}
       <h4 className="hub-section-title">
-        <i className="bi bi-grid-fill text-primary"></i>
+        <i className="bi bi-grid-fill text-primary mt-3"></i>
         أدوات التحليل الطبي المتخصصة
       </h4>
 
@@ -249,7 +249,7 @@ const HubView = ({ onSelectTool, userGender }) => {
       {/* Women's Health Section (female users only) */}
       {userGender === "Female" && (
         <>
-          <h4 className="hub-section-title hub-section-title-pink">
+          <h4 className="hub-section-title hub-section-title-pink mt-4">
             <i className="bi bi-heart-pulse"></i>
             فحوصات صحة المرأة
           </h4>

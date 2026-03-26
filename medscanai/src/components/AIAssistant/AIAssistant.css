@@ -258,15 +258,14 @@
   animation: shimmer 2s infinite;
 }
 
-/* Hub View - KPI Style */
-.hub-grid {
+/* .hub-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px 20px;
-}
+} */
 
 .hub-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
