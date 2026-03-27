@@ -41,7 +41,8 @@ const MODEL_CONFIG = {
     icon: "bi-file-earmark-medical",
     color: "danger",
     titleCard: "نتيجة تحليل المختبر",
-    apiEndpoint: "http://localhost:8005/images/analyze-with-history",
+    apiEndpoint: "https://localhost:7196/api/ai/GetLabResults",
+    // apiEndpoint: "http://localhost:8005/images/analyze",
     requiresPatientId: true,
   },
   breast: {

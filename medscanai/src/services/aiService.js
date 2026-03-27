@@ -2,8 +2,7 @@
  * Service to handle AI/Chatbot API interactions.
  * Connects to the local FastAPI backend.
  */
-
-const API_BASE_URL = 'http://localhost:8005';
+import { getToken } from "../utils/auth.js";
 
 /**
  * Sends a message to the AI chatbot.
@@ -14,14 +13,21 @@ const API_BASE_URL = 'http://localhost:8005';
  */
 export async function sendMessageToChatbot({ message, userRole }) {
   try {
-    const response = await fetch(`${API_BASE_URL}/chat/`, {
+    const token = getToken();
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    
+    const response = await fetch(`https://localhost:7196/api/ai/GetChatbotResponse/`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({
         message: message,
-        user_role: userRole,
+        userRole: userRole,
       }),
     });
 

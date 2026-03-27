@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { getUserRole } from "../../utils/auth";
 import { sendMessageToChatbot } from "../../services/aiService";
 import "./HubView.css";
@@ -7,7 +7,6 @@ const ChatView = () => {
   const isDoctor = getUserRole() === "Doctor";
   const messagesEndRef = useRef(null);
 
-  // Define language resources
   const text = {
     ar: {
       welcome: "مرحبًا! أنا مساعدك الطبي العام. كيف يمكنني مساعدتك اليوم؟",
@@ -53,10 +52,7 @@ const ChatView = () => {
 
     try {
       const role = getUserRole(); 
-      // Ensure we pass 'patient' or 'doctor' in lowercase as backend expectation might be case sensitive or specific keys
-      // The user example showed "user_role": "patient", so we will format it accordingly.
-      // getUserRole() returns "patient" by default or "Doctor" etc. 
-      // We will lowercase it to be safe: "patient", "doctor".
+
       const formattedRole = role ? role.toLowerCase() : "patient";
 
       const data = await sendMessageToChatbot({
@@ -64,11 +60,7 @@ const ChatView = () => {
         userRole: formattedRole
       });
 
-      // Assuming backend returns { response: "..." } or similar.
-      // If the backend returns just the string or a different field, this might need adjustment.
-      // Based on common patterns and the user's focus on "text report", we expect a 'response' or 'message' field.
-      // We'll check for 'response' first, then 'message', then string.
-      const botReplyText = data.response || data.message || (typeof data === 'string' ? data : t.response);
+      const botReplyText = data.data.response;
 
       const botResponse = { 
         id: Date.now() + 1, 

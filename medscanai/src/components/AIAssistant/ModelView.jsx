@@ -63,7 +63,7 @@ const ModelView = ({
           diagnosis: data.data.classLabelAr,
           diagnosisEn: data.data.classLabelEn,
           confidence: data.data.confidenceLevel,
-          advice: data.data.generatedAdvice,
+          advice: data?.data?.generatedAdvice || data?.data?.analysis,
           raw: data.data,
         });
       } catch (err) {
