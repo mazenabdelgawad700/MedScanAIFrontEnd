@@ -17,7 +17,7 @@ const MODEL_CONFIG = {
     icon: "bi-activity",
     color: "primary",
     titleCard: "تقرير تحليل ورم الدماغ",
-    apiEndpoint: "http://localhost:8001/predict",
+    apiEndpoint: "https://localhost:7196/api/ai/GetBrainTumorDiagnose",
   },
   xray: {
     title: "X-Ray Diagnostics",
@@ -25,7 +25,7 @@ const MODEL_CONFIG = {
     icon: "bi-lungs",
     color: "info",
     titleCard: "تقرير الاشعة المقطعية",
-    apiEndpoint: "http://localhost:8002/predict",
+    apiEndpoint: "https://localhost:7196/api/ai/GetXRayDiagnose",
   },
   skin: {
     title: "Dermatology AI",
@@ -33,7 +33,7 @@ const MODEL_CONFIG = {
     icon: "bi-person-bounding-box",
     color: "warning",
     titleCard: "نتيجة تحليل الصورة",
-    apiEndpoint: "http://localhost:8000/predict",
+    apiEndpoint: "https://localhost:7196/api/ai/GetDermatologyDiagnose",
   },
   lab: {
     title: "Lab Results Analysis",
@@ -50,7 +50,7 @@ const MODEL_CONFIG = {
     icon: "bi-heart-pulse",
     color: "pink",
     titleCard: "نتيجة تحليل سرطان الثدي",
-    apiEndpoint: "http://localhost:8006/predict",
+    apiEndpoint: "https://localhost:7196/api/ai/GetBreastCancerDiagnose",
     requiresPatientId: true,
   },
 };

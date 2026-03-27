@@ -37,21 +37,17 @@ const ModelView = ({
     if (apiEndpoint && selectedFile) {
       try {
         const formData = new FormData();
-        formData.append("file", selectedFile);
+        formData.append("Image", selectedFile);
         
         if (requiresPatientId && patientId) {
           formData.append("patient_id", patientId);
         }
-
+        
         const token = getToken();
         const userRole = getUserRole().toLowerCase();
+        formData.append("userRole", userRole);
 
-        // Build URL with user_role query parameter
-        // If the endpoint already has query params, append with &
-        const separator = apiEndpoint.includes('?') ? '&' : '?';
-        const urlWithRole = `${apiEndpoint}${separator}user_role=${userRole}`;
-
-        const response = await fetch(urlWithRole, {
+        const response = await fetch(apiEndpoint, {
           method: "POST",
           body: formData,
           headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -63,14 +59,12 @@ const ModelView = ({
 
         const data = await response.json();
 
-        // Map API response to internal format
-        // Handle different response structures
         setResult({
-          diagnosis: data.analysis || data.class_label_ar || data.class_label_en,
-          diagnosisEn: data.class_label_en,
-          confidence: data.confidence_level,
-          advice: data.generated_advice,
-          raw: data,
+          diagnosis: data.data.classLabelAr,
+          diagnosisEn: data.data.classLabelEn,
+          confidence: data.data.confidenceLevel,
+          advice: data.data.generatedAdvice,
+          raw: data.data,
         });
       } catch (err) {
         console.error("Analysis failed:", err);
@@ -179,9 +173,9 @@ const ModelView = ({
           {result && (
             <div className="fade-in-up mt-4">
               <ResultCard
-                diagnosis={result.diagnosis || result.Diagnose}
+                diagnosis={result.diagnosis}
                 diagnosisEn={result.diagnosisEn}
-                nextSteps={result.nextSteps || result.NextSteps}
+                nextSteps={result.nextSteps}
                 advice={result.advice}
                 confidence={result.confidence}
                 color={color}
