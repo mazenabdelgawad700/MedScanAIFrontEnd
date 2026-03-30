@@ -370,6 +370,15 @@ export default function DoctorDashboard() {
                 </div>
               </div>
 
+              {selectedPatient.medicalReport && (
+                <div className="doc-modal-report">
+                  <strong>التقرير الطبي:</strong>
+                  <div className="medical-report-content">
+                    {selectedPatient.medicalReport}
+                  </div>
+                </div>
+              )}
+
               {actionMsg && (
                 <div
                   style={{
