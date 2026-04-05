@@ -151,6 +151,7 @@ const MedicalTag = ({
 const PatientDashboard = () => {
   const navigate = useNavigate();
   const dashboardRef = useRef(null);
+  const debounceTimerRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -207,6 +208,60 @@ const PatientDashboard = () => {
   };
 
   /**
+   * Debounced API call that generates medical report.
+   * Waits 10s after changes before calling API.
+   * Resets timer if another change occurs.
+   */
+  const triggerMedicalReportGeneration = () => {
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Set new timer for 10 seconds
+    debounceTimerRef.current = setTimeout(() => {
+      const generateReport = async () => {
+        try {
+          const token = getToken();
+          const userId = getUserId();
+
+          const response = await fetch(
+            "https://localhost:7196/api/ai/GenerateMedicalReport",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ patientId: userId }),
+            }
+          );
+
+          if (response.ok) {
+            console.log("Medical report generated successfully");
+          } else {
+            console.error("Failed to generate medical report:", response.status);
+          }
+        } catch (error) {
+          console.error("Error generating medical report:", error);
+        }
+      };
+
+      generateReport();
+      debounceTimerRef.current = null;
+    }, 5000); // 5 seconds
+  };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  /**
    * Generic update handler for all medical item types.
    * Replaces 3 separate near-identical functions.
    */
@@ -238,6 +293,7 @@ const PatientDashboard = () => {
 
       if (response.ok) {
         await fetchProfile();
+        triggerMedicalReportGeneration();
       }
     } catch (error) {
       console.error(`Failed to update ${type}`, error);
@@ -267,6 +323,7 @@ const PatientDashboard = () => {
 
       if (response.ok) {
         await fetchProfile();
+        triggerMedicalReportGeneration();
       } else {
         const txt = await response.text();
         console.error(`Delete ${type} failed:`, txt || response.status);
@@ -365,6 +422,7 @@ const PatientDashboard = () => {
         setShowAddModal(false);
         setNewItemName("");
         setAddType(null);
+        triggerMedicalReportGeneration();
       }
     } catch (error) {
       console.error("Failed to add item", error);
