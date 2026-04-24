@@ -378,6 +378,7 @@
   border-left: 4px solid #667eea;
   border-radius: 8px;
   grid-column: 1 / -1;
+  max-height: 350px;
 }
 
 .doc-modal-report strong {

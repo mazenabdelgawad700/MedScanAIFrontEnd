@@ -94,7 +94,7 @@ const BookAppointmentAdmin = () => {
         status: "Pending",
       };
 
-      const res = await fetch(`${API_BASE}/appointment/MakeAppointment`, {
+      const res = await fetch(`${API_BASE}/appointment/BookAppointmentByAdmin`, {
         method: "POST",
         headers: {
           Accept: "*/*",
@@ -111,7 +111,7 @@ const BookAppointmentAdmin = () => {
       setSelectedTime("");
       setReason("");
       setPatientName("");
-      navigate("/patient/appointments");
+      navigate("/admin");
     } catch (err) {
       console.error(err);
       setSubmitMsg("حدث خطأ أثناء الحجز. حاول مرة أخرى.");
