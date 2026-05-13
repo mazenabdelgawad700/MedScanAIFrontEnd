@@ -1,29 +1,11 @@
-/* Status Badge Styles */
+/* Status Badge Styles - Healthcare Light Mode */
 .status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.35rem 0.85rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  display: inline-flex; align-items: center;
+  padding: 0.35rem 0.85rem; border-radius: 20px;
+  font-size: 0.8rem; font-weight: 600;
 }
 
-.status-pending {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-}
-
-.status-confirmed {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-}
-
-.status-completed {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-}
-
-.status-cancelled {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-}
+.status-pending { background-color: var(--med-warning-light); color: #b45309; }
+.status-confirmed { background-color: var(--med-success-light); color: #047857; }
+.status-completed { background-color: var(--med-secondary-light); color: var(--med-secondary-dark); }
+.status-cancelled { background-color: var(--med-danger-light); color: #b91c1c; }

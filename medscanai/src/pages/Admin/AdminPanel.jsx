@@ -241,6 +241,7 @@ const AdminPanel = () => {
               </div>
             ) : (
               todayAppointments.map((appt, idx) => (
+                <>
                 <div key={idx} className="appointment-item">
                   <div className="appointment-time">{appt.time}</div>
                   <div className="appointment-info">
@@ -281,6 +282,8 @@ const AdminPanel = () => {
                     </div>
                   )}
                 </div>
+                {idx !== todayAppointments.length - 1 && <hr className="m-0" />}
+                </>
               ))
             )}
           </div>

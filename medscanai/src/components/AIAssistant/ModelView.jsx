@@ -97,8 +97,8 @@ const ModelView = ({
         >
           <i className={`bi ${icon} display-6`}></i>
         </div>
-        <h2 className="fw-bold text-white">{title}</h2>
-        <p className="text-white lead fs-6">{description}</p>
+        <h2 className="fw-bold ">{title}</h2>
+        <p className="lead fs-6">{description}</p>
       </div>
 
       <div className="row justify-content-center flex-grow-1">
@@ -140,7 +140,7 @@ const ModelView = ({
                       )}
                     </div>
                   ) : (
-                    <div className="text-white py-4">
+                    <div className="py-4">
                       <i
                         className={`bi bi-cloud-arrow-up display-4 text-${color} mb-3 d-block`}
                       ></i>

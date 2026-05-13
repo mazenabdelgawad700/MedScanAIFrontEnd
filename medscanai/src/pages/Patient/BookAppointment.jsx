@@ -87,7 +87,7 @@ const BookAppointment = () => {
         .toLocaleString("sv-SE", { hour12: false })
         .replace(" ", "T");
 
-      const res = await fetch(`${API_BASE}/appointment/MakeAppointment`, {
+      const res = await fetch(`${API_BASE}/appointment/BookAppointment`, {
         method: "POST",
         headers: {
           Accept: "*/*",

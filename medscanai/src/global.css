@@ -1,0 +1,263 @@
+:root {
+  /* Medical Healthcare Light Mode Palette */
+  --med-primary: #158582; /* Calming Teal */
+  --med-primary-light: #e8f5f4;
+  --med-primary-dark: #106664;
+  
+  --med-secondary: #0ea5e9; /* Soft Medical Blue */
+  --med-secondary-light: #f0f9ff;
+  --med-secondary-dark: #0284c7;
+  
+  --med-success: #10b981; /* Soft Green */
+  --med-success-light: #ecfdf5;
+  
+  --med-warning: #f59e0b; /* Muted Amber */
+  --med-warning-light: #fffbeb;
+  
+  --med-danger: #ef4444; /* Soft Medical Red */
+  --med-danger-light: #fef2f2;
+  
+  --med-background: #f8fafc; /* Off-white warm background */
+  --med-surface: #ffffff; /* Clean white cards */
+  
+  --med-text-primary: #0f172a; /* Deep slate, not pure black */
+  --med-text-secondary: #475569; /* Soft charcoal */
+  --med-text-muted: #94a3b8;
+  
+  --med-border: #e2e8f0;
+  --med-border-light: #f1f5f9;
+
+  /* Premium Medical Category Colors (Refined) */
+  --med-tag-disease-bg: #f0f7ff;
+  --med-tag-disease-text: #1e40af;
+  --med-tag-disease-border: #bfdbfe;
+  --med-tag-disease-icon: #3b82f6;
+
+  --med-tag-allergy-bg: #faf5ff;
+  --med-tag-allergy-text: #7e22ce;
+  --med-tag-allergy-border: #e9d5ff;
+  --med-tag-allergy-icon: #a855f7;
+
+  --med-tag-med-bg: #f0fdf4;
+  --med-tag-med-text: #166534;
+  --med-tag-med-border: #bbf7d0;
+  --med-tag-med-icon: #22c55e;
+
+  /* Universal Medical Action (Solid Premium) */
+  --med-action-bg: var(--med-primary);
+  --med-action-border: var(--med-primary);
+  --med-action-icon: #ffffff;
+  
+  /* Typography */
+  --med-font-body: 'Tajawal', system-ui, -apple-system, sans-serif;
+  --med-font-heading: 'Cairo', system-ui, -apple-system, sans-serif;
+  
+  /* Shadows */
+  --med-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --med-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --med-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --med-shadow-hover: 0 20px 25px -5px rgb(21 133 130 / 0.05), 0 8px 10px -6px rgb(21 133 130 / 0.05);
+  
+  /* Radii */
+  --med-radius-sm: 0.5rem;
+  --med-radius-md: 0.75rem;
+  --med-radius-lg: 1rem;
+  --med-radius-xl: 1.5rem;
+  --med-radius-full: 9999px;
+  
+  /* Override Bootstrap Variables globally */
+  --bs-primary: var(--med-primary);
+  --bs-primary-rgb: 21, 133, 130;
+  --bs-body-bg: var(--med-background);
+  --bs-body-color: var(--med-text-primary);
+  --bs-font-sans-serif: var(--med-font-body);
+  --bs-border-color: var(--med-border);
+  --bs-success: var(--med-success);
+  --bs-warning: var(--med-warning);
+  --bs-danger: var(--med-danger);
+  --bs-link-color: var(--med-primary);
+  --bs-link-hover-color: var(--med-primary-dark);
+}
+
+* {
+  font-family: var(--med-font-body);
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--med-font-heading);
+  font-weight: 700;
+}
+
+body {
+  background-color: var(--med-background);
+  color: var(--med-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Global Card System */
+.med-card {
+  background-color: var(--med-surface);
+  border-radius: var(--med-radius-md);
+  box-shadow: var(--med-shadow-md);
+  border: 1px solid var(--med-border-light);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.med-card:hover {
+  box-shadow: var(--med-shadow-lg);
+}
+
+/* Global Button System */
+.med-btn-primary {
+  background-color: var(--med-primary);
+  color: white;
+  border: none;
+  border-radius: var(--med-radius-sm);
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.med-btn-primary:hover {
+  background-color: var(--med-primary-dark);
+  box-shadow: 0 4px 12px rgba(21, 133, 130, 0.2);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.med-btn-secondary {
+  background-color: var(--med-secondary-light);
+  color: var(--med-primary-dark);
+  border: 1px solid transparent;
+  border-radius: var(--med-radius-sm);
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.med-btn-secondary:hover {
+  background-color: #e2f0ef;
+  color: var(--med-primary-dark);
+}
+
+.med-btn-outline {
+  background-color: transparent;
+  color: var(--med-primary);
+  border: 1px solid var(--med-primary);
+  border-radius: var(--med-radius-sm);
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.med-btn-outline:hover {
+  background-color: var(--med-primary-light);
+  color: var(--med-primary-dark);
+}
+
+/* Forms */
+.med-input {
+  background-color: #f8fafc;
+  border: 1px solid var(--med-border);
+  border-radius: var(--med-radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--med-text-primary);
+  width: 100%;
+  transition: all 0.2s ease;
+  font-family: var(--med-font-body);
+}
+
+.med-input:focus {
+  outline: none;
+  border-color: var(--med-primary);
+  box-shadow: 0 0 0 3px var(--med-primary-light);
+  background-color: var(--med-surface);
+}
+
+.med-label {
+  font-weight: 600;
+  color: var(--med-text-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Badges */
+.med-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--med-radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.med-badge-success {
+  background-color: var(--med-success-light);
+  color: var(--med-success);
+}
+
+.med-badge-warning {
+  background-color: var(--med-warning-light);
+  color: var(--med-warning);
+}
+
+.med-badge-danger {
+  background-color: var(--med-danger-light);
+  color: var(--med-danger);
+}
+
+.med-badge-primary {
+  background-color: var(--med-primary-light);
+  color: var(--med-primary-dark);
+}
+
+/* Overriding any legacy dark mode or hacker styles globally */
+.bg-dark, .text-light, .bg-black {
+  background-color: var(--med-surface) !important;
+  color: var(--med-text-primary) !important;
+}
+
+.glow, .neon-text, .neon-border {
+  text-shadow: none !important;
+  box-shadow: none !important;
+  border-color: var(--med-border) !important;
+}
+
+/* Improve scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--med-background); 
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--med-text-muted); 
+}
+
+/* Spacing utilities for RTL/LTR safety */
+.mt-4 { margin-top: 1.5rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.py-4 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }

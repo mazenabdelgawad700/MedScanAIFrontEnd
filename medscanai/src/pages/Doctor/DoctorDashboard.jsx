@@ -394,7 +394,7 @@ export default function DoctorDashboard() {
 
             <div className="doc-modal-footer">
               <button
-                className="btn-primary"
+                className="btn-primary text-white"
                 onClick={handleCompleteAppointment}
                 disabled={actionLoading}
               >

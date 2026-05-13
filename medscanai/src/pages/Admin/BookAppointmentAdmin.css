@@ -1,11 +1,11 @@
 .admin-book-page {
   min-height: 100vh;
-  direction: rtl;
+
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background: var(--med-background);
   position: relative;
   overflow-x: hidden;
 }
@@ -14,10 +14,10 @@
 .book-card {
   width: 100%;
   max-width: 1000px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
+  background-color: var(--med-background);
+  border: 1px solid var(--med-border-light);
+
+  border-radius: var(--med-radius-xl);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   display: flex;
   overflow: hidden;
@@ -29,7 +29,7 @@
   width: 40%;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--med-primary);
 }
 
 .book-image-side img {
@@ -62,7 +62,7 @@
 
 .book-header h2 {
   font-size: 24px;
-  color: #fff;
+  color: var(--med-text-primary);
   font-weight: 700;
   margin: 0;
   display: flex;
@@ -71,7 +71,7 @@
 }
 
 .go-back-link {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
@@ -82,7 +82,7 @@
 }
 
 .go-back-link:hover {
-  color: #fff;
+  color: var(--med-text-primary);
 }
 
 .admin-book-form {
@@ -98,7 +98,7 @@
 }
 
 .form-group label {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--med-text-primary);
   font-weight: 600;
   font-size: 14px;
   display: flex;
@@ -112,9 +112,8 @@
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
-  color: #fff;
+  border: 2px solid #198754;
+  color: var(--med-text-primary);
   font-size: 15px;
   transition: all 0.2s;
 }
@@ -123,9 +122,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  border-color: #198754;
 }
 
 .form-group select {
@@ -137,8 +134,8 @@
 }
 
 .form-group select option {
-  background: #1e293b;
-  color: #fff;
+  background-color: var(--med-surface);
+  color: var(--med-text-primary);
 }
 
 .submit-message {
@@ -150,19 +147,19 @@
 }
 
 .submit-message.success {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .submit-message.error {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.1);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background-color: var(--med-primary);
   color: white;
   padding: 14px;
   border-radius: 14px;
@@ -171,7 +168,7 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(21, 133, 130, 0.2);
   margin-top: 10px;
 }
 
@@ -192,7 +189,7 @@
 }
 
 .loading {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--med-text-muted);
   text-align: center;
   padding: 40px;
 }

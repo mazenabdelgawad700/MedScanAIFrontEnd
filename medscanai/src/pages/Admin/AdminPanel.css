@@ -1,11 +1,11 @@
 .admin-panel-page {
   min-height: 100vh;
-  direction: rtl;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+
+  background: var(--med-background);
   padding: 28px 40px;
   position: relative;
   overflow-x: hidden;
-  color: #fff;
+  color: var(--med-text-primary);
 }
 
 .admin-panel-page::before {
@@ -15,7 +15,7 @@
   right: -500px;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(21, 133, 130, 0.04) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -28,7 +28,7 @@
   left: -500px;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(118, 75, 162, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.04) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -56,18 +56,18 @@
   font-size: 28px;
   font-weight: 800;
   margin: 0 0 8px;
-  color: #fff;
+  color: var(--med-text-primary);
 }
 
 .admin-panel-header .sub {
   margin: 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   font-size: 16px;
 }
 
 .logout-btn {
   border: 1px solid rgba(220, 38, 38, 0.4);
-  color: #fca5a5;
+  color: var(--med-danger);
   background: transparent;
   width: fit-content;
   border-radius: 8px;
@@ -97,18 +97,16 @@
 .stat-card-admin {
   opacity: 1;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08)) !important;
-  border-radius: 20px;
+  border-radius: var(--med-radius-lg);
   padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--med-border-light);
   display: flex;
   align-items: center;
   gap: 20px;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--med-shadow-md);
 }
 
 .stat-card-admin.clickable {
@@ -129,8 +127,8 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: var(--med-background);
+  color: var(--med-text-primary);
 }
 
 .stat-card-admin.blue .icon-wrapper {
@@ -156,7 +154,6 @@
 }
 
 .stat-title {
-  color: rgba(255, 255, 255, 0.8) !important;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
@@ -166,19 +163,17 @@
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.5px;
-  background-color: wheat !important;
-  color: #fff;
 }
 
 /* Appointments Section */
 .appointments-section {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-  border-radius: 24px;
+  background: var(--med-surface);
+  border-radius: var(--med-radius-xl);
   padding: 32px;
   margin-bottom: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--med-border-light);
+
+  box-shadow: var(--med-shadow-md);
   max-height: 400px;
   overflow-y: scroll;
 }
@@ -186,7 +181,7 @@
 .appointments-section h2 {
   margin: 0;
   font-size: 24px;
-  color: #fff;
+  color: var(--med-text-primary);
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -194,7 +189,7 @@
 }
 
 .appointments-date {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--med-text-muted);
   margin: 8px 0 24px 0;
   font-size: 14px;
 }
@@ -209,21 +204,21 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 20px;
+  padding: 5px 20px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   transition: all 0.2s ease;
 }
 
 .appointment-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(200 205 241 / 50%);
   transform: translateX(-4px);
+  /* border: 2px solid blue; */
 }
 
 .appointment-time {
   min-width: 90px;
-  color: #a5b4fc;
+  color: var(--med-primary);
   font-weight: 700;
   font-size: 18px;
   direction: ltr;
@@ -239,17 +234,17 @@
 
 .patient-name {
   font-weight: 700;
-  color: #fff !important;
+  color: var(--med-text-primary) !important;
   margin-bottom: 6px;
   font-size: 16px;
 }
 
 .doctor-name {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   font-size: 14px;
   display: flex;
   align-items: center;
-  color: #fff;
+  color: var(--med-text-primary);
   gap: 6px;
 }
 
@@ -266,7 +261,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--med-primary);
   color: white;
   border: none;
   padding: 10px 24px;
@@ -295,16 +290,16 @@
 }
 
 .action-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-  border-radius: 20px;
+  background: var(--med-surface);
+  border-radius: var(--med-radius-lg);
   padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--med-border-light);
   display: flex;
   align-items: flex-start;
   gap: 20px;
   transition: all 0.3s ease;
   cursor: pointer;
-  backdrop-filter: blur(20px);
+
 }
 
 .action-card:hover {
@@ -322,8 +317,8 @@
   justify-content: center;
   border-radius: 14px;
   font-size: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: var(--med-background);
+  color: var(--med-text-primary);
   transition: all 0.3s;
 }
 
@@ -333,13 +328,13 @@
 
 .action-card h3 {
   margin: 0 0 8px 0;
-  color: #fff;
+  color: var(--med-text-primary);
   font-size: 18px;
   font-weight: 700;
 }
 
 .action-card p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   font-size: 14px;
   margin: 0 0 16px 0;
   line-height: 1.5;
@@ -349,8 +344,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: var(--med-background);
+  color: var(--med-text-primary);
   padding: 8px 16px;
   border-radius: 10px;
   text-decoration: none;
@@ -368,7 +363,7 @@
 .empty-text {
   text-align: center;
   padding: 40px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--med-text-muted);
   font-size: 16px;
 }
 

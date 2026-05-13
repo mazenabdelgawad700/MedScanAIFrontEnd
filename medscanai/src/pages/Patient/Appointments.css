@@ -1,7 +1,7 @@
 .apt-page {
-  direction: rtl;
+  
   padding: 28px 40px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background: var(--med-background);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
@@ -14,7 +14,7 @@
   right: -500px;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(21, 133, 130, 0.04) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -27,7 +27,7 @@
   left: -500px;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(118, 75, 162, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.04) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -40,12 +40,12 @@
 .apt-hero h1 {
   font-size: 28px;
   margin: 6px 0;
-  color: #fff;
+  color: var(--med-text-primary);
   font-weight: 800;
 }
 
 .apt-sub {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--med-text-secondary);
 }
 
 .apt-hero-content {
@@ -55,9 +55,9 @@
 }
 
 .apt-back-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background-color: var(--med-surface);
+  border: 1px solid var(--med-border);
+  color: var(--med-primary);
   padding: 10px 20px;
   border-radius: 12px;
   cursor: pointer;
@@ -67,10 +67,11 @@
   font-weight: 600;
   transition: all 0.2s;
   width: fit-content;
+  box-shadow: var(--med-shadow-sm);
 }
 
 .apt-back-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background-color: var(--med-surface);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -78,7 +79,7 @@
   font-size: 24px;
   font-weight: 800;
   margin: 40px 0 24px;
-  color: #fff;
+  color: var(--med-text-primary);
   text-align: right;
   display: flex;
   align-items: center;
@@ -86,7 +87,7 @@
 }
 
 .apt-section-title i {
-  color: #a5b4fc;
+  color: var(--med-primary);
 }
 
 .apt-grid {
@@ -96,24 +97,24 @@
 }
 
 .apt-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-  border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--med-surface);
+  border-radius: var(--med-radius-xl);
+  box-shadow: var(--med-shadow-md);
+  border: 1px solid var(--med-border-light);
   overflow: hidden;
-  backdrop-filter: blur(20px);
+  
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
 }
 
 .apt-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
-  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: var(--med-shadow-lg);
+  border-color: var(--med-border);
 }
 
 .apt-card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--med-primary);
   padding: 20px 24px;
   display: flex;
   justify-content: space-between;
@@ -126,7 +127,7 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   padding: 6px 12px;
   border-radius: 12px;
   font-size: 14px;
@@ -148,7 +149,7 @@
 }
 
 .status-confirmed {
-  background: rgba(59, 130, 246, 0.2);
+  background-color: var(--med-secondary-light);
   color: #60a5fa;
   border: 1px solid rgba(59, 130, 246, 0.4);
 }
@@ -174,11 +175,11 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--med-text-secondary);
 }
 
 .apt-info-row i {
-  color: #a5b4fc;
+  color: var(--med-primary);
   font-size: 18px;
   width: 24px;
   text-align: center;
@@ -186,7 +187,7 @@
 
 .apt-info-label {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--med-text-muted);
   display: block;
   margin-bottom: 4px;
 }
@@ -194,19 +195,19 @@
 .apt-info-value {
   font-size: 16px;
   font-weight: 500;
-  color: #fff;
+  color: var(--med-text-primary);
 }
 
 .apt-card-actions {
   padding: 20px 24px;
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--med-background);
+  border-top: 1px solid var(--med-border-light);
   display: flex;
   justify-content: flex-end;
 }
 
 .apt-cancel-btn {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: var(--med-danger);
   color: white;
   border: none;
   border-radius: 12px;
@@ -236,17 +237,18 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 60px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
+  background-color: var(--med-background);
+  border-radius: var(--med-radius-xl);
   border: 2px dashed rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--med-text-muted);
 }
 
 .apt-empty i {
   font-size: 48px;
   margin-bottom: 16px;
   display: block;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--med-primary);
+  opacity: 0.2;
 }
 
 .apt-loading {
@@ -260,7 +262,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #667eea;
+  border-top-color: var(--med-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -284,8 +286,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.4);
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -304,16 +306,16 @@
 }
 
 .apt-modal {
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-  border-radius: 24px;
+  background: var(--med-surface);
+  border-radius: var(--med-radius-xl);
   padding: 32px;
   max-width: 400px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--med-shadow-lg);
   animation: modalSlideIn 0.25s ease-out;
-  border: 1px solid rgba(102, 126, 234, 0.2);
-  backdrop-filter: blur(20px);
+  border: 1px solid var(--med-border-light);
+  
 }
 
 @keyframes modalSlideIn {
@@ -355,19 +357,19 @@
 
 .apt-modal-icon i {
   font-size: 32px;
-  color: #fff;
+  color: white;
 }
 
 .apt-modal-title {
   font-size: 22px;
   font-weight: 700;
-  color: #fff;
+  color: var(--med-text-primary);
   margin: 0 0 12px;
 }
 
 .apt-modal-message {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--med-text-secondary);
   margin: 0 0 28px;
   line-height: 1.6;
 }
@@ -394,26 +396,26 @@
 }
 
 .apt-modal-btn-cancel {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--med-background);
+  color: var(--med-text-secondary);
+  border: 1px solid var(--med-border);
 }
 
 .apt-modal-btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
+  background-color: var(--med-surface);
+  border-color: var(--med-text-muted);
   transform: translateY(-2px);
 }
 
 .apt-modal-btn-delete {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+  background-color: var(--med-danger);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
 .apt-modal-btn-delete:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(220, 38, 38, 0.4);
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.2);
 }
 
 .apt-modal-btn:disabled {

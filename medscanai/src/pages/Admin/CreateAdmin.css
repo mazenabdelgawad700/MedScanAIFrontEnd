@@ -4,8 +4,8 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-  direction: rtl;
+  background: var(--med-background);
+  
   position: relative;
   overflow: hidden;
 }
@@ -35,10 +35,10 @@
 .create-admin-card {
   width: 100%;
   max-width: 520px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
+  background-color: var(--med-background);
+  border: 1px solid var(--med-border-light);
+  
+  border-radius: var(--med-radius-xl);
   padding: 40px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -47,14 +47,14 @@
 
 .create-admin-card h1 {
   margin: 0 0 12px 0;
-  color: #fff;
+  color: var(--med-text-primary);
   font-size: 28px;
   font-weight: 700;
   text-align: center;
 }
 
 .create-admin-card p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   margin-bottom: 32px;
   text-align: center;
   font-size: 16px;
@@ -80,7 +80,7 @@
 }
 
 .back-to-admin a:hover {
-  background: rgba(59, 130, 246, 0.2);
+  background-color: var(--med-secondary-light);
   transform: translateY(-2px);
 }
 
@@ -93,7 +93,7 @@
 .create-admin-form .label {
   font-weight: 600;
   margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--med-text-primary);
   font-size: 14px;
 }
 
@@ -101,18 +101,14 @@
   width: 100%;
   padding: 14px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
-  color: #fff;
+  border: 2px solid #47a6ac;
+  color: var(--med-text-primary);
   font-size: 16px;
   transition: all 0.2s;
 }
 
 .create-admin-form input:focus {
   outline: none;
-  border-color: #8b5cf6;
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
 }
 
 .create-admin-form .message {

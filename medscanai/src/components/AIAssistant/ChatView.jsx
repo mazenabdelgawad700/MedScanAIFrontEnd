@@ -86,12 +86,12 @@ const ChatView = () => {
     <div className="d-flex flex-column h-100" style={{ minHeight: '600px', maxHeight: '600px' }} dir={dir}>
       <div className="border-bottom border-secondary pb-3 mb-3">
         <div className="d-flex align-items-center">
-          <div className={`p-3 rounded-circle text-primary bg-primary bg-opacity-10 ${isDoctor ? 'me-3' : 'ms-3'}`}>
+          <div className={`p-3 rounded-circle text-primary bg-primary bg-opacity-10 ${isDoctor ? 'ms-3' : 'me-3'}`}>
             <i className="bi bi-robot fs-4"></i>
           </div>
           <div>
-            <h5 className="mb-0 fw-bold text-white">{t.title}</h5>
-            <small className="text-white opacity-75">{t.subtitle}</small>
+            <h5 className="mb-0 fw-bold">{t.title}</h5>
+            <small className=" opacity-75">{t.subtitle}</small>
           </div>
         </div>
       </div>
@@ -108,7 +108,7 @@ const ChatView = () => {
               }}
             >
               <div 
-                className={`p-3 rounded-4 shadow-sm ${msg.sender === 'user' ? 'bg-primary text-white' : 'bg-white bg-opacity-10 text-white border border-light border-opacity-10'}`}
+                className={`p-3 rounded-4 shadow-sm ${msg.sender === 'user' ? 'bg-primary text-white' : 'bg-info text-white border border-light'}`}
                 style={{ maxWidth: '80%' }}
               >
                 {msg.text}
@@ -134,7 +134,7 @@ const ChatView = () => {
         <form onSubmit={handleSendMessage} className="position-relative">
           <input
             type="text"
-            className={`form-control form-control-lg rounded-pill shadow-sm border-0 bg-white bg-opacity-10 text-white placeholder-light ${isDoctor ? 'pe-5 ps-4' : 'ps-5 pe-4'}`}
+            className={`form-control form-control-lg rounded-pill shadow-sm border-0 bg-white bg-opacity-10 placeholder-light ${isDoctor ? 'pe-5 ps-4' : 'ps-5 pe-4'}`}
             placeholder={t.placeholder}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -145,7 +145,7 @@ const ChatView = () => {
           />
           <button 
             type="submit" 
-            className={`btn btn-primary rounded-circle position-absolute top-50 translate-middle-y ${isDoctor ? 'end-0 me-2' : 'start-0 ms-2'}`}
+            className={`btn btn-primary rounded-circle position-absolute top-50 translate-middle-y ${isDoctor ? 'start-0 ms-2' : 'end-0 me-2'}`}
             style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <i className={`bi ${isDoctor ? 'bi-send-fill' : 'bi-send-fill'}`}></i>

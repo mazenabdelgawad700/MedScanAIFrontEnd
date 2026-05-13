@@ -285,7 +285,7 @@ const AddDoctor = () => {
           {/* Doctor Schedule Section */}
           <div className="schedule-section">
             <div className="label" style={{ marginBottom: 16, fontSize: '16px' }}>
-              <i className="bi bi-calendar-week ms-2 text-info"></i>
+              <i className="bi bi-calendar-week me-2 text-info"></i>
               جدول الطبيب (الأيام المتاحة وأوقات العمل)
             </div>
             <div className="days-row mb-4">
@@ -357,7 +357,7 @@ const AddDoctor = () => {
             >
               إلغاء
             </button>
-            <button type="submit" className="btn-primary" disabled={loading}>
+            <button type="submit" className="btn-primary text-white" disabled={loading}>
               {loading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>

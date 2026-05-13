@@ -1,8 +1,8 @@
 .doctors-page {
   min-height: 100vh;
   padding: 40px 20px;
-  direction: rtl;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  
+  background: var(--med-background);
   display: flex;
   justify-content: center;
   position: relative;
@@ -30,19 +30,19 @@
 }
 
 .page-breadcrumb {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
 }
 
 .page-info i {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--med-text-muted);
   font-size: 12px;
 }
 
 .page-title {
-  color: #fff;
+  color: var(--med-text-primary);
   font-size: 18px;
   font-weight: 700;
   background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
@@ -52,7 +52,7 @@
 }
 
 .back-link {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   text-decoration: none;
   font-weight: 600;
   display: flex;
@@ -60,17 +60,17 @@
   gap: 8px;
   padding: 10px 20px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background-color: var(--med-background);
   transition: all 0.3s ease;
   width: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--med-border-light);
   cursor: pointer;
   font-size: 14px;
 }
 
 .back-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: var(--med-background);
+  color: var(--med-text-primary);
   border-color: rgba(255, 255, 255, 0.2);
   transform: translateX(-4px);
 }
@@ -93,10 +93,10 @@
   position: relative;
   width: 100%;
   height: 500px;
-  border-radius: 20px;
+  border-radius: var(--med-radius-lg);
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--med-border-light);
   background: rgba(255, 255, 255, 0.02);
 }
 
@@ -125,7 +125,7 @@
 .image-title {
   font-size: 28px;
   font-weight: 800;
-  color: #fff;
+  color: var(--med-text-primary);
   margin: 0 0 8px 0;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   animation: slideInUp 0.6s ease;
@@ -133,7 +133,7 @@
 
 .image-subtitle {
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--med-text-secondary);
   margin: 0;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   animation: slideInUp 0.6s ease 0.1s both;
@@ -154,12 +154,12 @@
 /* Doctor Card */
 .doctors-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  background-color: var(--med-background);
+  border-radius: var(--med-radius-lg);
   padding: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--med-border-light);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(20px);
+  
   position: relative;
   z-index: 1;
 }
@@ -213,7 +213,7 @@
 
 .doctor-name {
   font-weight: 700;
-  color: #fff !important;
+  color: var(--med-text-primary) !important;
   font-size: 16px;
   margin-bottom: 4px;
   display: flex;
@@ -222,7 +222,7 @@
 }
 
 .doctor-email {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -236,13 +236,13 @@
 }
 
 .doctor-phone {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--med-text-secondary);
   font-family: monospace;
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background-color: var(--med-background);
   padding: 6px 12px;
   border-radius: 8px;
 }
@@ -295,11 +295,11 @@
   text-align: center;
   font-size: 16px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--med-border-light);
 }
 
 .loading {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
   background: rgba(59, 130, 246, 0.05);
   display: flex;
   align-items: center;
@@ -314,7 +314,7 @@
 }
 
 .empty {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--med-text-muted);
   background: rgba(255, 255, 255, 0.02);
 }
 

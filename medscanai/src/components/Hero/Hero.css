@@ -1,7 +1,7 @@
 .hero {
   width: 100%;
   min-height: 100vh;
-  padding-top: 0;
+  padding-top: 80px; /* Space for navbar */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,6 +9,7 @@
   position: relative;
   overflow: hidden;
   text-align: center;
+  background-color: var(--med-background);
 }
 
 /* Background Slider */
@@ -43,7 +44,6 @@
   from {
     transform: scale(1.1);
   }
-
   to {
     transform: scale(1);
   }
@@ -56,9 +56,9 @@
   right: 0;
   bottom: 0;
   background: linear-gradient(180deg,
-      rgba(10, 25, 47, 0.85) 0%,
-      rgba(15, 35, 65, 0.75) 50%,
-      rgba(10, 25, 47, 0.9) 100%);
+      rgba(252, 252, 252, 0.92) 0%,
+      rgba(252, 252, 252, 0.82) 50%,
+      rgba(252, 252, 252, 0.98) 100%);
   z-index: 1;
 }
 
@@ -66,7 +66,6 @@
 .hero-inner {
   width: 100%;
   max-width: 900px;
-  /* padding: 120px 20px 40px; */
   position: relative;
   z-index: 2;
   display: flex;
@@ -75,40 +74,37 @@
   justify-content: center;
   text-align: center;
   margin: 0 auto;
-  direction: rtl;
 }
 
 .hero-badge {
   display: inline-block;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-  border: 1px solid rgba(102, 126, 234, 0.4);
-  color: #a5b4fc;
-  padding: 10px 24px;
+  background-color: var(--med-primary-light);
+  color: var(--med-primary-dark);
+  padding: 8px 24px;
   border-radius: 50px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 28px;
-  backdrop-filter: blur(10px);
+  margin-bottom: 24px;
   animation: fadeInUp 0.8s ease-out;
+  border: 1px solid rgba(21, 133, 130, 0.2);
 }
 
 .hero-title {
   margin: 0 0 24px 0;
-  color: #fff;
+  color: var(--med-text-primary);
   font-weight: 800;
-  line-height: 1.15;
-  font-size: clamp(36px, 8vw, 64px);
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+  font-size: clamp(36px, 6vw, 64px);
   animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .hero-sub {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--med-text-secondary);
+  font-size: clamp(16px, 2vw, 22px);
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.8;
-  font-weight: 400;
+  font-weight: 500;
   animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
@@ -124,45 +120,45 @@
 .cta-button {
   text-decoration: none;
   border: none;
-  padding: 16px 32px;
-  border-radius: 12px;
+  padding: 14px 32px;
+  border-radius: var(--med-radius-md);
   font-weight: 700;
-  font-size: 17px;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
 .cta-button.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  background-color: var(--med-primary);
+  color: white;
+  box-shadow: 0 8px 20px rgba(21, 133, 130, 0.2);
 }
 
 .cta-button.primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+  transform: translateY(-2px);
+  background-color: var(--med-primary-dark);
+  box-shadow: 0 12px 25px rgba(21, 133, 130, 0.3);
 }
 
 .cta-button.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
+  background-color: white;
+  color: var(--med-primary);
+  border: 2px solid var(--med-border);
 }
 
 .cta-button.secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-3px);
+  background-color: var(--med-background);
+  border-color: var(--med-primary-light);
+  transform: translateY(-2px);
 }
 
 /* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 40px;
+  bottom: 30px;
   transform: translateX(-50%);
   z-index: 10;
   background: none;
@@ -183,18 +179,18 @@
   transform: translateX(-50%) translateY(5px);
 }
 
-.scroll-indicator:hover .scroll-mouse {
-  border-color: rgba(255, 255, 255, 0.8);
-}
-
 /* Mouse Icon */
 .scroll-mouse {
-  width: 26px;
-  height: 42px;
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  width: 24px;
+  height: 40px;
+  border: 2px solid var(--med-text-muted);
   border-radius: 15px;
   position: relative;
   transition: border-color 0.3s ease;
+}
+
+.scroll-indicator:hover .scroll-mouse {
+  border-color: var(--med-primary);
 }
 
 .scroll-wheel {
@@ -204,22 +200,23 @@
   transform: translateX(-50%);
   width: 4px;
   height: 8px;
-  background: #fff;
+  background: var(--med-text-muted);
   border-radius: 4px;
   animation: scrollWheel 2s ease-in-out infinite;
 }
 
-@keyframes scrollWheel {
+.scroll-indicator:hover .scroll-wheel {
+  background: var(--med-primary);
+}
 
-  0%,
-  100% {
+@keyframes scrollWheel {
+  0%, 100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
-
   50% {
     opacity: 0.3;
-    transform: translateX(-50%) translateY(12px);
+    transform: translateX(-50%) translateY(10px);
   }
 }
 
@@ -233,11 +230,15 @@
 
 .scroll-arrows span {
   display: block;
-  width: 12px;
-  height: 12px;
-  border-right: 2px solid rgba(255, 255, 255, 0.6);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--med-text-muted);
+  border-bottom: 2px solid var(--med-text-muted);
   transform: rotate(45deg);
+}
+
+.scroll-indicator:hover .scroll-arrows span {
+  border-color: var(--med-primary);
 }
 
 .arrow-1 {
@@ -249,13 +250,10 @@
 }
 
 @keyframes arrowBounce {
-
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.4;
     transform: rotate(45deg) translateY(0);
   }
-
   50% {
     opacity: 1;
     transform: rotate(45deg) translateY(5px);
@@ -267,7 +265,6 @@
     opacity: 0;
     transform: translateY(30px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -279,39 +276,20 @@
   .hero {
     min-height: 90vh;
   }
-
-  .hero-inner {
-    padding: 40px 16px;
+  .hero-title {
+    font-size: 32px;
   }
-
+  .hero-inner {
+    padding: 20px 16px;
+  }
   .hero-cta {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 300px;
   }
-
   .cta-button {
     width: 100%;
-    max-width: 280px;
     justify-content: center;
-  }
-
-  .scroll-indicator {
-    bottom: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-badge {
-    font-size: 12px;
-    padding: 8px 18px;
-  }
-
-  .hero-sub {
-    font-size: 15px;
-  }
-
-  .cta-button {
-    padding: 14px 24px;
-    font-size: 15px;
   }
 }

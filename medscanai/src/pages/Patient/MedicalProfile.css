@@ -1,10 +1,10 @@
 .medical-profile {
-  direction: rtl;
+  
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background: var(--med-background);
   position: relative;
 }
 
@@ -15,7 +15,7 @@
   right: -500px;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(21, 133, 130, 0.04) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -28,7 +28,7 @@
   left: -500px;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(118, 75, 162, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.04) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -47,7 +47,7 @@
 }
 
 .back-link {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--med-text-secondary);
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -57,27 +57,27 @@
 }
 
 .back-link:hover {
-  color: #fff;
+  color: var(--med-text-primary);
 }
 
 .section-title {
-  color: #fff;
+  color: var(--med-text-primary);
   font-size: 1.5rem;
   font-weight: 800;
   margin: 0;
 }
 
 .profile-container {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-  border-radius: 24px;
+  background: var(--med-surface);
+  border-radius: var(--med-radius-xl);
   padding: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--med-shadow-md);
+  
+  border: 1px solid var(--med-border-light);
 }
 
 .subtitle {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--med-text-secondary);
   font-size: 1.1rem;
   margin-bottom: 24px;
   font-weight: normal;
@@ -94,11 +94,11 @@
 
 .info-label {
   min-width: 180px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--med-text-secondary);
 }
 
 .info-value {
-  color: #fff;
+  color: var(--med-text-primary);
 }
 
 .medical-section {
@@ -106,7 +106,7 @@
 }
 
 .medical-section h3 {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--med-text-secondary);
   font-size: 1.1rem;
   margin-bottom: 16px;
   font-weight: normal;
@@ -120,19 +120,39 @@
 }
 
 .medical-tag {
-  background: #f8f0f0;
-  color: #ff6b6b;
+  background-color: var(--med-tag-disease-bg);
+  color: var(--med-tag-disease-text);
+  border: 1px solid var(--med-tag-disease-border);
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: var(--med-radius-lg);
   font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.medical-tag:hover {
+  background-color: #e0edff;
+  border-color: var(--med-tag-disease-text);
+  transform: translateY(-2px);
 }
 
 .medical-tag.allergy {
-  background: #fff0f0;
-  color: #ff6b6b;
+  background-color: var(--med-tag-allergy-bg);
+  color: var(--med-tag-allergy-text);
+  border: 1px solid var(--med-tag-allergy-border);
+}
+
+.medical-tag.allergy:hover {
+  background-color: #f3e8ff;
+  border-color: var(--med-tag-allergy-text);
 }
 
 .medical-tag.medication {
-  background: #f0f8ff;
-  color: #4a90e2;
+  background-color: var(--med-tag-med-bg);
+  color: var(--med-tag-med-text);
+  border: 1px solid var(--med-tag-med-border);
+}
+
+.medical-tag.medication:hover {
+  background-color: #ccfbf1;
+  border-color: var(--med-tag-med-text);
 }

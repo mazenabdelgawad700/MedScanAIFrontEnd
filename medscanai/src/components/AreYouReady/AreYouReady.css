@@ -1,8 +1,7 @@
 .are-ready {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6366f1 100%);
+  background-color: var(--med-primary);
   padding: 100px 20px;
-  direction: rtl;
   position: relative;
   overflow: hidden;
 }
@@ -20,7 +19,7 @@
 .cta-circle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .cta-circle-1 {
@@ -49,16 +48,13 @@
 }
 
 @keyframes pulse {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
-    opacity: 0.1;
+    opacity: 0.08;
   }
-
   50% {
     transform: scale(1.1);
-    opacity: 0.15;
+    opacity: 0.12;
   }
 }
 
@@ -73,15 +69,14 @@
 
 .cta-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #fff;
   padding: 8px 24px;
   border-radius: 50px;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 24px;
-  backdrop-filter: blur(10px);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.6s ease;
@@ -97,10 +92,10 @@
   font-weight: 800;
   font-size: clamp(28px, 5vw, 48px);
   line-height: 1.2;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateX(-40px);
   transition: all 0.6s ease 0.1s;
+  color: white;
 }
 
 .are-ready.visible .are-title {
@@ -143,53 +138,37 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 16px 32px;
-  border-radius: 14px;
+  padding: 14px 32px;
+  border-radius: var(--med-radius-md);
   font-weight: 700;
-  font-size: 17px;
+  font-size: 16px;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.are-cta::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.are-cta:hover::before {
-  left: 100%;
-}
-
 .are-cta.primary {
-  background: linear-gradient(135deg, #fff, #f8f9ff);
-  color: #764ba2;
-  box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
+  background-color: white;
+  color: var(--med-primary-dark);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .are-cta.primary:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 50px rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
 .are-cta.secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .are-cta.secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.8);
-  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-3px);
 }
 
 /* Trust Badges */

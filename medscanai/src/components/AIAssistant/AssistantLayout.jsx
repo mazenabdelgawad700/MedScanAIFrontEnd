@@ -142,7 +142,6 @@ const AssistantLayout = () => {
         <div className="mb-4" dir="rtl">
           <button
             className="btn btn-outline-primary shadow-sm rounded-pill px-4 fw-bold"
-            style={{ color: "#fff" }}
             onClick={() => {
               const role = getUserRole();
               navigate(role === "Doctor" ? "/doctor/dashboard" : "/patient/dashboard");
@@ -157,7 +156,7 @@ const AssistantLayout = () => {
         {currentView !== "hub" && (
           <div className="mb-4" dir="rtl">
             <button
-              className="btn btn-light shadow-sm rounded-pill px-4 fw-bold text-white"
+              className="btn btn-light shadow-sm rounded-pill px-4 fw-bold"
               onClick={() => setCurrentView("hub")}
             >
               <i className="bi bi-arrow-right me-2"></i>
