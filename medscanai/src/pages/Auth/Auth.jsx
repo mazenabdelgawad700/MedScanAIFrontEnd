@@ -98,12 +98,13 @@ const Auth = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
+
         const data = await res.json();
-        setMessage(data.message || "");
-        if (data && data.succeeded && data.data) {
+        setMessage(data.message || ""); 
+        
+        if (res.ok && data.succeeded && data.data) {
           localStorage.setItem("token", data.data);
-          // navigate("/");
-          setMode("login");
+          navigate("/patient/complete-profile");
         }
       }
     } catch (err) {

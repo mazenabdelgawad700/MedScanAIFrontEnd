@@ -5,35 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
   position: relative;
   overflow: hidden;
-}
-
-.complete-profile-bg::before {
-  content: "";
-  position: fixed;
-  top: -500px;
-  right: -500px;
-  width: 1000px;
-  height: 1000px;
-  background: radial-gradient(circle, rgba(21, 133, 130, 0.04) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.complete-profile-bg::after {
-  content: "";
-  position: fixed;
-  bottom: -500px;
-  left: -500px;
-  width: 1000px;
-  height: 1000px;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.04) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .complete-profile-card {
@@ -47,7 +20,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
   border: 1px solid var(--med-border-light);
   position: relative;
   z-index: 1;
@@ -125,8 +97,8 @@
 }
 
 .profile-add-btn {
-  background: #0a0a23;
-  color: var(--med-text-primary);
+  background-color: #158582;
+  color: white;
   border: none;
   border-radius: 8px;
   padding: 6px 16px;
@@ -252,15 +224,25 @@
 }
 
 .profile-submit-btn {
-  background: #0a0a23;
-  color: var(--med-text-primary);
+  background-color: #158582;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
   border: none;
-  font-size: 1.1rem;
-  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
 }
 
+.profile-no-medical-info-btn {
+  /* background-color: #1272ff; */
+  background-color: #e52336;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
 .profile-submit-btn:disabled {
   background: #6b7a99;
   cursor: not-allowed;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CompleteProfile.css";
 import {API_BASE} from "../../../utils/Constants.ts"
@@ -29,6 +29,14 @@ const CompleteProfile = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const redirectTimeoutRef = useRef(null);
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+    };
+  }, []);
 
   // Only allow logged-in patients
   useEffect(() => {
@@ -99,14 +107,15 @@ const CompleteProfile = () => {
         }
       );
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "فشل حفظ البيانات. حاول مرة أخرى.");
+        throw new Error("لم يتم حفظ سجلاتك الطبية. يرجى إعادة إدخال معلوماتك الطبية لاحقاً من لوحة التحكم الخاصة بك ضمن قسم 'المعلومات الطبية'.");
       }
       setSuccess(true);
-      // after successful profile creation, navigate to dashboard
-      navigate("/patient/dashboard");
+      
+      redirectTimeoutRef.current = setTimeout(() => {
+        navigate("/patient/dashboard");
+      }, 3000);
     } catch (err) {
-      setError(err.message || "فشل حفظ البيانات. حاول مرة أخرى.");
+      setError("لم يتم حفظ سجلاتك الطبية. يرجى إعادة إدخال معلوماتك الطبية لاحقاً من لوحة التحكم الخاصة بك ضمن قسم 'المعلومات الطبية'.");
     } finally {
       setSubmitting(false);
     }
@@ -295,26 +304,32 @@ const CompleteProfile = () => {
               ✓
             </div>
           </div>
-          {error && <div className="profile-error">{error}</div>}
+          {error && !success && <div className="profile-error">{error}</div>}
           {success && (
-            <div className="profile-success">تم حفظ البيانات بنجاح!</div>
+            <div className="profile-success" style={{ display: "flex", flexDirection: "column", gap: "15px", alignItems: "center", textAlign: "center" }}>
+              <span>
+                تم إنشاء ملفك الطبي بنجاح. سيتم تحويلك تلقائياً إلى لوحة التحكم خلال ٣ ثوانٍ.
+              </span>
+            </div>
           )}
           <div className="buttons">
             <button
-              className="btn btn-danger"
+              className="profile-no-medical-info-btn"
               type="button"
               onClick={() => navigate("/patient/dashboard")}
             >
-              لدي ملف تعريفي بالفعل
+              لا توجد معلومات طبية
             </button>
 
-            <button
-              type="submit"
-              className="profile-submit-btn"
-              disabled={submitting}
-            >
-              {submitting ? "جارٍ الحفظ..." : "إكمال الملف الشخصي"}
-            </button>
+            {!success && (
+              <button
+                type="submit"
+                className="profile-submit-btn"
+                disabled={submitting}
+              >
+                {submitting ? "جارٍ الحفظ..." : "حفظ المعلومات الطبية"}
+              </button>
+            )}
           </div>
         </form>
       </div>
